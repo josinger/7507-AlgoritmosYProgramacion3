@@ -31,7 +31,7 @@ cantidadDeMenasDe: tipoDeMena
 estaVacia
 	^contenido size = 0! !
 
-!Caja class methodsFor: 'as yet unclassified' stamp: 'JS 5/7/2021 21:16:42'!
+!Caja class methodsFor: 'as yet unclassified' stamp: 'JS 5/10/2021 17:20:31'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -67,12 +67,12 @@ cantidadDeMenas
 cantidadDeMenasDe: tipoDeMena
 	^contenido count: [ :tipo | tipo = tipoDeMena].! !
 
-!CintaA class methodsFor: 'as yet unclassified' stamp: 'JS 5/7/2021 21:16:03'!
+!CintaA class methodsFor: 'as yet unclassified' stamp: 'JS 5/10/2021 17:18:29'!
 descargarMenas
 	| menasDescargadas |
 	menasDescargadas := OrderedCollection new.
 	menasDescargadas addAll: contenido.
-	contenido := OrderedCollection new.
+	self vaciar.
 	^menasDescargadas.! !
 
 !CintaA class methodsFor: 'as yet unclassified' stamp: 'JS 5/3/2021 21:27:53'!
@@ -83,7 +83,7 @@ destino: aContenedor
 estaVacia
 	^contenido size = 0! !
 
-!CintaA class methodsFor: 'as yet unclassified' stamp: 'JS 5/7/2021 21:16:42'!
+!CintaA class methodsFor: 'as yet unclassified' stamp: 'JS 5/10/2021 17:20:31'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -124,12 +124,12 @@ cantidadDeMenas
 cantidadDeMenasDe: tipoDeMena
 	^contenido count: [ :tipo | tipo = tipoDeMena].! !
 
-!CintaB class methodsFor: 'as yet unclassified' stamp: 'JS 5/7/2021 20:59:25'!
+!CintaB class methodsFor: 'as yet unclassified' stamp: 'JS 5/10/2021 17:17:35'!
 descargarMenas
 	| menasDescargadas |
 	menasDescargadas := OrderedCollection new.
 	menasDescargadas addAll: contenido.
-	contenido := OrderedCollection new.
+	self vaciar.
 	^menasDescargadas.! !
 
 !CintaB class methodsFor: 'as yet unclassified' stamp: 'JS 5/7/2021 20:59:25'!
@@ -140,7 +140,7 @@ destino: aContenedor
 estaVacia
 	^contenido size = 0! !
 
-!CintaB class methodsFor: 'as yet unclassified' stamp: 'JS 5/7/2021 21:16:42'!
+!CintaB class methodsFor: 'as yet unclassified' stamp: 'JS 5/10/2021 17:20:31'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -206,7 +206,7 @@ extraer
 	self sacarEnergia: energiaConsumida.
 	^destino agregarMenas: (self conjuntoDeMenasDeCarbonCantidad: cantidadDeMenas).! !
 
-!ExtractorDeCarbon class methodsFor: 'as yet unclassified' stamp: 'JS 5/7/2021 21:16:42'!
+!ExtractorDeCarbon class methodsFor: 'as yet unclassified' stamp: 'JS 5/10/2021 17:20:31'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -276,7 +276,7 @@ extraer
 	self sacarEnergia: energiaConsumida.
 	^destino agregarMenas: (self conjuntoDeMenasDeHierroCantidad: cantidadDeMenas).! !
 
-!ExtractorDeHierro class methodsFor: 'as yet unclassified' stamp: 'JS 5/7/2021 21:16:42'!
+!ExtractorDeHierro class methodsFor: 'as yet unclassified' stamp: 'JS 5/10/2021 17:20:31'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
