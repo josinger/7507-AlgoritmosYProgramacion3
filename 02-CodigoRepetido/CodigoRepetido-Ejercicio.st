@@ -52,8 +52,8 @@ createCustomerBookWithSuspendedCustomerNamed: aName
 	customerBook suspendCustomerNamed: aName.
 	^customerBook.! !
 
-!CustomerBookTest methodsFor: 'shared' stamp: 'LT 5/17/2021 23:58:30'!
-isJohnLennonIsTheOnlyCustomerInside: customerBook
+!CustomerBookTest methodsFor: 'shared' stamp: 'JS 5/18/2021 23:44:21'!
+isJohnLennonTheOnlyCustomerInside: customerBook
 
 	^[:error | self assert: customerBook numberOfCustomers = 1.
 	self assert: (customerBook includesCustomerNamed: johnLennon )]! !
@@ -106,7 +106,7 @@ test03CanNotAddACustomerWithEmptyName
 	
 	self assertThatExecutionOf: additionOfEmptyName throws: Error andVerify: customerWasNotAdded.! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'LT 5/17/2021 23:58:30'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'JS 5/18/2021 23:44:21'!
 test04CanNotRemoveAnInvalidCustomer
 	
 	| customerBook removalOfInvalidCustomer customerBookRemainsUnchanged |
@@ -114,7 +114,7 @@ test04CanNotRemoveAnInvalidCustomer
 	customerBook := self createCustomerBookWithCustomerNamed: johnLennon .
 	
 	removalOfInvalidCustomer := [ customerBook removeCustomerNamed: paulMcCartney .].
-	customerBookRemainsUnchanged := self isJohnLennonIsTheOnlyCustomerInside: customerBook.
+	customerBookRemainsUnchanged := self isJohnLennonTheOnlyCustomerInside: customerBook.
 	
 	self assertThatExecutionOf: removalOfInvalidCustomer throws: NotFound andVerify: customerBookRemainsUnchanged.
 	
@@ -176,21 +176,21 @@ test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'LT 5/17/2021 23:58:30'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'JS 5/18/2021 23:44:21'!
 test07CanNotSuspendAnInvalidCustomer
 	| customerBook  suspensionOfInexistent customerBookRemainsUnchanged |
 			
 	customerBook := self createCustomerBookWithCustomerNamed: johnLennon.
 	
 	suspensionOfInexistent := [ customerBook suspendCustomerNamed: ringoStar.].
-	customerBookRemainsUnchanged := self isJohnLennonIsTheOnlyCustomerInside: customerBook.
+	customerBookRemainsUnchanged := self isJohnLennonTheOnlyCustomerInside: customerBook.
 
 	self assertThatExecutionOf: suspensionOfInexistent  throws: CantSuspend  andVerify: customerBookRemainsUnchanged.
 
 
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'LT 5/17/2021 23:58:30'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'JS 5/18/2021 23:44:21'!
 test08CanNotSuspendAnAlreadySuspendedCustomer
 	
 	| customerBook suspensionOfSuspended customerBookRemainsUnchanged |
@@ -198,7 +198,7 @@ test08CanNotSuspendAnAlreadySuspendedCustomer
 	customerBook := self createCustomerBookWithSuspendedCustomerNamed: johnLennon.
 	
 	suspensionOfSuspended := [ customerBook suspendCustomerNamed: johnLennon .].
-	customerBookRemainsUnchanged := self isJohnLennonIsTheOnlyCustomerInside: customerBook.
+	customerBookRemainsUnchanged := self isJohnLennonTheOnlyCustomerInside: customerBook.
 
 	self assertThatExecutionOf: suspensionOfSuspended  throws: CantSuspend  andVerify: customerBookRemainsUnchanged.
 ! !
