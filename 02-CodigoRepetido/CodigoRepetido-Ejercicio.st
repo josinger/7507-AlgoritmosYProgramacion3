@@ -52,16 +52,18 @@ createCustomerBookWithSuspendedCustomerNamed: aName
 	customerBook suspendCustomerNamed: aName.
 	^customerBook.! !
 
-!CustomerBookTest methodsFor: 'shared' stamp: 'JS 5/18/2021 23:44:21'!
+!CustomerBookTest methodsFor: 'shared' stamp: 'LT 5/20/2021 14:37:22'!
 isJohnLennonTheOnlyCustomerInside: customerBook
 
-	^[:error | self assert: customerBook numberOfCustomers = 1.
+	^[self assert: customerBook numberOfCustomers = 1.
 	self assert: (customerBook includesCustomerNamed: johnLennon )]! !
 
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'LT 5/17/2021 22:57:44'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'LT 5/20/2021 14:39:58'!
 setUp
-
+	"Lo bueno de tener como variables los nombres, es que imposibilita cometer un typo sin que el entorno te avise.
+	Además, si a futuro quisiese modificarse la creación de customers, tenerlo centralizado lo hace mas fácil, 
+	dado que no tendríamos que ir a buscar en todos los lugares donde se usaron los string literales."
 	johnLennon := 'John Lennon'.
 	paulMcCartney := 'Paul McCartney'.
 	ringoStar := 'Ringo Star'.
@@ -120,20 +122,14 @@ test04CanNotRemoveAnInvalidCustomer
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'LT 5/17/2021 23:22:27'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'LT 5/20/2021 14:40:49'!
 test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
-	"Este test junto con el 06 tienen 3 asserts de las mismas características y se podrían 
+	"Este test junto con el 06 tienen 3 asserts identicos exceptuando el numero y se podrían 
 	considerar código repetido, pero consideramos que son bastante descriptivos por sí solos
 	y que la refactorización necesitaría un mensaje muy extenso en donde se pierde la claridad.
 	
 	Por ejemplo, pensamos algo como:
-	assertThatCustomerBook:hasNumberOfActiveCustomers:andSuspendedCustomers:andTotalCustomers
-	
-	Una mejora que se le podría hacer es que la cantidad total se calcule con la suma de las otras 2 cantidades.
-	Pero, nos parece poco escalable (ie. agregar un nuevo tipo de customer alargaría mucho mas el nombre).
-	
-	Otra cosa a tener en cuenta es que se podría usar como variable de instancia el customerBook para evitar
-	tener que pasarlo como colaborador externo del mensaje."
+	assertThatCustomerBook:hasNumberOfActiveCustomers:andSuspendedCustomers:andTotalCustomers"
 	
 	| customerBook |
 	
@@ -148,20 +144,14 @@ test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'LT 5/17/2021 23:22:43'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'LT 5/20/2021 14:41:11'!
 test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
-	"Este test junto con el 05 tienen 3 asserts de las mismas características y se podrían 
+	"Este test junto con el 05 tienen 3 asserts identicos exceptuando el numero y se podrían 
 	considerar código repetido, pero consideramos que son bastante descriptivos por sí solos
 	y que la refactorización necesitaría un mensaje muy extenso en donde se pierde la claridad.
 	
 	Por ejemplo, pensamos algo como:
-	assertThatCustomerBook:hasNumberOfActiveCustomers:andSuspendedCustomers:andTotalCustomers
-	
-	Una mejora que se le podría hacer es que la cantidad total se calcule con la suma de las otras 2 cantidades.
-	Pero, nos parece poco escalable (ie. agregar un nuevo tipo de customer alargaría mucho mas el nombre).
-	
-	Otra cosa a tener en cuenta es que se podría usar como variable de instancia el customerBook para evitar
-	tener que pasarlo como colaborador externo del mensaje."
+	assertThatCustomerBook:hasNumberOfActiveCustomers:andSuspendedCustomers:andTotalCustomers"
 	| customerBook |
 	
 	customerBook := self createCustomerBookWithSuspendedCustomerNamed: paulMcCartney.
