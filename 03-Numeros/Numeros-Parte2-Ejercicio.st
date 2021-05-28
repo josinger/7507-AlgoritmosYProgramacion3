@@ -1,4 +1,4 @@
-!classDefinition: #NumeroTest category: #'Numeros-Parte2-Ejercicio'!
+!classDefinition: #NumeroTest category: 'Numeros-Parte2-Ejercicio'!
 TestCase subclass: #NumeroTest
 	instanceVariableNames: 'zero one two four oneFifth oneHalf five twoFifth twoTwentyfifth fiveHalfs three eight negativeOne negativeTwo'
 	classVariableNames: ''
@@ -84,7 +84,7 @@ test11EnteroAddsFraccionCorrectly
 
 	self assert: one + oneFifth equals: (Entero with: 6) / (Entero with: 5)! !
 
-!NumeroTest methodsFor: 'tests' stamp: 'HernanWilkinson 5/7/2016 21:07'!
+!NumeroTest methodsFor: 'tests' stamp: 'JS 5/27/2021 20:31:35'!
 test12FraccionAddsEnteroCorrectly
 
 	self assert: oneFifth + one equals: (Entero with: 6) / (Entero with: 5)! !
@@ -287,7 +287,7 @@ setUp
 	! !
 
 
-!classDefinition: #Numero category: #'Numeros-Parte2-Ejercicio'!
+!classDefinition: #Numero category: 'Numeros-Parte2-Ejercicio'!
 Object subclass: #Numero
 	instanceVariableNames: ''
 	classVariableNames: ''
@@ -343,7 +343,7 @@ invalidNumberType
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Numero class' category: #'Numeros-Parte2-Ejercicio'!
+!classDefinition: 'Numero class' category: 'Numeros-Parte2-Ejercicio'!
 Numero class
 	instanceVariableNames: ''!
 
@@ -357,7 +357,7 @@ invalidNumberTypeErrorDescription
 	^ 'Tipo de Número Inválido'! !
 
 
-!classDefinition: #Entero category: #'Numeros-Parte2-Ejercicio'!
+!classDefinition: #Entero category: 'Numeros-Parte2-Ejercicio'!
 Numero subclass: #Entero
 	instanceVariableNames: 'value'
 	classVariableNames: ''
@@ -370,10 +370,13 @@ Numero subclass: #Entero
 	^self class with: value * aMultiplier integerValue
 	! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 23:13'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'JS 5/27/2021 20:27:05'!
 + anAdder 
-	
-	^self class with: value + anAdder integerValue
+	|newNumerator|
+	(anAdder isMemberOf: Entero) ifTrue:  [^self class with: value + anAdder integerValue].
+	(anAdder isMemberOf: Fraccion) ifTrue: [
+		newNumerator := (self * anAdder denominator) + anAdder numerator.
+		^(newNumerator / anAdder denominator)].
 ! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'NR 9/23/2018 23:40:37'!
@@ -460,7 +463,7 @@ greatestCommonDivisorWith: anEntero
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Entero class' category: #'Numeros-Parte2-Ejercicio'!
+!classDefinition: 'Entero class' category: 'Numeros-Parte2-Ejercicio'!
 Entero class
 	instanceVariableNames: ''!
 
@@ -477,7 +480,7 @@ with: aValue
 	^self new initalizeWith: aValue! !
 
 
-!classDefinition: #Fraccion category: #'Numeros-Parte2-Ejercicio'!
+!classDefinition: #Fraccion category: 'Numeros-Parte2-Ejercicio'!
 Numero subclass: #Fraccion
 	instanceVariableNames: 'numerator denominator'
 	classVariableNames: ''
@@ -490,15 +493,18 @@ Numero subclass: #Fraccion
 	^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator)
 	! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 23:14'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'JS 5/27/2021 20:48:57'!
 + anAdder 
 	
 	| newNumerator newDenominator |
 	
+	(anAdder isMemberOf: Fraccion) ifTrue: [
 	newNumerator := (numerator * anAdder denominator) + (denominator * anAdder numerator).
 	newDenominator := denominator * anAdder denominator.
+	^(newNumerator / newDenominator)].
+	(anAdder isMemberOf: Entero) ifTrue: [^(anAdder + self)].
 	
-	^newNumerator / newDenominator ! !
+	! !
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'NR 9/23/2018 23:43:50'!
 - aSubtrahend 
@@ -576,7 +582,7 @@ printOn: aStream
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Fraccion class' category: #'Numeros-Parte2-Ejercicio'!
+!classDefinition: 'Fraccion class' category: 'Numeros-Parte2-Ejercicio'!
 Fraccion class
 	instanceVariableNames: ''!
 
