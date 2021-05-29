@@ -406,13 +406,13 @@ Numero subclass: #Entero
 	^anAdder beAddedToAnEntero: self.
 ! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'JS 5/28/2021 18:08:26'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'LT 5/28/2021 23:06:34'!
 - aSubtrahend 
-	^aSubtrahend beSubstractedFromAnEntero: self! !
+	^aSubtrahend beSubstractedFromAnEntero: self.! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'JS 5/28/2021 17:54:58'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'LT 5/28/2021 23:06:37'!
 / aDivisor 
-	^aDivisor divideAnEntero: self! !
+	^aDivisor divideAnEntero: self.! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HAW 9/24/2018 08:47:50'!
 fibonacci
@@ -487,45 +487,41 @@ greatestCommonDivisorWith: anEntero
 	^self class with: (value gcd: anEntero integerValue)! !
 
 
-!Entero methodsFor: 'private' stamp: 'JS 5/28/2021 18:35:50'!
+!Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:06:48'!
 beAddedToAFraccion: aFraccionAugend
 	| newNumerator |
 	newNumerator := aFraccionAugend numerator + (aFraccionAugend denominator * self).
-	^(newNumerator / aFraccionAugend denominator)! !
+	^newNumerator / aFraccionAugend denominator.! !
 
-!Entero methodsFor: 'private' stamp: 'JS 5/28/2021 17:31:55'!
+!Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:07:04'!
 beAddedToAnEntero: anEnteroAugend
-	^self class with: (anEnteroAugend integerValue + self integerValue).! !
+	^self class with: anEnteroAugend integerValue + self integerValue.! !
 
-!Entero methodsFor: 'private' stamp: 'JS 5/28/2021 18:30:23'!
+!Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:07:12'!
 beMultipliedByAFraccion: aFraccionMultiplier
 	| newNumerator |
 	newNumerator := aFraccionMultiplier numerator * self.
-	^(newNumerator / aFraccionMultiplier denominator)! !
+	^newNumerator / aFraccionMultiplier denominator.! !
 
-!Entero methodsFor: 'private' stamp: 'JS 5/28/2021 17:36:21'!
+!Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:07:22'!
 beMultipliedByAnEntero: anEnteroMultiplier
-	^self class with: (anEnteroMultiplier integerValue * self integerValue).! !
+	^self class with: anEnteroMultiplier integerValue * self integerValue.! !
 
-!Entero methodsFor: 'private' stamp: 'JS 5/28/2021 18:45:53'!
+!Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:07:28'!
 beSubstractedFromAFraccion: aFraccionMinuend
-	| newNumerator |
-	newNumerator := aFraccionMinuend numerator - (aFraccionMinuend denominator * self).
-	^(newNumerator / aFraccionMinuend denominator)! !
+	^self negated beAddedToAFraccion: aFraccionMinuend.! !
 
-!Entero methodsFor: 'private' stamp: 'JS 5/28/2021 18:03:13'!
+!Entero methodsFor: 'private' stamp: 'LT 5/28/2021 22:29:16'!
 beSubstractedFromAnEntero: anEnteroMinuend
-	^self class with: (anEnteroMinuend integerValue - self integerValue).! !
+	^self negated beAddedToAnEntero: anEnteroMinuend.! !
 
-!Entero methodsFor: 'private' stamp: 'JS 5/28/2021 18:38:56'!
-divideAFraccion: AFraccionDividend
-	| newDenominator |
-	newDenominator := AFraccionDividend denominator * self.
-	^(AFraccionDividend numerator / newDenominator)! !
+!Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:07:35'!
+divideAFraccion: aFraccionDividend
+	^(Entero with: 1)/self beMultipliedByAFraccion: aFraccionDividend.! !
 
-!Entero methodsFor: 'private' stamp: 'JS 5/28/2021 18:36:11'!
+!Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:08:14'!
 divideAnEntero: AnEnteroDividend
-	^Fraccion with: AnEnteroDividend over: self! !
+	^Fraccion with: AnEnteroDividend over: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -626,53 +622,47 @@ isZero
 	^false! !
 
 
-!Fraccion methodsFor: 'private' stamp: 'JS 5/28/2021 18:49:55'!
+!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:05:39'!
 beAddedToAFraccion: aFraccionAugend
 	| newNumerator newDenominator |
 	newNumerator := (aFraccionAugend numerator * self denominator) + 
 				    (aFraccionAugend denominator * self numerator).
 	newDenominator := aFraccionAugend denominator * self denominator.
-	^(newNumerator / newDenominator)! !
+	^newNumerator / newDenominator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'JS 5/28/2021 17:32:04'!
+!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:05:43'!
 beAddedToAnEntero: anEnteroAugend
 	| newNumerator |
 	newNumerator := (anEnteroAugend * self denominator) + self numerator.
-	^(newNumerator / self denominator)! !
+	^newNumerator / self denominator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'JS 5/28/2021 18:32:10'!
+!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:05:47'!
 beMultipliedByAFraccion: aFraccionMultiplier
-	^(aFraccionMultiplier numerator * self numerator) / (aFraccionMultiplier denominator * self denominator)! !
+	^(aFraccionMultiplier numerator * self numerator) / (aFraccionMultiplier denominator * self denominator).! !
 
-!Fraccion methodsFor: 'private' stamp: 'JS 5/28/2021 17:41:28'!
+!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 22:44:49'!
 beMultipliedByAnEntero: anEnteroMultiplier
-	| newNumerator |
-	newNumerator := anEnteroMultiplier * self numerator.
-	^(newNumerator / self denominator).! !
+	^anEnteroMultiplier beMultipliedByAFraccion: self.! !
 
-!Fraccion methodsFor: 'private' stamp: 'JS 5/28/2021 18:50:47'!
+!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:05:53'!
 beSubstractedFromAFraccion: aFraccionMinuend
 	| newNumerator newDenominator |
 	newNumerator := (aFraccionMinuend numerator * self denominator) - 
 				    (aFraccionMinuend denominator * self numerator).
 	newDenominator := aFraccionMinuend denominator * self denominator.
-	^newNumerator / newDenominator! !
+	^newNumerator / newDenominator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'JS 5/28/2021 18:13:47'!
+!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:05:56'!
 beSubstractedFromAnEntero: anEnteroMinuend
-	| newNumerator |
-	newNumerator := (anEnteroMinuend * self denominator) - self numerator.
-	^(newNumerator / self denominator)! !
+	^self negated beAddedToAnEntero: anEnteroMinuend.! !
 
-!Fraccion methodsFor: 'private' stamp: 'JS 5/28/2021 18:34:38'!
+!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:05:59'!
 divideAFraccion: aFraccionDividend
-	^(aFraccionDividend numerator * self denominator) / (aFraccionDividend denominator * self numerator)! !
+	^(aFraccionDividend numerator * self denominator) / (aFraccionDividend denominator * self numerator).! !
 
-!Fraccion methodsFor: 'private' stamp: 'JS 5/28/2021 17:53:42'!
+!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:06:02'!
 divideAnEntero: anEnteroDividend
-	| newNumerator |
-	newNumerator :=  anEnteroDividend * self denominator.
-	^(newNumerator / self numerator).! !
+	^anEnteroDividend  * (self denominator / self numerator).! !
 
 
 !Fraccion methodsFor: 'printing' stamp: 'HAW 9/24/2018 08:54:46'!
