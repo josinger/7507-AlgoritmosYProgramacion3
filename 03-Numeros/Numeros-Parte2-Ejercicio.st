@@ -266,7 +266,7 @@ test42SignIsCorrectlyAssignedToFractionWithNegativeDivisor
 	self assert: oneHalf negated equals: (one / negativeTwo)! !
 
 
-!NumeroTest methodsFor: 'setup' stamp: 'NR 9/23/2018 23:46:28'!
+!NumeroTest methodsFor: 'setup' stamp: 'JS 5/29/2021 22:48:10'!
 setUp
 
 	zero := Entero with: 0.
@@ -386,7 +386,7 @@ canNotDivideByZeroErrorDescription
 
 !Numero class methodsFor: 'error descriptions' stamp: 'NR 5/7/2020 17:46:56'!
 invalidNumberTypeErrorDescription
-	^ 'Tipo de Número Inválido'! !
+	^ 'Tipo de Nï¿½mero Invï¿½lido'! !
 
 
 !classDefinition: #Entero category: 'Numeros-Parte2-Ejercicio'!
@@ -476,15 +476,15 @@ isZero
 	^value = 0! !
 
 
-!Entero methodsFor: 'arithmetic operations - private' stamp: 'HernanWilkinson 5/7/2016 21:55'!
+!Entero methodsFor: 'arithmetic operations - private' stamp: 'JS 5/29/2021 22:58:42'!
 // aDivisor 
 	
-	^self class with: value // aDivisor integerValue! !
+	^Entero with: value // aDivisor integerValue! !
 
-!Entero methodsFor: 'arithmetic operations - private' stamp: 'HernanWilkinson 5/7/2016 21:00'!
+!Entero methodsFor: 'arithmetic operations - private' stamp: 'JS 5/29/2021 22:58:12'!
 greatestCommonDivisorWith: anEntero 
 	
-	^self class with: (value gcd: anEntero integerValue)! !
+	^Entero with: (value gcd: anEntero integerValue)! !
 
 
 !Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:06:48'!
@@ -493,9 +493,9 @@ beAddedToAFraccion: aFraccionAugend
 	newNumerator := aFraccionAugend numerator + (aFraccionAugend denominator * self).
 	^newNumerator / aFraccionAugend denominator.! !
 
-!Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:07:04'!
+!Entero methodsFor: 'private' stamp: 'JS 5/29/2021 22:59:41'!
 beAddedToAnEntero: anEnteroAugend
-	^self class with: anEnteroAugend integerValue + self integerValue.! !
+	^Entero with: anEnteroAugend integerValue + self integerValue.! !
 
 !Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:07:12'!
 beMultipliedByAFraccion: aFraccionMultiplier
@@ -503,9 +503,9 @@ beMultipliedByAFraccion: aFraccionMultiplier
 	newNumerator := aFraccionMultiplier numerator * self.
 	^newNumerator / aFraccionMultiplier denominator.! !
 
-!Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:07:22'!
+!Entero methodsFor: 'private' stamp: 'JS 5/29/2021 22:59:56'!
 beMultipliedByAnEntero: anEnteroMultiplier
-	^self class with: anEnteroMultiplier integerValue * self integerValue.! !
+	^Entero with: anEnteroMultiplier integerValue * self integerValue.! !
 
 !Entero methodsFor: 'private' stamp: 'LT 5/28/2021 23:07:28'!
 beSubstractedFromAFraccion: aFraccionMinuend
@@ -523,6 +523,24 @@ divideAFraccion: aFraccionDividend
 divideAnEntero: AnEnteroDividend
 	^Fraccion with: AnEnteroDividend over: self.! !
 
+
+!Entero methodsFor: 'as yet unclassified' stamp: 'JS 5/30/2021 01:33:42'!
+initializeAFraccionWithADividend: aDividend 
+	^aDividend initializeAFraccionWithADivisor: self! !
+
+!Entero methodsFor: 'as yet unclassified' stamp: 'JS 5/30/2021 01:33:42'!
+initializeAFraccionWithADivisor: aDivisor
+	|greatestCommonDivisor denominator numerator|
+
+	greatestCommonDivisor := self greatestCommonDivisorWith: aDivisor. 
+	numerator := self // greatestCommonDivisor.
+	denominator := aDivisor // greatestCommonDivisor.
+	^denominator initializeAFraccionWithNumerator: numerator! !
+
+!Entero methodsFor: 'as yet unclassified' stamp: 'JS 5/30/2021 01:21:36'!
+initializeAFraccionWithNumerator: aNumerator
+	^Fraccion new initializeWith: aNumerator over: self! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Entero class' category: 'Numeros-Parte2-Ejercicio'!
@@ -531,15 +549,109 @@ Entero class
 
 !Entero class methodsFor: 'instance creation' stamp: 'NR 4/8/2019 02:57:57'!
 negativeFibonacciErrorDescription
-	^ ' Fibonacci no está definido aquí para Enteros Negativos'! !
+	^ ' Fibonacci no estï¿½ definido aquï¿½ para Enteros Negativos'! !
 
-!Entero class methodsFor: 'instance creation' stamp: 'HernanWilkinson 5/7/2016 22:53'!
+!Entero class methodsFor: 'instance creation' stamp: 'JS 5/29/2021 22:43:46'!
 with: aValue 
-	
+	| valueClass valueInstance |
 	"Esta verificacion esta puesta por si se equivocan y quieren crear un Entero pasando otra cosa que un Integer - Hernan"
 	aValue isInteger ifFalse: [  self error: 'aValue debe ser anInteger' ].
-	
-	^self new initalizeWith: aValue! !
+	valueClass := self subclasses detect: [:integerType | integerType isOfSameType: aValue].
+	valueInstance := valueClass new initalizeWith: aValue.
+	^valueInstance.! !
+
+
+!Entero class methodsFor: 'nil' stamp: 'JS 5/29/2021 22:45:41'!
+isOfSameType: aValue
+	self subclassResponsibility! !
+
+
+!classDefinition: #Cero category: 'Numeros-Parte2-Ejercicio'!
+Entero subclass: #Cero
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numeros-Parte2-Ejercicio'!
+
+!Cero methodsFor: 'testing' stamp: 'JS 5/30/2021 01:35:50'!
+initializeAFraccionWithADividend: aDividend 
+	Fraccion error: Fraccion canNotDivideByZeroErrorDescription! !
+
+!Cero methodsFor: 'testing' stamp: 'JS 5/30/2021 01:33:42'!
+initializeAFraccionWithADivisor: aBlock
+	^self! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Cero class' category: 'Numeros-Parte2-Ejercicio'!
+Cero class
+	instanceVariableNames: ''!
+
+!Cero class methodsFor: 'as yet unclassified' stamp: 'JS 5/29/2021 22:46:47'!
+isOfSameType: aValue
+	^aValue = 0! !
+
+
+!classDefinition: #EnteroNegativo category: 'Numeros-Parte2-Ejercicio'!
+Entero subclass: #EnteroNegativo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numeros-Parte2-Ejercicio'!
+
+!EnteroNegativo methodsFor: 'testing' stamp: 'JS 5/30/2021 01:31:57'!
+initializeAFraccionWithADividend: aDividend 
+	^aDividend negated / self negated.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'EnteroNegativo class' category: 'Numeros-Parte2-Ejercicio'!
+EnteroNegativo class
+	instanceVariableNames: ''!
+
+!EnteroNegativo class methodsFor: 'nil' stamp: 'JS 5/29/2021 22:47:07'!
+isOfSameType: aValue
+	^aValue < 0! !
+
+
+!classDefinition: #EnteroPositivo category: 'Numeros-Parte2-Ejercicio'!
+Entero subclass: #EnteroPositivo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numeros-Parte2-Ejercicio'!
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'EnteroPositivo class' category: 'Numeros-Parte2-Ejercicio'!
+EnteroPositivo class
+	instanceVariableNames: ''!
+
+!EnteroPositivo class methodsFor: 'nil' stamp: 'JS 5/29/2021 22:47:33'!
+isOfSameType: aValue
+	^aValue > 1! !
+
+
+!classDefinition: #Uno category: 'Numeros-Parte2-Ejercicio'!
+Entero subclass: #Uno
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numeros-Parte2-Ejercicio'!
+
+!Uno methodsFor: 'as yet unclassified' stamp: 'JS 5/30/2021 01:19:02'!
+initializeAFraccionWithNumerator: aNumerator
+	^aNumerator! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Uno class' category: 'Numeros-Parte2-Ejercicio'!
+Uno class
+	instanceVariableNames: ''!
+
+!Uno class methodsFor: 'nil' stamp: 'JS 5/29/2021 22:47:40'!
+isOfSameType: aValue
+	^aValue = 1! !
 
 
 !classDefinition: #Fraccion category: 'Numeros-Parte2-Ejercicio'!
@@ -630,11 +742,9 @@ beAddedToAFraccion: aFraccionAugend
 	newDenominator := aFraccionAugend denominator * self denominator.
 	^newNumerator / newDenominator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:05:43'!
+!Fraccion methodsFor: 'private' stamp: 'JS 5/29/2021 20:01:26'!
 beAddedToAnEntero: anEnteroAugend
-	| newNumerator |
-	newNumerator := (anEnteroAugend * self denominator) + self numerator.
-	^newNumerator / self denominator.! !
+	^anEnteroAugend beAddedToAFraccion: self.! !
 
 !Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:05:47'!
 beMultipliedByAFraccion: aFraccionMultiplier
@@ -652,17 +762,17 @@ beSubstractedFromAFraccion: aFraccionMinuend
 	newDenominator := aFraccionMinuend denominator * self denominator.
 	^newNumerator / newDenominator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:05:56'!
+!Fraccion methodsFor: 'private' stamp: 'JS 5/29/2021 20:04:23'!
 beSubstractedFromAnEntero: anEnteroMinuend
-	^self negated beAddedToAnEntero: anEnteroMinuend.! !
+	^anEnteroMinuend beAddedToAFraccion: self negated.! !
 
 !Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:05:59'!
 divideAFraccion: aFraccionDividend
 	^(aFraccionDividend numerator * self denominator) / (aFraccionDividend denominator * self numerator).! !
 
-!Fraccion methodsFor: 'private' stamp: 'LT 5/28/2021 23:06:02'!
+!Fraccion methodsFor: 'private' stamp: 'JS 5/29/2021 20:07:07'!
 divideAnEntero: anEnteroDividend
-	^anEnteroDividend  * (self denominator / self numerator).! !
+	^anEnteroDividend beMultipliedByAFraccion: (self denominator / self numerator).! !
 
 
 !Fraccion methodsFor: 'printing' stamp: 'HAW 9/24/2018 08:54:46'!
@@ -679,21 +789,26 @@ printOn: aStream
 Fraccion class
 	instanceVariableNames: ''!
 
-!Fraccion class methodsFor: 'intance creation' stamp: 'NR 9/23/2018 23:45:19'!
+!Fraccion class methodsFor: 'intance creation' stamp: 'JS 5/30/2021 01:29:16'!
 with: aDividend over: aDivisor
 
-	| greatestCommonDivisor numerator denominator |
-	
-	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
-	aDividend isZero ifTrue: [ ^aDividend ].
-	
-	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
-	
-	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
-	numerator := aDividend // greatestCommonDivisor.
-	denominator := aDivisor // greatestCommonDivisor.
-	
-	denominator isOne ifTrue: [ ^numerator ].
+	^aDivisor initializeAFraccionWithADividend: aDividend.
 
-	^self new initializeWith: numerator over: denominator
+	
 	! !
+
+
+!classDefinition: #FraccionNegativa category: 'Numeros-Parte2-Ejercicio'!
+Fraccion subclass: #FraccionNegativa
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numeros-Parte2-Ejercicio'!
+
+
+!classDefinition: #FraccionPositiva category: 'Numeros-Parte2-Ejercicio'!
+Fraccion subclass: #FraccionPositiva
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numeros-Parte2-Ejercicio'!
