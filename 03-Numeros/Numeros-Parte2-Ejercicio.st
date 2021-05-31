@@ -530,7 +530,7 @@ beAddedToAnEntero: anEnteroAugend
 
 	^Entero with: anEnteroAugend integerValue + self integerValue! !
 
-!Entero methodsFor: 'operations with enteros' stamp: 'JS 5/30/2021 20:25:28'!
+!Entero methodsFor: 'operations with enteros' stamp: 'JS 5/31/2021 01:17:48'!
 beDividedByAnEntero: AnEnteroDivisor
 
 	| greatestCommonDivisor numerator denominator |
@@ -539,7 +539,7 @@ beDividedByAnEntero: AnEnteroDivisor
 	numerator := self // greatestCommonDivisor.
 	denominator := AnEnteroDivisor // greatestCommonDivisor.
 
-	^denominator divideAnEnteroCoprimo: numerator
+	^denominator divideAnEnteroCoprime: numerator
 
 ! !
 
@@ -559,8 +559,8 @@ divideAnEntero: AnEnteroDividend
 	^AnEnteroDividend beDividedByAnEntero: self
 ! !
 
-!Entero methodsFor: 'operations with enteros' stamp: 'JS 5/30/2021 20:27:26'!
-divideAnEnteroCoprimo: aDividendCoprime
+!Entero methodsFor: 'operations with enteros' stamp: 'JS 5/31/2021 01:17:48'!
+divideAnEnteroCoprime: aDividendCoprime
 
 	^Fraccion new initializeWith: aDividendCoprime over: self! !
 
@@ -723,8 +723,8 @@ fibonacci
 	^Entero with: 1! !
 
 
-!Uno methodsFor: 'operations with enteros' stamp: 'JS 5/30/2021 20:27:12'!
-divideAnEnteroCoprimo: aDividendCoprime
+!Uno methodsFor: 'operations with enteros' stamp: 'JS 5/31/2021 01:17:48'!
+divideAnEnteroCoprime: aDividendCoprime
 
 	^aDividendCoprime! !
 
