@@ -228,15 +228,43 @@ test04CantFindIfWordIsEmpty
 		withExceptionDo: [ :anError |
 			self assert: anError messageText =  SentenceFinderByPrefix emptyWordErrorDescription ]! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LT 6/4/2021 21:49:16'!
-test05DidNotFindAnyWordMatchingThePrefix
-	| sentenceFinder stack |
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'lt 6/6/2021 17:37:44'!
+test05CantFindIfPrefixContainsSpaces
+	| sentenceFinder stack|
 	
 	sentenceFinder := SentenceFinderByPrefix new.
 	stack := OOStack new.
 	stack push: 'test'.
 	
-	self assert: (sentenceFinder find: 'a' in: stack) isEmpty.! !
+	self
+		should: [ sentenceFinder find: 'one two' in: stack]
+		raise: InvalidWordError
+		withExceptionDo: [ :anError |
+			self assert: anError messageText =  SentenceFinderByPrefix moreThanOneWordErrorDescription ]! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'lt 6/6/2021 17:35:35'!
+test05DoesNotFindMatchesIfItNoWordContainsThePrefix
+	| sentenceFinder stack |
+	
+	sentenceFinder := SentenceFinderByPrefix new.
+	stack := OOStack new.
+	stack push: 'test'.
+	stack push: 'cucu'.
+	stack push: 'pepe'.
+	
+	self assert: (sentenceFinder find: 'hola' in: stack) isEmpty.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'lt 6/6/2021 17:35:55'!
+test06DoesNotFindMatchesIfItNoWordStartsWithThePrefix
+	| sentenceFinder stack |
+	
+	sentenceFinder := SentenceFinderByPrefix new.
+	stack := OOStack new.
+	stack push: 'testahola'.
+	stack push: 'cuaholacu'.
+	stack push: 'bholaa'.
+	
+	self assert: (sentenceFinder find: 'hola' in: stack) isEmpty.! !
 
 !SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LT 6/4/2021 21:53:43'!
 test06FoundAWordWithMatchingPrefix
@@ -251,7 +279,7 @@ test06FoundAWordWithMatchingPrefix
 	self assert: filteredStack size = 1.
 	self assert: filteredStack top = 'test'.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LT 6/4/2021 21:53:08'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'lt 6/6/2021 17:31:51'!
 test07FoundManyWordsWithMatchingPrefix
 	| sentenceFinder stack filteredStack|
 	
@@ -302,9 +330,8 @@ isEmpty
 size
 	^size.! !
 
-!OOStack methodsFor: 'accessing' stamp: 'LT 6/4/2021 19:44:30'!
+!OOStack methodsFor: 'accessing' stamp: 'lt 6/6/2021 17:17:59'!
 top
-	topObject ifNil: [self error: self class stackEmptyErrorDescription].
 	^self topObject element.! !
 
 
@@ -377,11 +404,20 @@ Object subclass: #SentenceFinderByPrefix
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'LT 6/4/2021 21:49:04'!
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 'lt 6/6/2021 17:47:01'!
 find: aWord in: aStack
 	| filteredStack auxStack currentElement |
 	aStack ifNil: [ NullStackError signal: SentenceFinderByPrefix nullStackErrorDescription ].
-	aStack isEmpty ifTrue: [StackEmptyError  signal: OOStack stackEmptyErrorDescription].
+	aStack isEmpty ifTrue: [StackEmptyError  signal: OOStack stackEmptyErrorDescription]. "esto podriamos sacarlo"
+	
+	"para sacarnos estos if de encima podriamos  crear una clase Prefix con subclases NullPrefix, EmptyPrefix, InvalidPrefix"
+	"luego, hacer igual que hicimos en el tp de numeros, instanciar la correcta dependiendo de como sea aWord, usando detect:"
+	"sin embargo, me parece medio al pepe, algo así como crear la clase 0 o 1. Seria mas un truquito implementativo que algo que demuestre-"
+	"-un modelo 1 a 1 con la realidad, con lo cual no me parece que valga la pena hacer eso."
+	"Lo que si podríamos hacer es hacer estas validaciones en otro metodo asi queda mas limpio, y tmb hacer mas prolijo la logica"
+	
+	"nota extra: no me parece mal que reciba el stack por parametro, lo hace mas flexible al objeto SentenceFinder".
+	
 	aWord ifNil: [ NullWordError signal: SentenceFinderByPrefix nullWordErrorDescription ].
 	aWord isEmpty ifTrue: [InvalidWordError signal: SentenceFinderByPrefix emptyWordErrorDescription ].
 	(aWord findString: ' ') = 0 ifFalse: [InvalidWordError signal: SentenceFinderByPrefix moreThanOneWordErrorDescription ].
@@ -396,7 +432,7 @@ find: aWord in: aStack
 	
 	(auxStack size) timesRepeat: [
 			currentElement := auxStack pop.
-			(currentElement includesSubString: aWord) ifTrue: [
+			(currentElement beginsWith: aWord) ifTrue: [
 					filteredStack push: currentElement.
 				].
 			aStack push: currentElement.
