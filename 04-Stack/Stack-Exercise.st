@@ -176,8 +176,9 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LT 6/4/2021 20:58:35'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JS 6/7/2021 05:02:27'!
 test01CantFindIfHasNoStack
+
 	| sentenceFinder |
 	
 	sentenceFinder := SentenceFinderByPrefix new.
@@ -188,8 +189,9 @@ test01CantFindIfHasNoStack
 		withExceptionDo: [ :anError |
 			self assert: anError messageText =  SentenceFinderByPrefix nullStackErrorDescription ]! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LT 6/4/2021 21:11:59'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JS 6/7/2021 05:02:44'!
 test02CantFindIfHasEmptyStack
+
 	| sentenceFinder |
 	
 	sentenceFinder := SentenceFinderByPrefix new.
@@ -200,8 +202,9 @@ test02CantFindIfHasEmptyStack
 		withExceptionDo: [ :anError |
 			self assert: anError messageText =  OOStack stackEmptyErrorDescription ]! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LT 6/4/2021 21:19:12'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JS 6/7/2021 05:02:53'!
 test03CantFindIfWordIsNull
+
 	| sentenceFinder stack|
 	
 	sentenceFinder := SentenceFinderByPrefix new.
@@ -214,8 +217,9 @@ test03CantFindIfWordIsNull
 		withExceptionDo: [ :anError |
 			self assert: anError messageText =  SentenceFinderByPrefix nullWordErrorDescription ]! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LT 6/4/2021 21:19:54'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JS 6/7/2021 05:03:03'!
 test04CantFindIfWordIsEmpty
+
 	| sentenceFinder stack|
 	
 	sentenceFinder := SentenceFinderByPrefix new.
@@ -228,8 +232,9 @@ test04CantFindIfWordIsEmpty
 		withExceptionDo: [ :anError |
 			self assert: anError messageText =  SentenceFinderByPrefix emptyWordErrorDescription ]! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'lt 6/6/2021 17:37:44'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JS 6/7/2021 05:03:07'!
 test05CantFindIfPrefixContainsSpaces
+
 	| sentenceFinder stack|
 	
 	sentenceFinder := SentenceFinderByPrefix new.
@@ -242,8 +247,9 @@ test05CantFindIfPrefixContainsSpaces
 		withExceptionDo: [ :anError |
 			self assert: anError messageText =  SentenceFinderByPrefix moreThanOneWordErrorDescription ]! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'lt 6/6/2021 17:35:35'!
-test05DoesNotFindMatchesIfItNoWordContainsThePrefix
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JS 6/7/2021 05:03:13'!
+test06DoesNotFindMatchesIfItNoWordContainsThePrefix
+
 	| sentenceFinder stack |
 	
 	sentenceFinder := SentenceFinderByPrefix new.
@@ -254,8 +260,9 @@ test05DoesNotFindMatchesIfItNoWordContainsThePrefix
 	
 	self assert: (sentenceFinder find: 'hola' in: stack) isEmpty.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'lt 6/6/2021 17:35:55'!
-test06DoesNotFindMatchesIfItNoWordStartsWithThePrefix
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JS 6/7/2021 05:03:19'!
+test07DoesNotFindMatchesIfItNoWordStartsWithThePrefix
+
 	| sentenceFinder stack |
 	
 	sentenceFinder := SentenceFinderByPrefix new.
@@ -266,8 +273,9 @@ test06DoesNotFindMatchesIfItNoWordStartsWithThePrefix
 	
 	self assert: (sentenceFinder find: 'hola' in: stack) isEmpty.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LT 6/4/2021 21:53:43'!
-test06FoundAWordWithMatchingPrefix
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JS 6/7/2021 05:03:41'!
+test08FoundAWordWithMatchingPrefix
+
 	| sentenceFinder stack filteredStack|
 	
 	sentenceFinder := SentenceFinderByPrefix new.
@@ -279,8 +287,9 @@ test06FoundAWordWithMatchingPrefix
 	self assert: filteredStack size = 1.
 	self assert: filteredStack top = 'test'.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'lt 6/6/2021 17:31:51'!
-test07FoundManyWordsWithMatchingPrefix
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JS 6/7/2021 05:03:48'!
+test09FoundManyWordsWithMatchingPrefix
+
 	| sentenceFinder stack filteredStack|
 	
 	sentenceFinder := SentenceFinderByPrefix new.
@@ -293,8 +302,9 @@ test07FoundManyWordsWithMatchingPrefix
 	self assert: filteredStack pop = 'testardo'.
 	self assert: filteredStack top = 'test'.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LT 6/4/2021 21:57:18'!
-test08OriginalStackRemainsTheSame
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JS 6/7/2021 05:03:51'!
+test10OriginalStackRemainsTheSame
+
 	| sentenceFinder stack |
 	
 	sentenceFinder := SentenceFinderByPrefix new.
@@ -321,47 +331,57 @@ Object subclass: #OOStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'testing' stamp: 'LT 6/4/2021 20:11:19'!
+!OOStack methodsFor: 'testing' stamp: 'JS 6/7/2021 05:05:07'!
 isEmpty
-	^self topObject isNullStackObject.! !
+
+	^self topObject isNullStackObject! !
 
 
-!OOStack methodsFor: 'accessing' stamp: 'LT 6/4/2021 18:55:05'!
+!OOStack methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:05:13'!
 size
-	^size.! !
 
-!OOStack methodsFor: 'accessing' stamp: 'lt 6/6/2021 17:17:59'!
+	^size! !
+
+!OOStack methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:05:17'!
 top
-	^self topObject element.! !
+
+	^self topObject element! !
 
 
-!OOStack methodsFor: 'private' stamp: 'LT 6/4/2021 18:51:45'!
+!OOStack methodsFor: 'private' stamp: 'JS 6/7/2021 05:04:14'!
 decrementSize
+
 	self size: self size - 1.! !
 
-!OOStack methodsFor: 'private' stamp: 'LT 6/4/2021 18:52:50'!
+!OOStack methodsFor: 'private' stamp: 'JS 6/7/2021 05:04:19'!
 incrementSize
+
 	self size: self size + 1.! !
 
-!OOStack methodsFor: 'private' stamp: 'LT 6/4/2021 18:46:39'!
+!OOStack methodsFor: 'private' stamp: 'JS 6/7/2021 05:04:43'!
 nextObject
-	^self topObject nextObject.! !
 
-!OOStack methodsFor: 'private' stamp: 'LT 6/4/2021 18:52:22'!
+	^self topObject nextObject! !
+
+!OOStack methodsFor: 'private' stamp: 'JS 6/7/2021 05:04:38'!
 size: newSize
-	size := newSize! !
 
-!OOStack methodsFor: 'private' stamp: 'LT 6/4/2021 18:27:41'!
+	size := newSize.! !
+
+!OOStack methodsFor: 'private' stamp: 'JS 6/7/2021 05:04:28'!
 topObject
+
 	^topObject ! !
 
-!OOStack methodsFor: 'private' stamp: 'LT 6/4/2021 18:30:02'!
+!OOStack methodsFor: 'private' stamp: 'JS 6/7/2021 05:04:31'!
 topObject: newStackObject
+
 	topObject := newStackObject.! !
 
 
-!OOStack methodsFor: 'operations' stamp: 'LT 6/4/2021 18:54:19'!
+!OOStack methodsFor: 'operations' stamp: 'JS 6/7/2021 05:05:31'!
 pop
+
 	| popedElement |
 	
 	popedElement  := self top.
@@ -370,17 +390,21 @@ pop
 	^popedElement 
 	! !
 
-!OOStack methodsFor: 'operations' stamp: 'LT 6/4/2021 20:01:44'!
+!OOStack methodsFor: 'operations' stamp: 'JS 6/7/2021 05:05:44'!
 push: anElement 
+
 	| newStackObject |
+	
 	newStackObject := FilledStackObject with: anElement linkedTo: self topObject.
 	self topObject: newStackObject.
 	self incrementSize.
-	^anElement.! !
+	
+	^anElement! !
 
 
-!OOStack methodsFor: 'initialization' stamp: 'LT 6/4/2021 20:05:05'!
+!OOStack methodsFor: 'initialization' stamp: 'JS 6/7/2021 05:06:04'!
 initialize
+
 	super initialize.
 	self topObject: NullStackObject new.
 	self size: 0.! !
@@ -448,20 +472,24 @@ find: aWord in: aStack
 SentenceFinderByPrefix class
 	instanceVariableNames: ''!
 
-!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'LT 6/4/2021 21:16:05'!
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'JS 6/7/2021 05:11:29'!
 emptyWordErrorDescription
+
 	^ 'Word is empty'! !
 
-!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'LT 6/4/2021 21:17:22'!
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'JS 6/7/2021 05:11:31'!
 moreThanOneWordErrorDescription
+
 	^ 'More than one word was given'! !
 
-!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'LT 6/4/2021 20:57:49'!
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'JS 6/7/2021 05:11:34'!
 nullStackErrorDescription
+
 	^ 'Stack is nil'! !
 
-!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'LT 6/4/2021 21:11:11'!
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'JS 6/7/2021 05:11:37'!
 nullWordErrorDescription
+
 	^ 'Word is nil'! !
 
 
@@ -472,13 +500,15 @@ Object subclass: #StackObject
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!StackObject methodsFor: 'as yet unclassified' stamp: 'LT 6/4/2021 20:08:14'!
+!StackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:07:29'!
 element
-	self subclassResponsibility ! !
 
-!StackObject methodsFor: 'as yet unclassified' stamp: 'LT 6/4/2021 20:11:29'!
+	^self subclassResponsibility ! !
+
+!StackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:07:41'!
 isNullStackObject
-	self subclassResponsibility ! !
+
+	^self subclassResponsibility! !
 
 
 !classDefinition: #FilledStackObject category: 'Stack-Exercise'!
@@ -494,18 +524,20 @@ initializeWith: anElement linkedTo: nextStackObject
 	nextObject := nextStackObject.! !
 
 
-!FilledStackObject methodsFor: 'accessing' stamp: 'LT 6/4/2021 19:57:50'!
+!FilledStackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:10:34'!
 element
+
 	^element! !
 
-!FilledStackObject methodsFor: 'accessing' stamp: 'LT 6/4/2021 18:28:48'!
-nextObject
-	^nextObject! !
-
-
-!FilledStackObject methodsFor: 'as yet unclassified' stamp: 'LT 6/4/2021 20:12:51'!
+!FilledStackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:07:55'!
 isNullStackObject
-	^false.! !
+
+	^false! !
+
+!FilledStackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:10:40'!
+nextObject
+
+	^nextObject! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -513,12 +545,9 @@ isNullStackObject
 FilledStackObject class
 	instanceVariableNames: ''!
 
-!FilledStackObject class methodsFor: 'instance creation' stamp: 'LT 6/4/2021 18:33:58'!
-with: anElement 
-	^self new initializeWith: anElement ! !
-
-!FilledStackObject class methodsFor: 'instance creation' stamp: 'LT 6/4/2021 19:27:54'!
+!FilledStackObject class methodsFor: 'instance creation' stamp: 'JS 6/7/2021 05:11:54'!
 with: anElement linkedTo: nextStackObject
+
 	^self new initializeWith: anElement linkedTo: nextStackObject.! !
 
 
@@ -529,10 +558,12 @@ StackObject subclass: #NullStackObject
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!NullStackObject methodsFor: 'as yet unclassified' stamp: 'LT 6/4/2021 20:52:50'!
+!NullStackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:10:54'!
 element
+
 	StackEmptyError signal: OOStack stackEmptyErrorDescription.! !
 
-!NullStackObject methodsFor: 'as yet unclassified' stamp: 'LT 6/4/2021 20:11:50'!
+!NullStackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:11:00'!
 isNullStackObject
-	^true.! !
+
+	^true! !
