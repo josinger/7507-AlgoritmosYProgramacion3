@@ -501,11 +501,10 @@ push: anElement
 	^anElement! !
 
 
-!OOStackProfiling methodsFor: 'initialization' stamp: 'JS 6/10/2021 16:20:32'!
+!OOStackProfiling methodsFor: 'initialization' stamp: 'JS 6/10/2021 18:07:20'!
 initialize
 
-	self topObject: NullStackObject new.
-	self size: 0.! !
+	self topObject: NullStackObject new.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
