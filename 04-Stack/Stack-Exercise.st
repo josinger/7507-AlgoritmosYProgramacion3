@@ -160,15 +160,15 @@ test10CanNotTopWhenThereAreNoObjectsInTheStack
 		
 ! !
 
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'OOStackTest class' category: 'Stack-Exercise'!
 OOStackTest class
 	instanceVariableNames: ''!
 
-!OOStackTest class methodsFor: 'profiling' stamp: 'LT 6/10/2021 01:05:38'!
+!OOStackTest class methodsFor: 'profiling' stamp: 'JS 6/10/2021 16:28:23'!
 timeToOperateAStack: aStack withElements: amountOfElements withSizeAcceses: amountOfSizeAcceses
+
 	^[amountOfElements timesRepeat: [aStack push: nil].
 	amountOfSizeAcceses timesRepeat: [aStack size].
 	] timeToRun.
@@ -191,10 +191,11 @@ test01FailsToFindIfStackArgumentIsNotAStack
 		withExceptionDo: [ :anError |
 			self assert: anError messageText =  SentenceFinderByPrefix notAStackErrorDescription ]! !
 
-!SentenceFinderByPrefixTest methodsFor: 'failures' stamp: 'LT 6/9/2021 23:05:59'!
+!SentenceFinderByPrefixTest methodsFor: 'failures' stamp: 'JS 6/10/2021 16:22:35'!
 test02FailsToFindIfWordArgumentIsNotAWord
 
 	| stack|
+	
 	stack :=  self newOOStackWithElements: #('test').
 	
 	self
@@ -320,9 +321,6 @@ newOOStackWithElements: aListOfElements
 	aListOfElements do: [:element | aStack push: element].
 	^aStack.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'shared' stamp: 'LT 6/9/2021 23:00:38'!
-newSentenceFinder! !
-
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
 Object subclass: #OOStack
@@ -402,8 +400,9 @@ push: anElement
 	^anElement! !
 
 
-!OOStack methodsFor: 'initialization' stamp: 'LT 6/8/2021 00:03:11'!
+!OOStack methodsFor: 'initialization' stamp: 'JS 6/10/2021 16:19:59'!
 initialize
+
 	self topObject: NullStackObject new.
 	self size: 0.! !
 
@@ -471,11 +470,6 @@ nextObject
 	^self topObject nextObject! !
 
 !OOStackProfiling methodsFor: 'private' stamp: 'LT 6/10/2021 00:49:49'!
-size: newSize
-
-	size := newSize.! !
-
-!OOStackProfiling methodsFor: 'private' stamp: 'LT 6/10/2021 00:49:49'!
 topObject
 
 	^topObject ! !
@@ -507,8 +501,9 @@ push: anElement
 	^anElement! !
 
 
-!OOStackProfiling methodsFor: 'initialization' stamp: 'LT 6/10/2021 00:49:49'!
+!OOStackProfiling methodsFor: 'initialization' stamp: 'JS 6/10/2021 16:20:32'!
 initialize
+
 	self topObject: NullStackObject new.
 	self size: 0.! !
 
@@ -588,17 +583,20 @@ find: aWord in: aStack
 	! !
 
 
-!SentenceFinderByPrefix methodsFor: 'validations - private' stamp: 'LT 6/9/2021 23:34:18'!
+!SentenceFinderByPrefix methodsFor: 'validations - private' stamp: 'JS 6/10/2021 16:27:18'!
 allElementsOfStackAreStrings: aStack
 
 	| auxStack elementsAreValid |
+	
 	elementsAreValid := true. 
 	auxStack := OOStack new.
+	
 	self pour: aStack into: auxStack.
 	self pour: auxStack into: aStack doForEachElement: [
 		:element | 
 		(element isMemberOf: String) ifFalse: [elementsAreValid := false]
 		].
+	
 	^elementsAreValid! !
 
 !SentenceFinderByPrefix methodsFor: 'validations - private' stamp: 'LT 6/9/2021 23:35:09'!
@@ -610,8 +608,9 @@ throwErrorOnInvalidStack: aStack
 	(self allElementsOfStackAreStrings: aStack) ifFalse: [
 		^InvalidStackError signal: SentenceFinderByPrefix notAllElementsOfStackAreStringErrorDescription].! !
 
-!SentenceFinderByPrefix methodsFor: 'validations - private' stamp: 'LT 6/9/2021 23:36:08'!
+!SentenceFinderByPrefix methodsFor: 'validations - private' stamp: 'JS 6/10/2021 16:27:37'!
 throwErrorOnInvalidWord: aWord
+
 	(aWord isMemberOf: String) ifFalse: [
 		 InvalidWordError signal: SentenceFinderByPrefix notAWordErrorDescription ].
 	
@@ -630,27 +629,27 @@ throwErrorOnInvalidWord: aWord
 SentenceFinderByPrefix class
 	instanceVariableNames: ''!
 
-!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'JS 6/7/2021 05:11:29'!
+!SentenceFinderByPrefix class methodsFor: 'error descriptions' stamp: 'JS 6/7/2021 05:11:29'!
 emptyWordErrorDescription
 
 	^ 'Word is empty'! !
 
-!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'JS 6/7/2021 05:11:31'!
+!SentenceFinderByPrefix class methodsFor: 'error descriptions' stamp: 'JS 6/7/2021 05:11:31'!
 moreThanOneWordErrorDescription
 
 	^ 'More than one word was given'! !
 
-!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'LT 6/7/2021 20:06:27'!
+!SentenceFinderByPrefix class methodsFor: 'error descriptions' stamp: 'LT 6/7/2021 20:06:27'!
 notAStackErrorDescription
 
 	^ 'Argument is not an OOStack'! !
 
-!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'LT 6/7/2021 20:13:14'!
+!SentenceFinderByPrefix class methodsFor: 'error descriptions' stamp: 'LT 6/7/2021 20:13:14'!
 notAWordErrorDescription
 
 	^ 'Argument is not a word'! !
 
-!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'LT 6/9/2021 23:31:32'!
+!SentenceFinderByPrefix class methodsFor: 'error descriptions' stamp: 'LT 6/9/2021 23:31:32'!
 notAllElementsOfStackAreStringErrorDescription
 
 	^ 'There is at least one element of the stack which is not a string'! !
@@ -663,15 +662,15 @@ Object subclass: #StackObject
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!StackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:07:29'!
+!StackObject methodsFor: 'accessing' stamp: 'JS 6/10/2021 16:25:12'!
 element
 
-	^self subclassResponsibility ! !
+	self subclassResponsibility ! !
 
-!StackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:07:41'!
+!StackObject methodsFor: 'accessing' stamp: 'JS 6/10/2021 16:25:16'!
 isNullStackObject
 
-	^self subclassResponsibility! !
+	self subclassResponsibility! !
 
 !StackObject methodsFor: 'accessing' stamp: 'LT 6/10/2021 00:44:57'!
 nextObject
@@ -686,8 +685,9 @@ StackObject subclass: #FilledStackObject
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!FilledStackObject methodsFor: 'intialization' stamp: 'LT 6/4/2021 19:28:30'!
+!FilledStackObject methodsFor: 'intialization' stamp: 'JS 6/10/2021 16:26:25'!
 initializeWith: anElement linkedTo: nextStackObject
+
 	element := anElement.
 	nextObject := nextStackObject.! !
 
@@ -721,15 +721,17 @@ StackObject subclass: #NullStackObject
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
+!NullStackObject methodsFor: 'initialization' stamp: 'JS 6/10/2021 16:25:33'!
+initialize
+
+	element := nil.
+	nextObject := nil.! !
+
+
 !NullStackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:10:54'!
 element
 
 	StackEmptyError signal: OOStack stackEmptyErrorDescription.! !
-
-!NullStackObject methodsFor: 'accessing' stamp: 'LT 6/10/2021 00:36:38'!
-initialize
-	element := nil.
-	nextObject := nil.! !
 
 !NullStackObject methodsFor: 'accessing' stamp: 'JS 6/7/2021 05:11:00'!
 isNullStackObject
