@@ -171,13 +171,13 @@ test19CanNotEvaluateAnInvalidCommand
 							    self assert: (marsRover isAt: 1@2 facing: $O) ].
 	! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 19:08:48'!
+!MarsRoverTest methodsFor: 'tests' stamp: 'LT 6/29/2021 23:12:28'!
 test20CanNotInstantiateWithInvalidCardinalPoint
 
 	self 
 		should: [MarsRover at: 0@0 facing: $P]
 		raise: MarsRoverInvalidCardinalPointError
-		withExceptionDo: [:anError | self assert: anError messageText equals: (MarsRover invalidCardinalPointErrorDescription: $P)].
+		withExceptionDo: [:anError | self assert: anError messageText equals: (MarsRoverDirection invalidCardinalPointErrorDescription: $P)].
 	! !
 
 
@@ -194,28 +194,15 @@ evaluateCommandSequence: aCommandSequence
 	aCommandSequence do: [ :aCommandKey | (MarsRoverCommand of: aCommandKey) beExecutedBy: self ].! !
 
 
-!MarsRover methodsFor: 'initialization' stamp: 'JS 6/29/2021 21:21:38'!
-initializeAt: aPoint facing: aCardinalPoint 
+!MarsRover methodsFor: 'initialization' stamp: 'LT 6/29/2021 23:14:58'!
+initializeAt: aPoint facing: aDirection 
 
 	position := aPoint.
-	direction := MarsRoverDirection of: aCardinalPoint.! !
+	direction := aDirection.! !
 
 
-!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 21:18:57'!
+!MarsRover methodsFor: 'movement' stamp: 'LT 6/29/2021 23:10:31'!
 moveBackwards
-
-	"(self isFacing: $N) ifTrue: [
-		self moveBy: (0@-1).
-	].
-	(self isFacing: $S) ifTrue: [
-		self moveBy: (0@1).
-	].
-	(self isFacing: $E) ifTrue: [
-		self moveBy: (-1@0).
-	].
-	(self isFacing: $O) ifTrue: [
-		self moveBy: (1@0).
-	]."
 
 	self moveBy: direction backwards.! !
 
@@ -224,51 +211,18 @@ moveBy: aPoint
 
 	position := position + aPoint.! !
 
-!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 21:18:22'!
+!MarsRover methodsFor: 'movement' stamp: 'LT 6/29/2021 23:10:53'!
 moveForward
-
-	"(self isFacing: $N) ifTrue: [
-		self moveBy: (0@1).
-	].
-	(self isFacing: $S) ifTrue: [
-		self moveBy: (0@-1).
-	].
-	(self isFacing: $E) ifTrue: [
-		self moveBy: (1@0).
-	].
-	(self isFacing: $O) ifTrue: [
-		self moveBy: (-1@0).
-	]."
 
 	self moveBy: direction forward.! !
 
-!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 21:19:32'!
+!MarsRover methodsFor: 'movement' stamp: 'LT 6/29/2021 23:11:00'!
 rotateLeft
-
-	"(self isFacing: $N) ifTrue: [
-		self rotateTo: $O.
-	] ifFalse: [ (self isFacing: $S) ifTrue: [
-		self rotateTo: $E.
-	] ifFalse: [ (self isFacing: $E) ifTrue: [
-		self rotateTo: $N.
-	] ifFalse: [ (self isFacing: $O) ifTrue: [
-		self rotateTo: $S.
-	]]]]"
 
 	self rotateTo: direction left.! !
 
-!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 21:19:47'!
+!MarsRover methodsFor: 'movement' stamp: 'LT 6/29/2021 23:11:06'!
 rotateRight
-
-	"(self isFacing: $N) ifTrue: [
-		self rotateTo: $E.
-	] ifFalse: [ (self isFacing: $S) ifTrue: [
-		self rotateTo: $O.
-	] ifFalse: [ (self isFacing: $E) ifTrue: [
-		self rotateTo: $S.
-	] ifFalse: [ (self isFacing: $O) ifTrue: [
-		self rotateTo: $N.
-	]]]]"
 
 	self rotateTo: direction right.! !
 
@@ -299,17 +253,11 @@ isFacing: aCardinalPoint
 MarsRover class
 	instanceVariableNames: ''!
 
-!MarsRover class methodsFor: 'instance creation' stamp: 'JS 6/29/2021 18:10:17'!
+!MarsRover class methodsFor: 'instance creation' stamp: 'LT 6/29/2021 23:15:21'!
 at: aPoint facing: aCardinalPoint
 
-	(aCardinalPoint = $N or: [aCardinalPoint = $S or: [aCardinalPoint = $E or: [aCardinalPoint = $O]]]) ifFalse:
-	[MarsRoverInvalidCardinalPointError signal: (self invalidCardinalPointErrorDescription: aCardinalPoint) ].
-	^self new initializeAt: aPoint facing: aCardinalPoint ! !
+	^self new initializeAt: aPoint facing: (MarsRoverDirection of: aCardinalPoint) ! !
 
-
-!MarsRover class methodsFor: 'error descriptions' stamp: 'JS 6/29/2021 18:10:28'!
-invalidCardinalPointErrorDescription: aCardinalPoint
-	^aCardinalPoint asString,' is not a valid cardinal point'! !
 
 
 !classDefinition: #MarsRoverCommand category: 'MarsRover'!
