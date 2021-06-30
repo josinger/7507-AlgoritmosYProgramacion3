@@ -1,99 +1,184 @@
-!classDefinition: #XxxTest category: 'MarsRover'!
-TestCase subclass: #XxxTest
+!classDefinition: #MarsRoverInvalidCardinalPointError category: 'MarsRover'!
+Error subclass: #MarsRoverInvalidCardinalPointError
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!XxxTest methodsFor: 'as yet unclassified' stamp: 'JS 6/28/2021 23:18:37'!
-test01
+
+!classDefinition: #MarsRoverInvalidCommandError category: 'MarsRover'!
+Error subclass: #MarsRoverInvalidCommandError
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+
+!classDefinition: #MarsRoverTest category: 'MarsRover'!
+TestCase subclass: #MarsRoverTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!MarsRoverTest methodsFor: 'shared' stamp: 'JS 6/29/2021 20:43:44'!
+assertThatAMarsRoverAtOriginFacing: startingCardinalPoint evaluating: aCommandSequence endsAt: endingPoint facing: endingCardinalPoint
 
 	| marsRover |
 
-	marsRover := MarsRover at: 0@0 facing: 'N'.
-	marsRover evaluateCommandSequence: ''.
-	self assert: 0@0 equals: marsRover position.! !
+	marsRover := MarsRover at: 0@0 facing: startingCardinalPoint.
+	marsRover evaluateCommandSequence: aCommandSequence.
+	self assert: (marsRover isAt: endingPoint facing: endingCardinalPoint).! !
 
-!XxxTest methodsFor: 'as yet unclassified' stamp: 'JS 6/28/2021 23:24:44'!
-test02
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 20:45:47'!
+test01DoesNotMoveOrRotateIfNoCommandIsGiven
+
+	self  assertThatAMarsRoverAtOriginFacing: $N 
+		evaluating: '' 
+		endsAt: 0@0 facing: $N! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 20:46:22'!
+test02IfFacingNorthMovigForwardGoesUp
+
+	self  assertThatAMarsRoverAtOriginFacing: $N 
+		evaluating: 'f' 
+		endsAt: 0@1 facing: $N! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 20:48:17'!
+test03IfFacingNorthMovigBackwardsGoesDown
+
+	self  assertThatAMarsRoverAtOriginFacing: $N 
+		evaluating: 'b' 
+		endsAt: 0@-1 facing: $N! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 20:48:55'!
+test04IfFacingNorthRotatingLeftPointsWest
+
+	self  assertThatAMarsRoverAtOriginFacing: $N 
+		evaluating: 'l' 
+		endsAt: 0@0 facing: $O! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 20:49:22'!
+test05IfFacingNorthRotatingLeftPointsEast
+
+	self  assertThatAMarsRoverAtOriginFacing: $N 
+		evaluating: 'r' 
+		endsAt: 0@0 facing: $E! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 20:49:50'!
+test06IfFacingSouthMovigForwardGoesDown
+
+	self  assertThatAMarsRoverAtOriginFacing: $S
+		evaluating: 'f' 
+		endsAt: 0@-1 facing: $S! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 20:50:18'!
+test07IfFacingSouthMovigBackwardsGoesUp
+
+	self  assertThatAMarsRoverAtOriginFacing: $S
+		evaluating: 'b' 
+		endsAt: 0@1 facing: $S! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 20:51:22'!
+test08IfFacingSouthRotatingLeftPointsEast
+
+	self  assertThatAMarsRoverAtOriginFacing: $S 
+		evaluating: 'l' 
+		endsAt: 0@0 facing: $E! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 20:55:06'!
+test09IfFacingSouthRotatingLeftPointsWest
+
+	self  assertThatAMarsRoverAtOriginFacing: $S 
+		evaluating: 'r' 
+		endsAt: 0@0 facing: $O! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:01:17'!
+test10IfFacingEastMovigForwardGoesRight
+
+	self  assertThatAMarsRoverAtOriginFacing: $E
+		evaluating: 'f' 
+		endsAt: 1@0 facing: $E! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:01:45'!
+test11IfFacingEastMovigBackwardsGoesLeft
+
+	self  assertThatAMarsRoverAtOriginFacing: $E
+		evaluating: 'b' 
+		endsAt: -1@0 facing: $E! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:02:26'!
+test12IfFacingEastRotatingLeftPointsNorth
+
+	self  assertThatAMarsRoverAtOriginFacing: $E
+		evaluating: 'l' 
+		endsAt: 0@0 facing: $N! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:02:47'!
+test13IfFacingEastRotatingLeftPointsSouth
+
+	self  assertThatAMarsRoverAtOriginFacing: $E
+		evaluating: 'r' 
+		endsAt: 0@0 facing: $S! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:04:02'!
+test14IfFacingWestMovigForwardGoesLeft
+
+	self  assertThatAMarsRoverAtOriginFacing: $O
+		evaluating: 'f' 
+		endsAt: -1@0 facing: $O! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:04:23'!
+test15IfFacingWestMovigBackwardsGoesRight
+
+	self  assertThatAMarsRoverAtOriginFacing: $O
+		evaluating: 'b' 
+		endsAt: 1@0 facing: $O! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:04:52'!
+test16IfFacingWestRotatingLeftPointsSouth
+
+	self  assertThatAMarsRoverAtOriginFacing: $O
+		evaluating: 'l' 
+		endsAt: 0@0 facing: $S! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:05:05'!
+test17IfFacingWestRotatingLeftPointsNorth
+
+	self  assertThatAMarsRoverAtOriginFacing: $O
+		evaluating: 'r' 
+		endsAt: 0@0 facing: $N! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:08:13'!
+test18CanEvaluateMultipleCommands
+
+	self  assertThatAMarsRoverAtOriginFacing: $N
+		evaluating: 'ff' 
+		endsAt: 0@2 facing: $N! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:07:25'!
+test19CanNotEvaluateAnInvalidCommand
 
 	| marsRover |
 
-	marsRover := MarsRover at: 0@0 facing: 'N'.
-	marsRover evaluateCommandSequence: 'f'.
-	self assert: 0@1 equals: marsRover position.! !
+	marsRover := MarsRover at: 0@0 facing: $N.
+	
+	self 
+		should: [marsRover evaluateCommandSequence: 'fflbpf']
+		raise: MarsRoverInvalidCommandError
+		withExceptionDo: [:anError | self assert: anError messageText equals: (MarsRoverCommand invalidCommandErrorDescription: $p).
+							    self assert: (marsRover isAt: 1@2 facing: $O) ].
+	! !
 
-!XxxTest methodsFor: 'as yet unclassified' stamp: 'JS 6/28/2021 23:33:36'!
-test03
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 19:08:48'!
+test20CanNotInstantiateWithInvalidCardinalPoint
 
-	| marsRover |
-
-	marsRover := MarsRover at: 0@0 facing: 'N'.
-	marsRover evaluateCommandSequence: 'b'.
-	self assert: 0@-1 equals: marsRover position.! !
-
-!XxxTest methodsFor: 'as yet unclassified' stamp: 'JS 6/28/2021 23:42:03'!
-test04
-
-	| marsRover |
-
-	marsRover := MarsRover at: 0@0 facing: 'N'.
-	marsRover evaluateCommandSequence: 'l'.
-	self assert: 'O' equals: marsRover direction.! !
-
-!XxxTest methodsFor: 'as yet unclassified' stamp: 'JS 6/28/2021 23:44:47'!
-test05
-
-	| marsRover |
-
-	marsRover := MarsRover at: 0@0 facing: 'N'.
-	marsRover evaluateCommandSequence: 'r'.
-	self assert: 'E' equals: marsRover direction.! !
-
-!XxxTest methodsFor: 'as yet unclassified' stamp: 'JS 6/28/2021 23:50:43'!
-test06
-
-	| marsRover |
-
-	marsRover := MarsRover at: 0@0 facing: 'S'.
-	marsRover evaluateCommandSequence: 'f'.
-	self assert: 0@-1 equals: marsRover position.! !
-
-!XxxTest methodsFor: 'as yet unclassified' stamp: 'JS 6/28/2021 23:57:12'!
-test07
-
-	| marsRover |
-
-	marsRover := MarsRover at: 0@0 facing: 'S'.
-	marsRover evaluateCommandSequence: 'b'.
-	self assert: 0@1 equals: marsRover position.! !
-
-!XxxTest methodsFor: 'as yet unclassified' stamp: 'JS 6/28/2021 23:59:41'!
-test08
-
-	| marsRover |
-
-	marsRover := MarsRover at: 0@0 facing: 'S'.
-	marsRover evaluateCommandSequence: 'l'.
-	self assert: 'E' equals: marsRover direction.! !
-
-!XxxTest methodsFor: 'as yet unclassified' stamp: 'JS 6/29/2021 00:00:22'!
-test09
-
-	| marsRover |
-
-	marsRover := MarsRover at: 0@0 facing: 'S'.
-	marsRover evaluateCommandSequence: 'r'.
-	self assert: 'O' equals: marsRover direction.! !
-
-!XxxTest methodsFor: 'as yet unclassified' stamp: 'JS 6/29/2021 00:31:04'!
-test10
-
-	| marsRover |
-
-	marsRover := MarsRover at: 0@0 facing: 'N'.
-	marsRover evaluateCommandSequence: 'ff'.
-	self assert: 0@2 equals: marsRover position.! !
+	self 
+		should: [MarsRover at: 0@0 facing: $P]
+		raise: MarsRoverInvalidCardinalPointError
+		withExceptionDo: [:anError | self assert: anError messageText equals: (MarsRover invalidCardinalPointErrorDescription: $P)].
+	! !
 
 
 !classDefinition: #MarsRover category: 'MarsRover'!
@@ -103,98 +188,110 @@ Object subclass: #MarsRover
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MarsRover methodsFor: 'public' stamp: 'JS 6/28/2021 23:42:38'!
-direction
-	^direction! !
-
-!MarsRover methodsFor: 'public' stamp: 'JS 6/29/2021 00:41:01'!
+!MarsRover methodsFor: 'command evaluations' stamp: 'JS 6/29/2021 18:43:48'!
 evaluateCommandSequence: aCommandSequence
 
-	aCommandSequence do: [ :aCommand |
-		aCommand = $f ifTrue: [self moveForward].
-		aCommand = $b ifTrue: [self moveBackwards].
-		aCommand = $l ifTrue: [self rotateLeft].
-		aCommand = $r ifTrue: [self rotateRight]]
-! !
-
-!MarsRover methodsFor: 'public' stamp: 'JS 6/28/2021 23:29:51'!
-position
-	^position! !
+	aCommandSequence do: [ :aCommandKey | (MarsRoverCommand of: aCommandKey) beExecutedBy: self ].! !
 
 
-!MarsRover methodsFor: 'initialization' stamp: 'JS 6/28/2021 23:23:19'!
+!MarsRover methodsFor: 'initialization' stamp: 'JS 6/29/2021 21:21:38'!
 initializeAt: aPoint facing: aCardinalPoint 
+
 	position := aPoint.
-	direction := aCardinalPoint.! !
+	direction := MarsRoverDirection of: aCardinalPoint.! !
 
 
-!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 00:12:34'!
+!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 21:18:57'!
 moveBackwards
 
-	self direction = 'N' ifTrue: [
+	"(self isFacing: $N) ifTrue: [
 		self moveBy: (0@-1).
 	].
-	self direction = 'S' ifTrue: [
+	(self isFacing: $S) ifTrue: [
 		self moveBy: (0@1).
 	].
-	self direction = 'E' ifTrue: [
+	(self isFacing: $E) ifTrue: [
 		self moveBy: (-1@0).
 	].
-	self direction = 'O' ifTrue: [
+	(self isFacing: $O) ifTrue: [
 		self moveBy: (1@0).
-	].! !
+	]."
+
+	self moveBy: direction backwards.! !
 
 !MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 00:11:48'!
 moveBy: aPoint
 
 	position := position + aPoint.! !
 
-!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 00:10:50'!
+!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 21:18:22'!
 moveForward
 
-	self direction = 'N' ifTrue: [
+	"(self isFacing: $N) ifTrue: [
 		self moveBy: (0@1).
 	].
-	self direction = 'S' ifTrue: [
+	(self isFacing: $S) ifTrue: [
 		self moveBy: (0@-1).
 	].
-	self direction = 'E' ifTrue: [
+	(self isFacing: $E) ifTrue: [
 		self moveBy: (1@0).
 	].
-	self direction = 'O' ifTrue: [
+	(self isFacing: $O) ifTrue: [
 		self moveBy: (-1@0).
-	].! !
+	]."
 
-!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 00:27:57'!
+	self moveBy: direction forward.! !
+
+!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 21:19:32'!
 rotateLeft
 
-	self direction = 'N' ifTrue: [
-		self rotateTo: 'O'.
-	] ifFalse: [ self direction = 'S' ifTrue: [
-		self rotateTo: 'E'.
-	] ifFalse: [ self direction = 'E' ifTrue: [
-		self rotateTo: 'N'.
-	] ifFalse: [ self direction = 'O' ifTrue: [
-		self rotateTo: 'S'.
-	]]]]! !
+	"(self isFacing: $N) ifTrue: [
+		self rotateTo: $O.
+	] ifFalse: [ (self isFacing: $S) ifTrue: [
+		self rotateTo: $E.
+	] ifFalse: [ (self isFacing: $E) ifTrue: [
+		self rotateTo: $N.
+	] ifFalse: [ (self isFacing: $O) ifTrue: [
+		self rotateTo: $S.
+	]]]]"
 
-!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 00:28:34'!
+	self rotateTo: direction left.! !
+
+!MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 21:19:47'!
 rotateRight
 
-	self direction = 'N' ifTrue: [
-		self rotateTo: 'E'.
-	] ifFalse: [ self direction = 'S' ifTrue: [
-		self rotateTo: 'O'.
-	] ifFalse: [ self direction = 'E' ifTrue: [
-		self rotateTo: 'S'.
-	] ifFalse: [ self direction = 'O' ifTrue: [
-		self rotateTo: 'N'.
-	]]]]! !
+	"(self isFacing: $N) ifTrue: [
+		self rotateTo: $E.
+	] ifFalse: [ (self isFacing: $S) ifTrue: [
+		self rotateTo: $O.
+	] ifFalse: [ (self isFacing: $E) ifTrue: [
+		self rotateTo: $S.
+	] ifFalse: [ (self isFacing: $O) ifTrue: [
+		self rotateTo: $N.
+	]]]]"
+
+	self rotateTo: direction right.! !
 
 !MarsRover methodsFor: 'movement' stamp: 'JS 6/29/2021 00:17:34'!
 rotateTo: aCardinalPoint
 
 	direction := aCardinalPoint.! !
+
+
+!MarsRover methodsFor: 'testing' stamp: 'JS 6/29/2021 20:37:47'!
+isAt: aPoint
+
+	^aPoint = position! !
+
+!MarsRover methodsFor: 'testing' stamp: 'JS 6/29/2021 20:39:00'!
+isAt: aPoint facing: aCardinalPoint
+
+	^(self isAt: aPoint) and: [self isFacing: aCardinalPoint].! !
+
+!MarsRover methodsFor: 'testing' stamp: 'JS 6/29/2021 21:56:55'!
+isFacing: aCardinalPoint
+
+	^(MarsRoverDirection of: aCardinalPoint) = direction! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -202,6 +299,349 @@ rotateTo: aCardinalPoint
 MarsRover class
 	instanceVariableNames: ''!
 
-!MarsRover class methodsFor: 'instance creation' stamp: 'JS 6/28/2021 23:21:14'!
-at: aPoint facing: aCardinalPoint 
+!MarsRover class methodsFor: 'instance creation' stamp: 'JS 6/29/2021 18:10:17'!
+at: aPoint facing: aCardinalPoint
+
+	(aCardinalPoint = $N or: [aCardinalPoint = $S or: [aCardinalPoint = $E or: [aCardinalPoint = $O]]]) ifFalse:
+	[MarsRoverInvalidCardinalPointError signal: (self invalidCardinalPointErrorDescription: aCardinalPoint) ].
 	^self new initializeAt: aPoint facing: aCardinalPoint ! !
+
+
+!MarsRover class methodsFor: 'error descriptions' stamp: 'JS 6/29/2021 18:10:28'!
+invalidCardinalPointErrorDescription: aCardinalPoint
+	^aCardinalPoint asString,' is not a valid cardinal point'! !
+
+
+!classDefinition: #MarsRoverCommand category: 'MarsRover'!
+Object subclass: #MarsRoverCommand
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!MarsRoverCommand methodsFor: 'execution' stamp: 'JS 6/29/2021 18:24:50'!
+beExecutedBy: aMarsRover
+	self subclassResponsibility.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'MarsRoverCommand class' category: 'MarsRover'!
+MarsRoverCommand class
+	instanceVariableNames: ''!
+
+!MarsRoverCommand class methodsFor: 'error descriptions' stamp: 'JS 6/29/2021 18:36:24'!
+invalidCommandErrorDescription: aCommand
+	^aCommand asString,' is not a valid command'! !
+
+
+!MarsRoverCommand class methodsFor: 'testing' stamp: 'JS 6/29/2021 18:35:44'!
+correspondsTo: aCommandKey
+
+	self subclassResponsibility! !
+
+
+!MarsRoverCommand class methodsFor: 'instance creation' stamp: 'JS 6/29/2021 18:43:00'!
+of: aCommandKey
+
+	| commandClass |
+
+	commandClass := self subclasses 
+				     detect: [ :aSubclass | aSubclass correspondsTo: aCommandKey ] 
+				     ifNone: [MarsRoverInvalidCommandError signal: (self invalidCommandErrorDescription: aCommandKey)].
+	
+	^commandClass new! !
+
+
+!classDefinition: #MoveBackwards category: 'MarsRover'!
+MarsRoverCommand subclass: #MoveBackwards
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!MoveBackwards methodsFor: 'execution' stamp: 'JS 6/29/2021 18:27:47'!
+beExecutedBy: aMarsRover
+	aMarsRover moveBackwards.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'MoveBackwards class' category: 'MarsRover'!
+MoveBackwards class
+	instanceVariableNames: ''!
+
+!MoveBackwards class methodsFor: 'testing' stamp: 'JS 6/29/2021 18:37:48'!
+correspondsTo: aCommandKey
+
+	^aCommandKey=$b! !
+
+
+!classDefinition: #MoveForward category: 'MarsRover'!
+MarsRoverCommand subclass: #MoveForward
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!MoveForward methodsFor: 'execution' stamp: 'JS 6/29/2021 18:28:47'!
+beExecutedBy: aMarsRover
+	aMarsRover moveForward.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'MoveForward class' category: 'MarsRover'!
+MoveForward class
+	instanceVariableNames: ''!
+
+!MoveForward class methodsFor: 'testing' stamp: 'JS 6/29/2021 18:37:57'!
+correspondsTo: aCommandKey
+
+	^aCommandKey=$f! !
+
+
+!classDefinition: #RotateLeft category: 'MarsRover'!
+MarsRoverCommand subclass: #RotateLeft
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!RotateLeft methodsFor: 'execution' stamp: 'JS 6/29/2021 18:29:01'!
+beExecutedBy: aMarsRover
+	aMarsRover rotateLeft.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'RotateLeft class' category: 'MarsRover'!
+RotateLeft class
+	instanceVariableNames: ''!
+
+!RotateLeft class methodsFor: 'testing' stamp: 'JS 6/29/2021 18:38:04'!
+correspondsTo: aCommandKey
+
+	^aCommandKey=$l! !
+
+
+!classDefinition: #RotateRight category: 'MarsRover'!
+MarsRoverCommand subclass: #RotateRight
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!RotateRight methodsFor: 'execution' stamp: 'JS 6/29/2021 18:29:13'!
+beExecutedBy: aMarsRover
+	aMarsRover rotateRight.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'RotateRight class' category: 'MarsRover'!
+RotateRight class
+	instanceVariableNames: ''!
+
+!RotateRight class methodsFor: 'testing' stamp: 'JS 6/29/2021 18:38:09'!
+correspondsTo: aCommandKey
+
+	^aCommandKey=$r! !
+
+
+!classDefinition: #MarsRoverDirection category: 'MarsRover'!
+Object subclass: #MarsRoverDirection
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!MarsRoverDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:27:44'!
+left
+	self subclassResponsibility! !
+
+!MarsRoverDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:27:48'!
+right
+	self subclassResponsibility! !
+
+
+!MarsRoverDirection methodsFor: 'movement directions' stamp: 'JS 6/29/2021 21:24:14'!
+backwards
+
+	^(self forward)*(-1)! !
+
+!MarsRoverDirection methodsFor: 'movement directions' stamp: 'JS 6/29/2021 21:22:48'!
+forward
+
+	self subclassResponsibility! !
+
+
+!MarsRoverDirection methodsFor: 'as yet unclassified' stamp: 'JS 6/29/2021 21:56:07'!
+= aMarsRoverDirection
+
+	^aMarsRoverDirection isMemberOf: self class.
+
+	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'MarsRoverDirection class' category: 'MarsRover'!
+MarsRoverDirection class
+	instanceVariableNames: ''!
+
+!MarsRoverDirection class methodsFor: 'instance creation' stamp: 'JS 6/29/2021 21:40:07'!
+of: aCardinalPoint
+
+	| directionClass |
+
+	directionClass := self subclasses 
+				     detect: [ :aSubclass | aSubclass correspondsTo: aCardinalPoint ] 
+				     ifNone: [MarsRoverInvalidCardinalPointError signal: (self invalidCardinalPointErrorDescription: aCardinalPoint)].
+	
+	^directionClass new! !
+
+
+!MarsRoverDirection class methodsFor: 'error descriptions' stamp: 'JS 6/29/2021 21:40:28'!
+invalidCardinalPointErrorDescription: aCardinalPoint
+	^aCardinalPoint asString,' is not a valid cardinal point'! !
+
+
+!MarsRoverDirection class methodsFor: 'testing' stamp: 'JS 6/29/2021 21:41:43'!
+correspondsTo: aCardinalPoint
+
+	self subclassResponsibility.! !
+
+
+!classDefinition: #EastDirection category: 'MarsRover'!
+MarsRoverDirection subclass: #EastDirection
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!EastDirection methodsFor: 'movement directions' stamp: 'JS 6/29/2021 21:46:26'!
+forward
+
+	^1@0! !
+
+
+!EastDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:49:28'!
+left
+
+	^NorthDirection new! !
+
+!EastDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:51:06'!
+right
+
+	^SouthDirection new! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'EastDirection class' category: 'MarsRover'!
+EastDirection class
+	instanceVariableNames: ''!
+
+!EastDirection class methodsFor: 'testing' stamp: 'JS 6/29/2021 21:58:30'!
+correspondsTo: aCardinalPoint
+
+	^aCardinalPoint = $E! !
+
+
+!classDefinition: #NorthDirection category: 'MarsRover'!
+MarsRoverDirection subclass: #NorthDirection
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!NorthDirection methodsFor: 'movement directions' stamp: 'JS 6/29/2021 21:48:15'!
+forward
+
+	^0@1! !
+
+
+!NorthDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:50:18'!
+left
+
+	^WestDirection new! !
+
+!NorthDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:51:23'!
+right
+
+	^EastDirection new! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'NorthDirection class' category: 'MarsRover'!
+NorthDirection class
+	instanceVariableNames: ''!
+
+!NorthDirection class methodsFor: 'testing' stamp: 'JS 6/29/2021 21:58:25'!
+correspondsTo: aCardinalPoint
+
+	^aCardinalPoint = $N! !
+
+
+!classDefinition: #SouthDirection category: 'MarsRover'!
+MarsRoverDirection subclass: #SouthDirection
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!SouthDirection methodsFor: 'movement directions' stamp: 'JS 6/29/2021 21:48:25'!
+forward
+
+	^0@-1! !
+
+
+!SouthDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:50:27'!
+left
+
+	^EastDirection new! !
+
+!SouthDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:51:37'!
+right
+
+	^WestDirection new! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'SouthDirection class' category: 'MarsRover'!
+SouthDirection class
+	instanceVariableNames: ''!
+
+!SouthDirection class methodsFor: 'testing' stamp: 'JS 6/29/2021 21:58:36'!
+correspondsTo: aCardinalPoint
+
+	^aCardinalPoint = $S! !
+
+
+!classDefinition: #WestDirection category: 'MarsRover'!
+MarsRoverDirection subclass: #WestDirection
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!WestDirection methodsFor: 'movement directions' stamp: 'JS 6/29/2021 21:48:32'!
+forward
+
+	^-1@0! !
+
+
+!WestDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:50:37'!
+left
+
+	^SouthDirection new! !
+
+!WestDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:51:46'!
+right
+
+	^NorthDirection new! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'WestDirection class' category: 'MarsRover'!
+WestDirection class
+	instanceVariableNames: ''!
+
+!WestDirection class methodsFor: 'testing' stamp: 'JS 6/29/2021 21:58:41'!
+correspondsTo: aCardinalPoint
+
+	^aCardinalPoint = $O! !
