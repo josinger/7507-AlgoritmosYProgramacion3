@@ -157,27 +157,25 @@ test18CanEvaluateMultipleCommands
 		evaluating: 'ff' 
 		endsAt: 0@2 facing: $N! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JS 6/29/2021 21:07:25'!
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 7/1/2021 01:43:03'!
 test19CanNotEvaluateAnInvalidCommand
 
 	| marsRover |
 
 	marsRover := MarsRover at: 0@0 facing: $N.
 	
-	self 
-		should: [marsRover evaluateCommandSequence: 'fflbpf']
+	self  should: [marsRover evaluateCommandSequence: 'fflbpf']
 		raise: MarsRoverInvalidCommandError
 		withExceptionDo: [:anError | self assert: anError messageText equals: (MarsRoverCommand invalidCommandErrorDescription: $p).
-							    self assert: (marsRover isAt: 1@2 facing: $O) ].
+							    self assert: (marsRover isAt: 1@2 facing: $O) ]
 	! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'LT 6/29/2021 23:12:28'!
+!MarsRoverTest methodsFor: 'tests' stamp: 'JS 7/1/2021 01:43:26'!
 test20CanNotInstantiateWithInvalidCardinalPoint
 
-	self 
-		should: [MarsRover at: 0@0 facing: $P]
+	self  should: [MarsRover at: 0@0 facing: $P]
 		raise: MarsRoverInvalidCardinalPointError
-		withExceptionDo: [:anError | self assert: anError messageText equals: (MarsRoverDirection invalidCardinalPointErrorDescription: $P)].
+		withExceptionDo: [:anError | self assert: anError messageText equals: (MarsRoverDirection invalidCardinalPointErrorDescription: $P)]
 	! !
 
 
@@ -237,10 +235,10 @@ isAt: aPoint
 
 	^aPoint = position! !
 
-!MarsRover methodsFor: 'testing' stamp: 'JS 6/29/2021 20:39:00'!
+!MarsRover methodsFor: 'testing' stamp: 'JS 7/1/2021 01:39:54'!
 isAt: aPoint facing: aCardinalPoint
 
-	^(self isAt: aPoint) and: [self isFacing: aCardinalPoint].! !
+	^(self isAt: aPoint) and: [self isFacing: aCardinalPoint]! !
 
 !MarsRover methodsFor: 'testing' stamp: 'JS 6/29/2021 21:56:55'!
 isFacing: aCardinalPoint
@@ -258,7 +256,6 @@ at: aPoint facing: aCardinalPoint
 
 	^self new initializeAt: aPoint facing: (MarsRoverDirection of: aCardinalPoint) ! !
 
-
 
 !classDefinition: #MarsRoverCommand category: 'MarsRover'!
 Object subclass: #MarsRoverCommand
@@ -267,8 +264,9 @@ Object subclass: #MarsRoverCommand
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MarsRoverCommand methodsFor: 'execution' stamp: 'JS 6/29/2021 18:24:50'!
+!MarsRoverCommand methodsFor: 'execution' stamp: 'JS 7/1/2021 01:40:02'!
 beExecutedBy: aMarsRover
+
 	self subclassResponsibility.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -277,18 +275,19 @@ beExecutedBy: aMarsRover
 MarsRoverCommand class
 	instanceVariableNames: ''!
 
-!MarsRoverCommand class methodsFor: 'error descriptions' stamp: 'JS 6/29/2021 18:36:24'!
+!MarsRoverCommand class methodsFor: 'error descriptions' stamp: 'JS 7/1/2021 01:43:48'!
 invalidCommandErrorDescription: aCommand
+
 	^aCommand asString,' is not a valid command'! !
 
 
-!MarsRoverCommand class methodsFor: 'testing' stamp: 'JS 6/29/2021 18:35:44'!
+!MarsRoverCommand class methodsFor: 'testing' stamp: 'JS 7/1/2021 01:43:43'!
 correspondsTo: aCommandKey
 
-	self subclassResponsibility! !
+	self subclassResponsibility.! !
 
 
-!MarsRoverCommand class methodsFor: 'instance creation' stamp: 'JS 6/29/2021 18:43:00'!
+!MarsRoverCommand class methodsFor: 'instance creation' stamp: 'JS 7/1/2021 01:44:16'!
 of: aCommandKey
 
 	| commandClass |
@@ -307,8 +306,9 @@ MarsRoverCommand subclass: #MoveBackwards
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MoveBackwards methodsFor: 'execution' stamp: 'JS 6/29/2021 18:27:47'!
+!MoveBackwards methodsFor: 'execution' stamp: 'JS 7/1/2021 01:40:07'!
 beExecutedBy: aMarsRover
+
 	aMarsRover moveBackwards.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -330,8 +330,9 @@ MarsRoverCommand subclass: #MoveForward
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MoveForward methodsFor: 'execution' stamp: 'JS 6/29/2021 18:28:47'!
+!MoveForward methodsFor: 'execution' stamp: 'JS 7/1/2021 01:40:10'!
 beExecutedBy: aMarsRover
+
 	aMarsRover moveForward.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -353,8 +354,9 @@ MarsRoverCommand subclass: #RotateLeft
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!RotateLeft methodsFor: 'execution' stamp: 'JS 6/29/2021 18:29:01'!
+!RotateLeft methodsFor: 'execution' stamp: 'JS 7/1/2021 01:40:16'!
 beExecutedBy: aMarsRover
+
 	aMarsRover rotateLeft.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -376,8 +378,9 @@ MarsRoverCommand subclass: #RotateRight
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!RotateRight methodsFor: 'execution' stamp: 'JS 6/29/2021 18:29:13'!
+!RotateRight methodsFor: 'execution' stamp: 'JS 7/1/2021 01:40:19'!
 beExecutedBy: aMarsRover
+
 	aMarsRover rotateRight.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -399,13 +402,15 @@ Object subclass: #MarsRoverDirection
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MarsRoverDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:27:44'!
+!MarsRoverDirection methodsFor: 'relative directions' stamp: 'JS 7/1/2021 01:40:53'!
 left
-	self subclassResponsibility! !
 
-!MarsRoverDirection methodsFor: 'relative directions' stamp: 'JS 6/29/2021 21:27:48'!
+	self subclassResponsibility.! !
+
+!MarsRoverDirection methodsFor: 'relative directions' stamp: 'JS 7/1/2021 01:40:58'!
 right
-	self subclassResponsibility! !
+
+	self subclassResponsibility.! !
 
 
 !MarsRoverDirection methodsFor: 'movement directions' stamp: 'JS 6/29/2021 21:24:14'!
@@ -413,16 +418,16 @@ backwards
 
 	^(self forward)*(-1)! !
 
-!MarsRoverDirection methodsFor: 'movement directions' stamp: 'JS 6/29/2021 21:22:48'!
+!MarsRoverDirection methodsFor: 'movement directions' stamp: 'JS 7/1/2021 01:41:04'!
 forward
 
-	self subclassResponsibility! !
+	self subclassResponsibility.! !
 
 
-!MarsRoverDirection methodsFor: 'as yet unclassified' stamp: 'JS 6/29/2021 21:56:07'!
+!MarsRoverDirection methodsFor: 'comparing' stamp: 'JS 7/1/2021 01:41:08'!
 = aMarsRoverDirection
 
-	^aMarsRoverDirection isMemberOf: self class.
+	^aMarsRoverDirection isMemberOf: self class
 
 	! !
 
@@ -444,8 +449,9 @@ of: aCardinalPoint
 	^directionClass new! !
 
 
-!MarsRoverDirection class methodsFor: 'error descriptions' stamp: 'JS 6/29/2021 21:40:28'!
+!MarsRoverDirection class methodsFor: 'error descriptions' stamp: 'JS 7/1/2021 01:44:57'!
 invalidCardinalPointErrorDescription: aCardinalPoint
+
 	^aCardinalPoint asString,' is not a valid cardinal point'! !
 
 
