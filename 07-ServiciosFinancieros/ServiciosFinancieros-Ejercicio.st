@@ -88,18 +88,85 @@ test07AccountKnowsItsTransactions
 	self assert: (account transactions includes: deposit).
 ! !
 
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LT 7/3/2021 15:16:37'!
+test08ReceptiveAccountCanTransferToAnotherReceptiveAccount
+
+	| account1 account2 |
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	
+	Deposit register: 50 * peso on: account1.
+	Transfer for: 50 * peso from: account1 to: account2.
+		
+	self assert: 50 * peso equals: account2 balance.
+	self assert: 0 * peso equals: account1 balance.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LT 7/3/2021 15:17:24'!
+test09ATransferKnowsItsValue
+
+	| account1 account2 transfer |
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	
+	Deposit register: 50 * peso on: account1.
+	transfer := Transfer for: 50 * peso from: account1 to: account2.
+		
+	self assert: 50 * peso equals: transfer value.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LT 7/3/2021 15:18:51'!
+test10EachPartOfTheTransferKnowsItsCounterPart
+
+	| account1 account2 transfer |
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	
+	Deposit register: 50 * peso on: account1.
+	transfer := Transfer for: 50 * peso from: account1 to: account2.
+		
+	self assert: transfer withdrawal counterPart equals: transfer deposit.
+	self assert: transfer deposit counterPart equals: transfer withdrawal.
+! !
+
 
 !classDefinition: #AccountTransaction category: 'ServiciosFinancieros-Ejercicio'!
 Object subclass: #AccountTransaction
-	instanceVariableNames: ''
+	instanceVariableNames: 'value transfer'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!AccountTransaction methodsFor: 'value' stamp: 'HernanWilkinson 9/12/2011 12:25'!
-value 
+!AccountTransaction methodsFor: 'value' stamp: 'LT 7/3/2021 15:08:47'!
+operationValue
 
 	self subclassResponsibility ! !
+
+!AccountTransaction methodsFor: 'value' stamp: 'LT 7/3/2021 15:23:25'!
+value
+
+	value ifNil: [^transfer value].
+	^value.! !
+
+
+!AccountTransaction methodsFor: 'instance creation' stamp: 'LT 7/3/2021 14:52:13'!
+counterPart
+
+	self subclassResponsibility.! !
+
+
+!AccountTransaction methodsFor: 'initialization' stamp: 'LT 7/2/2021 17:19:17'!
+initializeFor: aValue
+
+	value := aValue ! !
+
+!AccountTransaction methodsFor: 'initialization' stamp: 'LT 7/3/2021 15:27:40'!
+initializeOf: aTransfer
+
+	transfer := aTransfer.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -107,7 +174,27 @@ value
 AccountTransaction class
 	instanceVariableNames: ''!
 
-!AccountTransaction class methodsFor: 'instance creation' stamp: 'NR 10/17/2019 03:22:00'!
+!AccountTransaction class methodsFor: 'instance creation' stamp: 'LT 7/3/2021 14:47:22'!
+for: aValue
+
+	^ self new initializeFor: aValue ! !
+
+!AccountTransaction class methodsFor: 'instance creation' stamp: 'LT 7/3/2021 15:11:36'!
+of: aTransfer on: anAccount
+
+	| transaction |
+	
+	transaction := self ofTransfer: aTransfer.
+	anAccount register: transaction.
+		
+	^ transaction! !
+
+!AccountTransaction class methodsFor: 'instance creation' stamp: 'LT 7/3/2021 15:27:40'!
+ofTransfer: aTransfer
+
+	^self new initializeOf: aTransfer! !
+
+!AccountTransaction class methodsFor: 'instance creation' stamp: 'LT 7/2/2021 17:24:20'!
 register: aValue on: account
 
 	| transaction |
@@ -120,62 +207,42 @@ register: aValue on: account
 
 !classDefinition: #Deposit category: 'ServiciosFinancieros-Ejercicio'!
 AccountTransaction subclass: #Deposit
-	instanceVariableNames: 'value'
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Deposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:45'!
-initializeFor: aValue
 
-	value := aValue ! !
+!Deposit methodsFor: 'value' stamp: 'LT 7/3/2021 14:52:41'!
+counterPart
 
+	^ transfer withdrawal! !
 
-!Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
-value
+!Deposit methodsFor: 'value' stamp: 'LT 7/3/2021 15:23:53'!
+operationValue
 
-	^ value! !
+	^self value! !
 
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Deposit class' category: 'ServiciosFinancieros-Ejercicio'!
-Deposit class
-	instanceVariableNames: ''!
-
-!Deposit class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:38'!
-for: aValue
-
-	^ self new initializeFor: aValue ! !
 
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Ejercicio'!
 AccountTransaction subclass: #Withdraw
-	instanceVariableNames: 'value'
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Withdraw methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:46'!
-initializeFor: aValue
 
-	value := aValue ! !
+!Withdraw methodsFor: 'value' stamp: 'LT 7/3/2021 14:52:52'!
+counterPart
 
+	^ transfer deposit! !
 
-!Withdraw methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:33'!
-value
+!Withdraw methodsFor: 'value' stamp: 'LT 7/3/2021 15:23:48'!
+operationValue
 
-	^ value! !
+	^self value * (-1)! !
 
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Withdraw class' category: 'ServiciosFinancieros-Ejercicio'!
-Withdraw class
-	instanceVariableNames: ''!
-
-!Withdraw class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:33'!
-for: aValue
-
-	^ self new initializeFor: aValue ! !
 
 
 !classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio'!
@@ -191,10 +258,10 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'HAW 5/23/2019 15:19:32'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'LT 7/3/2021 15:08:22'!
 balance
 
-	^transactions sum: [ :aTransaction | aTransaction value ] ifEmpty: [ 0 ]! !
+	^transactions sum: [ :aTransaction | aTransaction operationValue ] ifEmpty: [ 0 ]! !
 
 !ReceptiveAccount methodsFor: 'main protocol' stamp: 'NR 10/17/2019 03:28:43'!
 hasRegistered: aTransaction
@@ -212,3 +279,43 @@ register: aTransaction
 transactions 
 
 	^ transactions copy! !
+
+
+!classDefinition: #Transfer category: 'ServiciosFinancieros-Ejercicio'!
+Object subclass: #Transfer
+	instanceVariableNames: 'withdrawal deposit value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!Transfer methodsFor: 'as yet unclassified' stamp: 'LT 7/2/2021 17:05:47'!
+deposit
+
+	^ deposit ! !
+
+!Transfer methodsFor: 'as yet unclassified' stamp: 'LT 7/3/2021 15:15:05'!
+initializeFor: aValue from: aWithdrawalAccount to: aDepositAccount
+	value := aValue.
+	withdrawal := Withdraw of: self on: aWithdrawalAccount.
+	deposit := Deposit of: self on: aDepositAccount.! !
+
+!Transfer methodsFor: 'as yet unclassified' stamp: 'LT 7/2/2021 17:05:07'!
+value
+
+	^ value! !
+
+!Transfer methodsFor: 'as yet unclassified' stamp: 'LT 7/2/2021 17:05:43'!
+withdrawal
+
+	^ withdrawal ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Transfer class' category: 'ServiciosFinancieros-Ejercicio'!
+Transfer class
+	instanceVariableNames: ''!
+
+!Transfer class methodsFor: 'as yet unclassified' stamp: 'LT 7/3/2021 15:14:52'!
+for: aValue from: withdrawalAccount to: depositAccount
+
+	^ self new initializeFor: aValue from: withdrawalAccount to: depositAccount! !
