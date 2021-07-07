@@ -1,3 +1,229 @@
+!classDefinition: #PortfolioTest category: 'ServiciosFinancieros-Ejercicio'!
+TestCase subclass: #PortfolioTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/5/2021 21:32:37'!
+test01PortfolioWithNoComponentsHasZeroPesos
+
+	| portfolio |
+	portfolio := Portfolio new.
+	self assert: 0 * peso equals: portfolio balance.! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 18:29:33'!
+test02PortfolioWithOneAccountKnowsItsBalance
+
+	| portfolio account |
+	portfolio := Portfolio new.
+	account := ReceptiveAccount new.
+	Deposit register: 100 * peso on: account.
+	portfolio add: account.
+	self assert: 100 * peso equals: portfolio balance.! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 18:30:00'!
+test03PortfolioWithManyAccountsKnowsItsBalance
+
+	| portfolio account1 account2 |
+	portfolio := Portfolio new.
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	Deposit register: 100 * peso on: account1.
+	Deposit register: 200 * peso on: account2.
+	portfolio add: account1.
+	portfolio add: account2.
+
+	self assert: 300 * peso equals: portfolio balance.! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 18:31:41'!
+test04PortfolioKnowsRegisteredTransactions
+
+	| portfolio deposit account |
+	portfolio := Portfolio new.
+	account := ReceptiveAccount new.
+	deposit := Deposit register: 100 * peso on: account.
+	portfolio add: account.
+	self assert: (portfolio hasRegistered: deposit).! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 18:37:52'!
+test05PortfolioDoesNotKnowNotRegisteredTransactions
+
+	| portfolio deposit account |
+	portfolio := Portfolio new.
+	account := ReceptiveAccount new.
+	deposit := Deposit register: 100 * peso on: account.
+	self deny: (portfolio hasRegistered: deposit).! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 18:40:19'!
+test06
+"este sería para probar si soporta portfolios, pero pasa solo porque el protfolio es polimorfo con las accounts."
+	| portfolio1 portfolio2 account1 account2 |
+	portfolio1 := Portfolio new.
+	portfolio2 := Portfolio new.
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	
+	Deposit register: 100 * peso on: account1.
+	Deposit register: 200 * peso on: account2.
+	
+	portfolio1 add: account1.
+	portfolio2 add: account2.
+	portfolio1 add: portfolio2.
+
+	self assert: 300 * peso equals: portfolio1 balance.! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 18:38:37'!
+test06PortfolioKnowsTransactionsOfSpecificAccount
+
+	| portfolio account  |
+	portfolio := Portfolio new.
+	account := ReceptiveAccount new.
+	Deposit register: 100 * peso on: account.
+	portfolio add: account.
+	self assert: ((portfolio transactionsOf: account) includesAllOf: account transactions).
+	self assert: (account transactions includesAllOf: (portfolio transactionsOf: account)).! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 19:31:29'!
+test07
+
+	| portfolio account |
+	account := ReceptiveAccount new.
+	Deposit register: 10 * peso on: account.
+	portfolio := Portfolio new.
+	portfolio add: account.
+	
+	self 
+		should: [portfolio add: account]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [:error |
+				self assert: 10 * peso equals: portfolio balance. 
+				self assert: 'account has already been added' equals: error messageText.
+			] 
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 19:29:43'!
+test08
+
+	| portfolio1 portfolio2 account |
+	account := ReceptiveAccount new.
+	Deposit register: 10 * peso on: account.
+	portfolio1 := Portfolio new.
+	portfolio2 := Portfolio new.
+	
+	portfolio2 add: account.
+	portfolio1 add: portfolio2.
+	self 
+		should: [portfolio1 add: account]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [:error |
+				self assert: 10 * peso equals: portfolio1 balance. 
+				self assert: 'account has already been added' equals: error messageText.
+			] 
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 19:29:33'!
+test09
+
+	| portfolio1 portfolio2 portfolio3 account |
+	account := ReceptiveAccount new.
+	Deposit register: 10 * peso on: account.
+	portfolio1 := Portfolio new.
+	portfolio2 := Portfolio new.
+	portfolio3  := Portfolio new.
+	portfolio3 add: account.
+	portfolio2 add: portfolio3.
+	portfolio1 add: portfolio2.
+	self 
+		should: [portfolio1 add: account]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [:error |
+				self assert: 10 * peso equals: portfolio1 balance. 
+				self assert: 'account has already been added' equals: error messageText.
+			] 
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 19:46:37'!
+test10
+
+	| portfolio |
+	portfolio := Portfolio new.
+	
+	self 
+		should: [portfolio add: portfolio ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [:error |
+				self assert: 'can not add itself' equals: error messageText.
+			] 
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 20:17:05'!
+test11
+
+	| portfolio1 portfolio2 account |
+	account := ReceptiveAccount new.
+	Deposit register: 10 * peso on: account.
+	portfolio1 := Portfolio new.
+	portfolio2 := Portfolio new.
+	
+	portfolio1 add: account.
+	portfolio1 add: portfolio2.
+	
+	self 
+		should: [portfolio2 add: account]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [:error |
+				self assert: 10 * peso equals: portfolio1 balance. 
+				self assert: 'account has already been added' equals: error messageText.
+			] 
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 20:21:11'!
+test12
+
+	| portfolio1 portfolio2 account |
+	account := ReceptiveAccount new.
+	Deposit register: 10 * peso on: account.
+	portfolio1 := Portfolio new.
+	portfolio2 := Portfolio new.
+	
+	portfolio1 add: account.
+	portfolio2 add: account.
+	
+	self 
+		should: [portfolio1 add: portfolio2.]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [:error |
+				self assert: 10 * peso equals: portfolio1 balance. 
+				self assert: 'account has already been added' equals: error messageText.
+			] 
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 21:20:17'!
+test13
+
+	| portfolio1 portfolio2 portfolio3 |
+	portfolio1 := Portfolio new.
+	portfolio2 := Portfolio new.
+	portfolio3 := Portfolio new.
+	
+	portfolio1 add: portfolio3.
+	portfolio2 add: portfolio3.
+	self 
+		should: [portfolio1 add: portfolio2.]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [:error |
+				self assert: 'account has already been added' equals: error messageText.
+			] 
+	
+	! !
+
+
 !classDefinition: #ReceptiveAccountTest category: 'ServiciosFinancieros-Ejercicio'!
 TestCase subclass: #ReceptiveAccountTest
 	instanceVariableNames: ''
@@ -88,8 +314,16 @@ test07AccountKnowsItsTransactions
 	self assert: (account transactions includes: deposit).
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LT 7/3/2021 15:16:37'!
-test08ReceptiveAccountCanTransferToAnotherReceptiveAccount
+
+!classDefinition: #TransferTest category: 'ServiciosFinancieros-Ejercicio'!
+TestCase subclass: #TransferTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 16:58:47'!
+test01ReceptiveAccountCanTransferToAnotherReceptiveAccount
 
 	| account1 account2 |
 	
@@ -103,8 +337,8 @@ test08ReceptiveAccountCanTransferToAnotherReceptiveAccount
 	self assert: 0 * peso equals: account1 balance.
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LT 7/3/2021 15:17:24'!
-test09ATransferKnowsItsValue
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 16:58:53'!
+test02ATransferKnowsTheValueOfTheTransaction
 
 	| account1 account2 transfer |
 	
@@ -117,8 +351,8 @@ test09ATransferKnowsItsValue
 	self assert: 50 * peso equals: transfer value.
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LT 7/3/2021 15:18:51'!
-test10EachPartOfTheTransferKnowsItsCounterPart
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 16:58:59'!
+test03EachPartOfTheTransferKnowsItsCounterPart
 
 	| account1 account2 transfer |
 	
@@ -140,33 +374,22 @@ Object subclass: #AccountTransaction
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!AccountTransaction methodsFor: 'value' stamp: 'LT 7/3/2021 15:08:47'!
-operationValue
+!AccountTransaction methodsFor: 'value' stamp: 'LT 7/6/2021 17:17:41'!
+operateOn: balance
 
 	self subclassResponsibility ! !
 
-!AccountTransaction methodsFor: 'value' stamp: 'LT 7/3/2021 15:23:25'!
+!AccountTransaction methodsFor: 'value' stamp: 'LT 7/6/2021 17:38:14'!
 value
 
-	value ifNil: [^transfer value].
 	^value.! !
 
-
-!AccountTransaction methodsFor: 'instance creation' stamp: 'LT 7/3/2021 14:52:13'!
-counterPart
-
-	self subclassResponsibility.! !
 
 
 !AccountTransaction methodsFor: 'initialization' stamp: 'LT 7/2/2021 17:19:17'!
 initializeFor: aValue
 
 	value := aValue ! !
-
-!AccountTransaction methodsFor: 'initialization' stamp: 'LT 7/3/2021 15:27:40'!
-initializeOf: aTransfer
-
-	transfer := aTransfer.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -178,21 +401,6 @@ AccountTransaction class
 for: aValue
 
 	^ self new initializeFor: aValue ! !
-
-!AccountTransaction class methodsFor: 'instance creation' stamp: 'LT 7/3/2021 15:11:36'!
-of: aTransfer on: anAccount
-
-	| transaction |
-	
-	transaction := self ofTransfer: aTransfer.
-	anAccount register: transaction.
-		
-	^ transaction! !
-
-!AccountTransaction class methodsFor: 'instance creation' stamp: 'LT 7/3/2021 15:27:40'!
-ofTransfer: aTransfer
-
-	^self new initializeOf: aTransfer! !
 
 !AccountTransaction class methodsFor: 'instance creation' stamp: 'LT 7/2/2021 17:24:20'!
 register: aValue on: account
@@ -213,15 +421,10 @@ AccountTransaction subclass: #Deposit
 	category: 'ServiciosFinancieros-Ejercicio'!
 
 
-!Deposit methodsFor: 'value' stamp: 'LT 7/3/2021 14:52:41'!
-counterPart
+!Deposit methodsFor: 'value' stamp: 'LT 7/6/2021 17:18:07'!
+operateOn: balance
 
-	^ transfer withdrawal! !
-
-!Deposit methodsFor: 'value' stamp: 'LT 7/3/2021 15:23:53'!
-operationValue
-
-	^self value! !
+	^balance + self value.! !
 
 
 
@@ -233,16 +436,79 @@ AccountTransaction subclass: #Withdraw
 	category: 'ServiciosFinancieros-Ejercicio'!
 
 
-!Withdraw methodsFor: 'value' stamp: 'LT 7/3/2021 14:52:52'!
-counterPart
+!Withdraw methodsFor: 'value' stamp: 'LT 7/6/2021 17:18:18'!
+operateOn: balance
 
-	^ transfer deposit! !
+	^balance - self value.! !
 
-!Withdraw methodsFor: 'value' stamp: 'LT 7/3/2021 15:23:48'!
-operationValue
 
-	^self value * (-1)! !
+
+!classDefinition: #Portfolio category: 'ServiciosFinancieros-Ejercicio'!
+Object subclass: #Portfolio
+	instanceVariableNames: 'components portfolioParents'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
 
+!Portfolio methodsFor: 'public' stamp: 'LT 7/6/2021 21:00:21'!
+add: aComponent 
+
+	| superParents childs |
+	
+	self = aComponent ifTrue: [Error signal: 'can not add itself'].
+	superParents := OrderedCollection new.
+	childs := OrderedCollection new.
+	self putSuperParents: superParents.
+	aComponent putChilds: childs.
+	superParents do: [:superParent | superParent throwErrorWhenAlreadyIncludes: childs].
+	components add: aComponent.
+	(aComponent isMemberOf: Portfolio) ifTrue: [aComponent beAddedTo: self]! !
+
+!Portfolio methodsFor: 'public' stamp: 'LT 7/6/2021 17:20:53'!
+balance
+	^components sum: [:component | component balance ] ifEmpty: [0 * peso].! !
+
+!Portfolio methodsFor: 'public' stamp: 'LT 7/6/2021 19:51:55'!
+beAddedTo: aPortfolio 
+	
+	portfolioParents add: aPortfolio.! !
+
+!Portfolio methodsFor: 'public' stamp: 'LT 7/6/2021 17:07:52'!
+hasRegistered: aDeposit 
+	^components anySatisfy: [:component | component hasRegistered: aDeposit]
+	! !
+
+!Portfolio methodsFor: 'public' stamp: 'LT 7/6/2021 19:52:11'!
+initialize
+	components := OrderedCollection new.
+	portfolioParents := OrderedCollection new.! !
+
+!Portfolio methodsFor: 'public' stamp: 'LT 7/6/2021 21:19:47'!
+putChilds: childCollection
+	(components isEmpty) ifTrue: [childCollection add: self].
+	components do: [:component | component putChilds: childCollection].
+	! !
+
+!Portfolio methodsFor: 'public' stamp: 'LT 7/6/2021 20:13:51'!
+putSuperParents: superParentCollection
+	(portfolioParents size = 0) ifTrue: [superParentCollection add: self] ifFalse: [
+			portfolioParents do: [:portfolioParent | portfolioParent putSuperParents: superParentCollection]
+		]
+	! !
+
+!Portfolio methodsFor: 'public' stamp: 'LT 7/6/2021 21:06:36'!
+throwErrorWhenAlreadyIncludes: aComponentList 
+
+	aComponentList do: [:aComponent | 
+			(components do: [:component | (component isMemberOf: Portfolio) ifTrue: [component throwErrorWhenAlreadyIncludes: aComponentList ]]).
+			^(components includes: aComponent) ifTrue: [Error signal: 'account has already been added'].
+		].
+	
+	! !
+
+!Portfolio methodsFor: 'public' stamp: 'LT 7/5/2021 21:25:33'!
+transactionsOf: aReceptiveAccount 
+	^(components detect: [:component | component = aReceptiveAccount ]) transactions.! !
 
 
 !classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio'!
@@ -258,16 +524,20 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'LT 7/3/2021 15:08:22'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'LT 7/6/2021 17:19:23'!
 balance
 
-	^transactions sum: [ :aTransaction | aTransaction operationValue ] ifEmpty: [ 0 ]! !
+	^transactions  inject: 0 * peso into: [:balance :aTransaction | aTransaction operateOn: balance].! !
 
 !ReceptiveAccount methodsFor: 'main protocol' stamp: 'NR 10/17/2019 03:28:43'!
 hasRegistered: aTransaction
 
 	^ transactions includes: aTransaction 
 ! !
+
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'LT 7/6/2021 20:46:50'!
+putChilds: childCollection
+	childCollection add: self.! !
 
 !ReceptiveAccount methodsFor: 'main protocol' stamp: 'HernanWilkinson 7/13/2011 18:37'!
 register: aTransaction
@@ -293,11 +563,11 @@ deposit
 
 	^ deposit ! !
 
-!Transfer methodsFor: 'as yet unclassified' stamp: 'LT 7/3/2021 15:15:05'!
+!Transfer methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 17:35:25'!
 initializeFor: aValue from: aWithdrawalAccount to: aDepositAccount
 	value := aValue.
-	withdrawal := Withdraw of: self on: aWithdrawalAccount.
-	deposit := Deposit of: self on: aDepositAccount.! !
+	withdrawal := TransferWithdraw of: self on: aWithdrawalAccount.
+	deposit := TransferDeposit of: self on: aDepositAccount.! !
 
 !Transfer methodsFor: 'as yet unclassified' stamp: 'LT 7/2/2021 17:05:07'!
 value
@@ -319,3 +589,89 @@ Transfer class
 for: aValue from: withdrawalAccount to: depositAccount
 
 	^ self new initializeFor: aValue from: withdrawalAccount to: depositAccount! !
+
+
+!classDefinition: #TransferTransaction category: 'ServiciosFinancieros-Ejercicio'!
+Object subclass: #TransferTransaction
+	instanceVariableNames: 'transfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!TransferTransaction methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 17:32:08'!
+counterPart
+
+	self subclassResponsibility ! !
+
+!TransferTransaction methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 17:31:51'!
+initializeOf: aTransfer
+
+	transfer := aTransfer.! !
+
+!TransferTransaction methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 17:32:19'!
+operateOn: balance
+
+	self subclassResponsibility ! !
+
+!TransferTransaction methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 17:31:29'!
+value
+
+	^transfer value! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransferTransaction class' category: 'ServiciosFinancieros-Ejercicio'!
+TransferTransaction class
+	instanceVariableNames: ''!
+
+!TransferTransaction class methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 17:32:55'!
+of: aTransfer on: aDepositAccount
+
+	| transaction |
+	
+	transaction := self ofTransfer: aTransfer.
+	aDepositAccount register: transaction.
+		
+	^ transaction
+	! !
+
+!TransferTransaction class methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 17:33:04'!
+ofTransfer: aTransfer
+
+	^self new initializeOf: aTransfer! !
+
+
+!classDefinition: #TransferDeposit category: 'ServiciosFinancieros-Ejercicio'!
+TransferTransaction subclass: #TransferDeposit
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!TransferDeposit methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 17:28:11'!
+counterPart
+
+	^transfer withdrawal! !
+
+!TransferDeposit methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 18:06:26'!
+operateOn: balance
+
+	^balance + self value.! !
+
+
+!classDefinition: #TransferWithdraw category: 'ServiciosFinancieros-Ejercicio'!
+TransferTransaction subclass: #TransferWithdraw
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!TransferWithdraw methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 17:34:56'!
+counterPart
+
+	^transfer deposit ! !
+
+!TransferWithdraw methodsFor: 'as yet unclassified' stamp: 'LT 7/6/2021 17:35:06'!
+operateOn: balance
+
+	^balance - self value.! !
