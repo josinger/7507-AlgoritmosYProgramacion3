@@ -457,10 +457,16 @@ effectOn: balance
 
 !classDefinition: #PortfolioComponent category: 'ServiciosFinancieros-Ejercicio'!
 Object subclass: #PortfolioComponent
-	instanceVariableNames: ''
+	instanceVariableNames: 'portfolioParents'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
+
+!PortfolioComponent methodsFor: 'initialization' stamp: 'LT 7/8/2021 10:08:44'!
+initialize
+	portfolioParents := OrderedCollection new.
+! !
+
 
 !PortfolioComponent methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:25:12'!
 balance
@@ -473,10 +479,21 @@ hasRegistered: aTransaction
 	self subclassResponsibility.
 ! !
 
+
+!PortfolioComponent methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:19:24'!
+addComponentsTo: aComponentCollection
+	^aComponentCollection add: self
+! !
+
+!PortfolioComponent methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:07:12'!
+becomeAChildOf: aPortfolio 
+	
+	portfolioParents add: aPortfolio.! !
+
 
 !classDefinition: #Portfolio category: 'ServiciosFinancieros-Ejercicio'!
 PortfolioComponent subclass: #Portfolio
-	instanceVariableNames: 'components portfolioParents'
+	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
@@ -499,12 +516,12 @@ throwErrorIfCantAdd: aComponent
 		rootPorfolio throwErrorIfAlreadyIncludesAnyOf: (self componentsBeneath: aComponent) ].! !
 
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:39:09'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:24:41'!
 addComponentsTo: componentCollection
 
 	components do: [ :component | 
 		componentCollection add: component.
-		(component isMemberOf: Portfolio) ifTrue: [component addComponentsTo: componentCollection ]].
+		component addComponentsTo: componentCollection].
 		
 	! !
 
@@ -516,52 +533,43 @@ addRootPortfoliosTo: rootCollection
 		ifFalse: [ portfolioParents do: [ :portfolioParent | portfolioParent addRootPortfoliosTo: rootCollection ]].
 	! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/7/2021 23:04:37'!
-becomeAChildOf: aPortfolio 
-	
-	portfolioParents add: aPortfolio.! !
-
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:32:17'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:06:28'!
 becomeAParentOf: aComponent
 
-	(aComponent isMemberOf: Portfolio) ifTrue: [ aComponent becomeAChildOf: self ].! !
+	aComponent becomeAChildOf: self! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 09:30:48'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:27:50'!
 componentsBeneath: aComponent
 
-	| componentCollection |
+	| componentsBeneathComponent |
 	
-	componentCollection := OrderedCollection new.
-	"aComponent addComponentsTo: componentCollection."
-	(aComponent isMemberOf: Portfolio)
-		ifTrue: [ aComponent addComponentsTo: componentCollection ]
-		ifFalse: [ componentCollection add: aComponent ].
-	^componentCollection ! !
+	componentsBeneathComponent := Set new.
+	aComponent addComponentsTo: componentsBeneathComponent.
+	
+	^componentsBeneathComponent ! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 09:32:54'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:04:29'!
 findTransactionsOf: aReceptiveAccount In: component
 
-	(component isMemberOf: Portfolio)
-		ifTrue: [ ^component transactionsOf: aReceptiveAccount ]
-		ifFalse: [ (component = aReceptiveAccount) ifTrue: [^component transactions ]].
+	^component transactionsOf: aReceptiveAccount
 	
 	! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:37:58'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:26:59'!
 rootPortfoliosContainingIt  
 
-	| rootCollection |
+	| portfolioRoots |
 	
-	rootCollection := OrderedCollection new.
-	self addRootPortfoliosTo: rootCollection.
-	^rootCollection! !
+	portfolioRoots := Set new.
+	self addRootPortfoliosTo: portfolioRoots.
+	^portfolioRoots! !
 
 
-!Portfolio methodsFor: 'initialization' stamp: 'JS 7/8/2021 01:42:02'!
+!Portfolio methodsFor: 'initialization' stamp: 'LT 7/8/2021 10:08:54'!
 initialize
 
 	components := OrderedCollection new.
-	portfolioParents := OrderedCollection new.! !
+	super initialize.! !
 
 
 !Portfolio methodsFor: 'main protocol' stamp: 'LT 7/7/2021 23:05:07'!
@@ -612,10 +620,11 @@ PortfolioComponent subclass: #ReceptiveAccount
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!ReceptiveAccount methodsFor: 'initialization' stamp: 'NR 10/17/2019 15:06:56'!
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'LT 7/8/2021 10:09:22'!
 initialize
 
-	transactions := OrderedCollection new.! !
+	transactions := OrderedCollection new.
+	super initialize.! !
 
 
 !ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:42:57'!
@@ -639,6 +648,11 @@ register: aTransaction
 transactions 
 
 	^transactions copy! !
+
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'LT 7/8/2021 10:01:37'!
+transactionsOf: aReceptiveAccount
+
+	(self = aReceptiveAccount) ifTrue: [^self transactions ]! !
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Ejercicio'!
