@@ -99,7 +99,7 @@ test07PortfolioKnowsTransactionsOfNestedSpecificAccount
 	self assert: ((portfolio1 transactionsOf: account) hasEqualElements: account transactions).
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:57:42'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 17:39:25'!
 test08PortfolioCannotAddSameAccountTwice
 
 	| portfolio account |
@@ -115,10 +115,10 @@ test08PortfolioCannotAddSameAccountTwice
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :error |
 				self assert: 10 * peso equals: portfolio balance. 
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
+				self assert: PortfolioComponent cannotAddAComponentAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:57:49'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 17:39:40'!
 test09PortfolioCannotAddAccountWhenADirectChildPortfolioAlreadyContainsIt
 
 	| portfolio1 portfolio2 account |
@@ -136,11 +136,11 @@ test09PortfolioCannotAddAccountWhenADirectChildPortfolioAlreadyContainsIt
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :error |
 				self assert: 10 * peso equals: portfolio1 balance. 
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
+				self assert: PortfolioComponent cannotAddAComponentAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:57:57'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 17:39:50'!
 test10PortfolioCannotAddAccountWhenANestedChildPortfolioAlreadyContainsIt
 
 	| portfolio1 portfolio2 portfolio3 account |
@@ -160,11 +160,11 @@ test10PortfolioCannotAddAccountWhenANestedChildPortfolioAlreadyContainsIt
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :error |
 				self assert: 10 * peso equals: portfolio1 balance. 
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
+				self assert: PortfolioComponent cannotAddAComponentAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:58:02'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 17:40:00'!
 test11PortfolioCannotAddItself
 
 	| portfolio |
@@ -174,10 +174,10 @@ test11PortfolioCannotAddItself
 	self 
 		should: [ portfolio add: portfolio ]
 		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [ :error | self assert: Portfolio cannotAddItselfErrorDescription equals: error messageText ].
+		withExceptionDo: [ :error | self assert: PortfolioComponent cannotAddAComponentAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:58:10'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 17:40:09'!
 test12PortfolioCannotAddAccountWhenDirectParentAlreadyContainsIt
 
 	| portfolio1 portfolio2 account |
@@ -195,11 +195,11 @@ test12PortfolioCannotAddAccountWhenDirectParentAlreadyContainsIt
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :error |
 				self assert: 10 * peso equals: portfolio1 balance. 
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
+				self assert: PortfolioComponent cannotAddAComponentAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:58:15'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 17:40:18'!
 test13PortfolioCannotAddPortfolioWhenBothContainSameAccount
 
 	| portfolio1 portfolio2 account |
@@ -217,11 +217,11 @@ test13PortfolioCannotAddPortfolioWhenBothContainSameAccount
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :error |
 				self assert: 10 * peso equals: portfolio1 balance. 
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
+				self assert: PortfolioComponent cannotAddAComponentAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:58:21'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 17:40:27'!
 test14PortfolioCannotAddPortfolioWhenBothContainSamePortfolio
 
 	| portfolio1 portfolio2 portfolio3 |
@@ -236,7 +236,7 @@ test14PortfolioCannotAddPortfolioWhenBothContainSamePortfolio
 	self 
 		should: [ portfolio1 add: portfolio2 ]
 		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [ :error | self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ]. 
+		withExceptionDo: [ :error | self assert: PortfolioComponent cannotAddAComponentAlreadyPresentInHierarchyErrorDescription equals: error messageText ]. 
 	
 	! !
 
@@ -473,6 +473,30 @@ hasRegistered: aTransaction
 	self subclassResponsibility.
 ! !
 
+
+!PortfolioComponent methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 17:02:16'!
+addComponentsTo: aComponentCollection
+
+	^aComponentCollection add: self
+! !
+
+
+!PortfolioComponent methodsFor: 'private - validations' stamp: 'JS 7/8/2021 17:50:48'!
+throwErrorIfItOrAnyOfItsComponentsAreIncludedIn: aComponentList
+
+	(aComponentList includes: self) ifTrue: [ Error signal: self class cannotAddAComponentAlreadyPresentInHierarchyErrorDescription ].! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'PortfolioComponent class' category: 'ServiciosFinancieros-Ejercicio'!
+PortfolioComponent class
+	instanceVariableNames: ''!
+
+!PortfolioComponent class methodsFor: 'error descriptions' stamp: 'JS 7/8/2021 17:41:26'!
+cannotAddAComponentAlreadyPresentInHierarchyErrorDescription
+
+	^'component is already present in hierarchy'! !
+
 
 !classDefinition: #Portfolio category: 'ServiciosFinancieros-Ejercicio'!
 PortfolioComponent subclass: #Portfolio
@@ -481,30 +505,27 @@ PortfolioComponent subclass: #Portfolio
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 06:43:08'!
-throwErrorIfAlreadyIncludesAnyOf: aComponentList 
+!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 17:38:21'!
+throwErrorIfCantAdd: aComponent 
 
-	aComponentList do: [ :aComponent | 
-		components do: [ :component | 
-			(component isMemberOf: Portfolio) ifTrue: [ component throwErrorIfAlreadyIncludesAnyOf: aComponentList ]].
-		(components includes: aComponent) ifTrue: [ Error signal: Portfolio accountAlreadyPresentInHierarchyErrorDescription ]].
+	self rootPortfoliosContainingIt do: [ :rootPorfolio | 
+		rootPorfolio throwErrorIfItOrAnyOfItsComponentsAreIncludedIn: (self componentsBeneath: aComponent) ].! !
+
+!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 17:41:52'!
+throwErrorIfItOrAnyOfItsComponentsAreIncludedIn: aComponentList 
+
+	super throwErrorIfItOrAnyOfItsComponentsAreIncludedIn: aComponentList.
+	components do: [ :component | component throwErrorIfItOrAnyOfItsComponentsAreIncludedIn: aComponentList ].
+		
 	
 	! !
 
-!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 06:27:53'!
-throwErrorIfCantAdd: aComponent 
 
-	(self = aComponent) ifTrue: [ Error signal: self class cannotAddItselfErrorDescription ].
-	self rootPortfoliosContainingIt do: [ :rootPorfolio | 
-		rootPorfolio throwErrorIfAlreadyIncludesAnyOf: (self componentsBeneath: aComponent) ].! !
-
-
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:39:09'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 17:03:29'!
 addComponentsTo: componentCollection
 
-	components do: [ :component | 
-		componentCollection add: component.
-		(component isMemberOf: Portfolio) ifTrue: [component addComponentsTo: componentCollection ]].
+	super addComponentsTo: componentCollection.
+	components do: [ :component | component addComponentsTo: componentCollection].
 		
 	! !
 
@@ -516,48 +537,44 @@ addRootPortfoliosTo: rootCollection
 		ifFalse: [ portfolioParents do: [ :portfolioParent | portfolioParent addRootPortfoliosTo: rootCollection ]].
 	! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/7/2021 23:04:37'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 17:46:14'!
 becomeAChildOf: aPortfolio 
 	
 	portfolioParents add: aPortfolio.! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:32:17'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 17:46:00'!
 becomeAParentOf: aComponent
 
 	(aComponent isMemberOf: Portfolio) ifTrue: [ aComponent becomeAChildOf: self ].! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 09:30:48'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:27:50'!
 componentsBeneath: aComponent
 
-	| componentCollection |
+	| componentsBeneathComponent |
 	
-	componentCollection := OrderedCollection new.
-	"aComponent addComponentsTo: componentCollection."
-	(aComponent isMemberOf: Portfolio)
-		ifTrue: [ aComponent addComponentsTo: componentCollection ]
-		ifFalse: [ componentCollection add: aComponent ].
-	^componentCollection ! !
+	componentsBeneathComponent := Set new.
+	aComponent addComponentsTo: componentsBeneathComponent.
+	
+	^componentsBeneathComponent ! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 09:32:54'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:04:29'!
 findTransactionsOf: aReceptiveAccount In: component
 
-	(component isMemberOf: Portfolio)
-		ifTrue: [ ^component transactionsOf: aReceptiveAccount ]
-		ifFalse: [ (component = aReceptiveAccount) ifTrue: [^component transactions ]].
+	^component transactionsOf: aReceptiveAccount
 	
 	! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:37:58'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:26:59'!
 rootPortfoliosContainingIt  
 
-	| rootCollection |
+	| portfolioRoots |
 	
-	rootCollection := OrderedCollection new.
-	self addRootPortfoliosTo: rootCollection.
-	^rootCollection! !
+	portfolioRoots := Set new.
+	self addRootPortfoliosTo: portfolioRoots.
+	^portfolioRoots! !
 
 
-!Portfolio methodsFor: 'initialization' stamp: 'JS 7/8/2021 01:42:02'!
+!Portfolio methodsFor: 'initialization' stamp: 'JS 7/8/2021 17:52:36'!
 initialize
 
 	components := OrderedCollection new.
@@ -588,22 +605,6 @@ transactionsOf: aReceptiveAccount
 	components do: [:component | ^self findTransactionsOf: aReceptiveAccount In: component ].
 	! !
 
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Portfolio class' category: 'ServiciosFinancieros-Ejercicio'!
-Portfolio class
-	instanceVariableNames: ''!
-
-!Portfolio class methodsFor: 'error descriptions' stamp: 'JS 7/8/2021 01:47:02'!
-accountAlreadyPresentInHierarchyErrorDescription
-
-	^'account is already present in hierarchy'! !
-
-!Portfolio class methodsFor: 'error descriptions' stamp: 'JS 7/8/2021 01:47:06'!
-cannotAddItselfErrorDescription
-
-	^'portfolio cannot add itself'! !
-
 
 !classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio'!
 PortfolioComponent subclass: #ReceptiveAccount
@@ -612,10 +613,11 @@ PortfolioComponent subclass: #ReceptiveAccount
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!ReceptiveAccount methodsFor: 'initialization' stamp: 'NR 10/17/2019 15:06:56'!
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'LT 7/8/2021 10:09:22'!
 initialize
 
-	transactions := OrderedCollection new.! !
+	transactions := OrderedCollection new.
+	super initialize.! !
 
 
 !ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:42:57'!
@@ -639,6 +641,11 @@ register: aTransaction
 transactions 
 
 	^transactions copy! !
+
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/8/2021 17:34:54'!
+transactionsOf: aReceptiveAccount
+
+	(self == aReceptiveAccount) ifTrue: [^self transactions ]! !
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Ejercicio'!
