@@ -70,34 +70,33 @@ test05PortfolioDoesNotKnowNotRegisteredTransactions
 	
 	self deny: (portfolio hasRegistered: deposit).! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 02:06:21'!
-test06PortfolioKnowsTransactionsOfSpecificAccount
+!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/8/2021 18:32:50'!
+test06PortfolioWithNoComponentsHasNoTransactions
 
-	| portfolio account |
+	| portfolio |
 	
 	portfolio := Portfolio new.
-	account := ReceptiveAccount new.
 	
-	Deposit register: 100 * peso on: account.
-	portfolio add: account.
-	
-	self assert: ((portfolio transactionsOf: account) hasEqualElements: account transactions).! !
+	self assert: (portfolio transactions isEmpty).! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 02:09:28'!
-test07PortfolioKnowsTransactionsOfNestedSpecificAccount
+!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/8/2021 18:41:27'!
+test07PortfolioWithNoComponentsHasNoTransactions
 
-	| portfolio1 portfolio2 account |
+	| portfolio1 portfolio2 account1 account2 transfer |
 	
 	portfolio1 := Portfolio new.
 	portfolio2 := Portfolio new.
-	account := ReceptiveAccount new.
 	
-	Deposit register: 100 * peso on: account.
-	portfolio2 add: account.
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	
+	transfer := Transfer for: 50 * peso from: account1 to: account2.
+	
+	portfolio1 add: account1.
+	portfolio2 add: account2.
 	portfolio1 add: portfolio2.
 	
-	self assert: ((portfolio1 transactionsOf: account) hasEqualElements: account transactions).
-	! !
+	self assert: (portfolio1 transactions hasEqualElements: {transfer withdrawal. transfer deposit}).! !
 
 !PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 17:39:25'!
 test08PortfolioCannotAddSameAccountTwice
@@ -473,12 +472,28 @@ hasRegistered: aTransaction
 	self subclassResponsibility.
 ! !
 
+!PortfolioComponent methodsFor: 'main protocol' stamp: 'LT 7/8/2021 18:55:27'!
+transactions
 
-!PortfolioComponent methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 17:02:16'!
-addComponentsTo: aComponentCollection
+	self subclassResponsibility.
+! !
+
+
+!PortfolioComponent methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 18:44:05'!
+addItAndItsComponentsTo: aComponentCollection
 
 	^aComponentCollection add: self
 ! !
+
+!PortfolioComponent methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 18:49:16'!
+itAndItsComponents
+
+	| componentsBeneathComponent |
+	
+	componentsBeneathComponent := Set new.
+	self addItAndItsComponentsTo: componentsBeneathComponent.
+	
+	^componentsBeneathComponent ! !
 
 
 !PortfolioComponent methodsFor: 'private - validations' stamp: 'JS 7/8/2021 17:50:48'!
@@ -505,11 +520,11 @@ PortfolioComponent subclass: #Portfolio
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 17:38:21'!
+!Portfolio methodsFor: 'private - validations' stamp: 'LT 7/8/2021 18:49:16'!
 throwErrorIfCantAdd: aComponent 
 
 	self rootPortfoliosContainingIt do: [ :rootPorfolio | 
-		rootPorfolio throwErrorIfItOrAnyOfItsComponentsAreIncludedIn: (self componentsBeneath: aComponent) ].! !
+		rootPorfolio throwErrorIfItOrAnyOfItsComponentsAreIncludedIn: (aComponent itAndItsComponents) ].! !
 
 !Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 17:41:52'!
 throwErrorIfItOrAnyOfItsComponentsAreIncludedIn: aComponentList 
@@ -521,11 +536,11 @@ throwErrorIfItOrAnyOfItsComponentsAreIncludedIn: aComponentList
 	! !
 
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 17:03:29'!
-addComponentsTo: componentCollection
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 18:44:05'!
+addItAndItsComponentsTo: componentCollection
 
-	super addComponentsTo: componentCollection.
-	components do: [ :component | component addComponentsTo: componentCollection].
+	super addItAndItsComponentsTo: componentCollection.
+	components do: [ :component | component addItAndItsComponentsTo: componentCollection].
 		
 	! !
 
@@ -546,23 +561,6 @@ becomeAChildOf: aPortfolio
 becomeAParentOf: aComponent
 
 	(aComponent isMemberOf: Portfolio) ifTrue: [ aComponent becomeAChildOf: self ].! !
-
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:27:50'!
-componentsBeneath: aComponent
-
-	| componentsBeneathComponent |
-	
-	componentsBeneathComponent := Set new.
-	aComponent addComponentsTo: componentsBeneathComponent.
-	
-	^componentsBeneathComponent ! !
-
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:04:29'!
-findTransactionsOf: aReceptiveAccount In: component
-
-	^component transactionsOf: aReceptiveAccount
-	
-	! !
 
 !Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 10:26:59'!
 rootPortfoliosContainingIt  
@@ -599,11 +597,16 @@ hasRegistered: aDeposit
 	^components anySatisfy: [ :component | component hasRegistered: aDeposit ]
 	! !
 
-!Portfolio methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:42:36'!
-transactionsOf: aReceptiveAccount 
+!Portfolio methodsFor: 'main protocol' stamp: 'LT 7/8/2021 18:42:12'!
+transactions
+
+	| transactionList |
 	
-	components do: [:component | ^self findTransactionsOf: aReceptiveAccount In: component ].
-	! !
+	transactionList := OrderedCollection new.
+	
+	components do: [:component | transactionList addAll: component transactions].
+	
+	^transactionList ! !
 
 
 !classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio'!
@@ -641,11 +644,6 @@ register: aTransaction
 transactions 
 
 	^transactions copy! !
-
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/8/2021 17:34:54'!
-transactionsOf: aReceptiveAccount
-
-	(self == aReceptiveAccount) ifTrue: [^self transactions ]! !
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Ejercicio'!
