@@ -5,223 +5,239 @@ TestCase subclass: #PortfolioTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/5/2021 21:32:37'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:48:43'!
 test01PortfolioWithNoComponentsHasZeroPesos
 
 	| portfolio |
+	
 	portfolio := Portfolio new.
+	
 	self assert: 0 * peso equals: portfolio balance.! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/6/2021 18:29:33'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:48:54'!
 test02PortfolioWithOneAccountKnowsItsBalance
 
 	| portfolio account |
+	
 	portfolio := Portfolio new.
 	account := ReceptiveAccount new.
+	
 	Deposit register: 100 * peso on: account.
 	portfolio add: account.
+	
 	self assert: 100 * peso equals: portfolio balance.! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/7/2021 23:16:20'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:59:28'!
 test03PortfolioWithManyAccountsKnowsItsBalance
 
 	| portfolio1 portfolio2 account1 account2 |
+	
 	portfolio1 := Portfolio new.
 	portfolio2 := Portfolio new.
 	account1 := ReceptiveAccount new.
 	account2 := ReceptiveAccount new.
+	
 	Deposit register: 100 * peso on: account1.
 	Deposit register: 200 * peso on: account2.
-	
 	portfolio1 add: account1.
 	portfolio2 add: account2.
 	portfolio1 add: portfolio2.
 
 	self assert: 300 * peso equals: portfolio1 balance.! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/6/2021 18:31:41'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:58:52'!
 test04PortfolioKnowsRegisteredTransactions
 
-	| portfolio deposit account |
+	| portfolio account deposit |
+	
 	portfolio := Portfolio new.
 	account := ReceptiveAccount new.
+	
 	deposit := Deposit register: 100 * peso on: account.
 	portfolio add: account.
+	
 	self assert: (portfolio hasRegistered: deposit).! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/6/2021 18:37:52'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:58:58'!
 test05PortfolioDoesNotKnowNotRegisteredTransactions
 
-	| portfolio deposit account |
+	| portfolio account deposit |
+	
 	portfolio := Portfolio new.
 	account := ReceptiveAccount new.
+	
 	deposit := Deposit register: 100 * peso on: account.
+	
 	self deny: (portfolio hasRegistered: deposit).! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/6/2021 18:38:37'!
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 02:06:21'!
 test06PortfolioKnowsTransactionsOfSpecificAccount
 
-	| portfolio account  |
+	| portfolio account |
+	
 	portfolio := Portfolio new.
 	account := ReceptiveAccount new.
+	
 	Deposit register: 100 * peso on: account.
 	portfolio add: account.
-	self assert: ((portfolio transactionsOf: account) includesAllOf: account transactions).
-	self assert: (account transactions includesAllOf: (portfolio transactionsOf: account)).! !
+	
+	self assert: ((portfolio transactionsOf: account) hasEqualElements: account transactions).! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/7/2021 12:41:04'!
-test07PortfolioCannotAddSameAccountTwice
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 02:09:28'!
+test07PortfolioKnowsTransactionsOfNestedSpecificAccount
+
+	| portfolio1 portfolio2 account |
+	
+	portfolio1 := Portfolio new.
+	portfolio2 := Portfolio new.
+	account := ReceptiveAccount new.
+	
+	Deposit register: 100 * peso on: account.
+	portfolio2 add: account.
+	portfolio1 add: portfolio2.
+	
+	self assert: ((portfolio1 transactionsOf: account) hasEqualElements: account transactions).
+	! !
+
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:57:42'!
+test08PortfolioCannotAddSameAccountTwice
 
 	| portfolio account |
-	account := ReceptiveAccount new.
-	Deposit register: 10 * peso on: account.
+	
 	portfolio := Portfolio new.
+	account := ReceptiveAccount new.
+	
+	Deposit register: 10 * peso on: account.
 	portfolio add: account.
 	
 	self 
-		should: [portfolio add: account]
+		should: [ portfolio add: account ]
 		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [:error |
+		withExceptionDo: [ :error |
 				self assert: 10 * peso equals: portfolio balance. 
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText.
-			] 
+				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/7/2021 12:43:49'!
-test08PortfolioCannotAddAccountWhenADirectChildPortfolioAlreadyContainsIt
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:57:49'!
+test09PortfolioCannotAddAccountWhenADirectChildPortfolioAlreadyContainsIt
 
 	| portfolio1 portfolio2 account |
-	account := ReceptiveAccount new.
-	Deposit register: 10 * peso on: account.
+	
 	portfolio1 := Portfolio new.
 	portfolio2 := Portfolio new.
+	account := ReceptiveAccount new.
 	
+	Deposit register: 10 * peso on: account.
 	portfolio2 add: account.
 	portfolio1 add: portfolio2.
+	
 	self 
-		should: [portfolio1 add: account]
+		should: [ portfolio1 add: account ]
 		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [:error |
+		withExceptionDo: [ :error |
 				self assert: 10 * peso equals: portfolio1 balance. 
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText.
-			] 
+				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/7/2021 12:43:35'!
-test09PortfolioCannotAddAccountWhenANestedChildPortfolioAlreadyContainsIt
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:57:57'!
+test10PortfolioCannotAddAccountWhenANestedChildPortfolioAlreadyContainsIt
 
 	| portfolio1 portfolio2 portfolio3 account |
-	account := ReceptiveAccount new.
-	Deposit register: 10 * peso on: account.
+	
 	portfolio1 := Portfolio new.
 	portfolio2 := Portfolio new.
 	portfolio3  := Portfolio new.
+	account := ReceptiveAccount new.
+	
+	Deposit register: 10 * peso on: account.
 	portfolio3 add: account.
 	portfolio2 add: portfolio3.
 	portfolio1 add: portfolio2.
+	
 	self 
-		should: [portfolio1 add: account]
+		should: [ portfolio1 add: account ]
 		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [:error |
+		withExceptionDo: [ :error |
 				self assert: 10 * peso equals: portfolio1 balance. 
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText.
-			] 
+				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/7/2021 12:53:02'!
-test10PortfolioCannotAddItself
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:58:02'!
+test11PortfolioCannotAddItself
 
 	| portfolio |
+	
 	portfolio := Portfolio new.
 	
 	self 
-		should: [portfolio add: portfolio ]
+		should: [ portfolio add: portfolio ]
 		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [:error |
-				self assert: Portfolio cannotAddItselfErrorDescription equals: error messageText.
-			] 
+		withExceptionDo: [ :error | self assert: Portfolio cannotAddItselfErrorDescription equals: error messageText ].
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/7/2021 12:44:43'!
-test11PortfolioCannotAddAccountWhenDirectParentAlreadyContainsIt
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:58:10'!
+test12PortfolioCannotAddAccountWhenDirectParentAlreadyContainsIt
 
 	| portfolio1 portfolio2 account |
-	account := ReceptiveAccount new.
-	Deposit register: 10 * peso on: account.
+
 	portfolio1 := Portfolio new.
 	portfolio2 := Portfolio new.
+	account := ReceptiveAccount new.
 	
+	Deposit register: 10 * peso on: account.
 	portfolio1 add: account.
 	portfolio1 add: portfolio2.
 	
 	self 
-		should: [portfolio2 add: account]
+		should: [ portfolio2 add: account ]
 		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [:error |
+		withExceptionDo: [ :error |
 				self assert: 10 * peso equals: portfolio1 balance. 
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText.
-			] 
+				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/7/2021 12:45:39'!
-test12PortfolioCannotAddPortfolioWhenBothContainSameAccount
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:58:15'!
+test13PortfolioCannotAddPortfolioWhenBothContainSameAccount
 
 	| portfolio1 portfolio2 account |
-	account := ReceptiveAccount new.
-	Deposit register: 10 * peso on: account.
+	
 	portfolio1 := Portfolio new.
 	portfolio2 := Portfolio new.
+	account := ReceptiveAccount new.
 	
+	Deposit register: 10 * peso on: account.
 	portfolio1 add: account.
 	portfolio2 add: account.
 	
 	self 
-		should: [portfolio1 add: portfolio2.]
+		should: [ portfolio1 add: portfolio2 ]
 		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [:error |
+		withExceptionDo: [ :error |
 				self assert: 10 * peso equals: portfolio1 balance. 
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText.
-			] 
+				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ].
 	
 	! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/7/2021 22:06:07'!
-test13PortfolioCannotAddPortfolioWhenBothContainSamePortfolio
+!PortfolioTest methodsFor: 'tests' stamp: 'JS 7/8/2021 01:58:21'!
+test14PortfolioCannotAddPortfolioWhenBothContainSamePortfolio
 
 	| portfolio1 portfolio2 portfolio3 |
+	
 	portfolio1 := Portfolio new.
 	portfolio2 := Portfolio new.
 	portfolio3 := Portfolio new.
 	
 	portfolio1 add: portfolio3.
 	portfolio2 add: portfolio3.
+	
 	self 
-		should: [portfolio1 add: portfolio2.]
+		should: [ portfolio1 add: portfolio2 ]
 		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [:error |
-				self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText.
-			] 
+		withExceptionDo: [ :error | self assert: Portfolio accountAlreadyPresentInHierarchyErrorDescription equals: error messageText ]. 
 	
-	! !
-
-!PortfolioTest methodsFor: 'tests' stamp: 'LT 7/7/2021 23:52:22'!
-test14PortfolioKnowsTransactionsOfNestedSpecificAccount
-
-	| portfolio1 portfolio2 account  |
-	portfolio1 := Portfolio new.
-	portfolio2 := Portfolio new.
-	
-	account := ReceptiveAccount new.
-	Deposit register: 100 * peso on: account.
-	
-	portfolio2 add: account.
-	portfolio1 add: portfolio2.
-	
-	self assert: ((portfolio1 transactionsOf: account) includesAllOf: account transactions).
-	self assert: (account transactions includesAllOf: (portfolio1 transactionsOf: account)).
 	! !
 
 
@@ -232,17 +248,16 @@ TestCase subclass: #ReceptiveAccountTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:10:43'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JS 7/8/2021 02:10:31'!
 test01ReceptiveAccountHaveZeroAsBalanceWhenCreated 
 
 	| account |
 	
 	account := ReceptiveAccount new.
 
-	self assert: 0 equals: account balance
-! !
+	self assert: 0 equals: account balance.! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:14:20'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JS 7/8/2021 02:10:34'!
 test02DepositIncreasesBalanceOnTransactionValue 
 
 	| account |
@@ -250,10 +265,10 @@ test02DepositIncreasesBalanceOnTransactionValue
 	account := ReceptiveAccount  new.
 	Deposit register: 100 * peso on: account.
 		
-	self assert: 100 * peso equals: account balance
+	self assert: 100 * peso equals: account balance.
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:14:24'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JS 7/8/2021 02:10:38'!
 test03WithdrawDecreasesBalanceOnTransactionValue 
 
 	| account |
@@ -262,10 +277,10 @@ test03WithdrawDecreasesBalanceOnTransactionValue
 	Deposit register: 100 * peso on: account.
 	Withdraw register: 50 * peso on: account.
 		
-	self assert: 50 * peso equals: account balance
+	self assert: 50 * peso equals: account balance.
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:10:14'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JS 7/8/2021 02:10:41'!
 test04WithdrawValueMustBePositive 
 
 	| account withdrawValue |
@@ -273,7 +288,7 @@ test04WithdrawValueMustBePositive
 	account := ReceptiveAccount new.
 	withdrawValue := 50 * peso.
 	
-	self assert: withdrawValue equals: (Withdraw register: withdrawValue on: account) value
+	self assert: withdrawValue equals: (Withdraw register: withdrawValue on: account) value.
 ! !
 
 !ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:10:22'!
@@ -375,16 +390,16 @@ Object subclass: #AccountTransaction
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!AccountTransaction methodsFor: 'balance effects' stamp: 'LT 7/7/2021 15:11:10'!
+!AccountTransaction methodsFor: 'balance effects' stamp: 'JS 7/8/2021 01:26:33'!
 effectOn: balance
 
-	self subclassResponsibility ! !
+	self subclassResponsibility.! !
 
 
-!AccountTransaction methodsFor: 'main protocol' stamp: 'LT 7/6/2021 17:38:14'!
+!AccountTransaction methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:24:47'!
 value
 
-	^value.! !
+	^value! !
 
 
 !AccountTransaction methodsFor: 'initialization' stamp: 'LT 7/2/2021 17:19:17'!
@@ -398,12 +413,12 @@ initializeFor: aValue
 AccountTransaction class
 	instanceVariableNames: ''!
 
-!AccountTransaction class methodsFor: 'instance creation' stamp: 'LT 7/3/2021 14:47:22'!
+!AccountTransaction class methodsFor: 'instance creation' stamp: 'JS 7/8/2021 01:46:47'!
 for: aValue
 
-	^ self new initializeFor: aValue ! !
+	^self new initializeFor: aValue ! !
 
-!AccountTransaction class methodsFor: 'instance creation' stamp: 'LT 7/2/2021 17:24:20'!
+!AccountTransaction class methodsFor: 'instance creation' stamp: 'JS 7/8/2021 01:46:52'!
 register: aValue on: account
 
 	| transaction |
@@ -411,7 +426,7 @@ register: aValue on: account
 	transaction := self for: aValue.
 	account register: transaction.
 		
-	^ transaction! !
+	^transaction! !
 
 
 !classDefinition: #Deposit category: 'ServiciosFinancieros-Ejercicio'!
@@ -421,10 +436,10 @@ AccountTransaction subclass: #Deposit
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Deposit methodsFor: 'balance effects' stamp: 'LT 7/7/2021 15:11:10'!
+!Deposit methodsFor: 'balance effects' stamp: 'JS 7/8/2021 01:24:58'!
 effectOn: balance
 
-	^balance + self value.! !
+	^balance + self value! !
 
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Ejercicio'!
@@ -434,10 +449,10 @@ AccountTransaction subclass: #Withdraw
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Withdraw methodsFor: 'balance effects' stamp: 'LT 7/7/2021 15:11:10'!
+!Withdraw methodsFor: 'balance effects' stamp: 'JS 7/8/2021 01:25:03'!
 effectOn: balance
 
-	^balance - self value.! !
+	^balance - self value! !
 
 
 !classDefinition: #PortfolioComponent category: 'ServiciosFinancieros-Ejercicio'!
@@ -447,15 +462,15 @@ Object subclass: #PortfolioComponent
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!PortfolioComponent methodsFor: 'main protocol' stamp: 'LT 7/7/2021 23:20:48'!
+!PortfolioComponent methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:25:12'!
 balance
 
-	self subclassResponsibility ! !
+	self subclassResponsibility.! !
 
-!PortfolioComponent methodsFor: 'main protocol' stamp: 'LT 7/7/2021 23:20:44'!
+!PortfolioComponent methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:25:17'!
 hasRegistered: aTransaction
 
-	self subclassResponsibility 
+	self subclassResponsibility.
 ! !
 
 
@@ -466,42 +481,39 @@ PortfolioComponent subclass: #Portfolio
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Portfolio methodsFor: 'private - validations' stamp: 'LT 7/7/2021 14:44:06'!
+!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 01:29:49'!
 throwErrorIfAlreadyIncludesAnyOf: aComponentList 
 
-	aComponentList do: [:aComponent | 
-			(components do: [:component |
-				 (component isMemberOf: Portfolio) ifTrue: [component throwErrorIfAlreadyIncludesAnyOf: aComponentList ]]
-			).
-			^(components includes: aComponent) ifTrue: [Error signal: Portfolio accountAlreadyPresentInHierarchyErrorDescription].
-		].
+	aComponentList do: [ :aComponent | (components do: [ :component |
+			(component isMemberOf: Portfolio) ifTrue: [ component throwErrorIfAlreadyIncludesAnyOf: aComponentList ]]).
+			^(components includes: aComponent) ifTrue: [ Error signal: Portfolio accountAlreadyPresentInHierarchyErrorDescription ]].
 	
 	! !
 
-!Portfolio methodsFor: 'private - validations' stamp: 'LT 7/7/2021 23:43:24'!
+!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 01:30:46'!
 throwErrorIfCantAdd: aComponent 
 
-	self = aComponent ifTrue: [Error signal: self class cannotAddItselfErrorDescription ].
-	self rootPortfoliosContainingIt do: [
-			:rootPorfolio | 
-			rootPorfolio throwErrorIfAlreadyIncludesAnyOf: (self componentsBeneath: aComponent) ].
+	(self = aComponent) ifTrue: [ Error signal: self class cannotAddItselfErrorDescription ].
+	self rootPortfoliosContainingIt do: [ :rootPorfolio | 
+		rootPorfolio throwErrorIfAlreadyIncludesAnyOf: (self componentsBeneath: aComponent) ].
 	! !
 
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/7/2021 23:42:40'!
-addComponentsTo: leafCollection
-	components do: [:component | 
-		leafCollection add: component.
-		(component isMemberOf: Portfolio) ifTrue: [component addComponentsTo: leafCollection].
-		].
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:39:09'!
+addComponentsTo: componentCollection
+
+	components do: [ :component | 
+		componentCollection add: component.
+		(component isMemberOf: Portfolio) ifTrue: [component addComponentsTo: componentCollection ]].
 		
 	! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/7/2021 23:11:27'!
-addRootPortfoliosTo: superParentCollection
-	(portfolioParents isEmpty) ifTrue: [superParentCollection add: self] ifFalse: [
-			portfolioParents do: [:portfolioParent | portfolioParent addRootPortfoliosTo: superParentCollection]
-		]
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:39:32'!
+addRootPortfoliosTo: rootCollection
+
+	(portfolioParents isEmpty) 
+		ifTrue: [ rootCollection add: self ] 
+		ifFalse: [ portfolioParents do: [ :portfolioParent | portfolioParent addRootPortfoliosTo: rootCollection ]].
 	! !
 
 !Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/7/2021 23:04:37'!
@@ -509,42 +521,44 @@ becomeAChildOf: aPortfolio
 	
 	portfolioParents add: aPortfolio.! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/7/2021 23:04:37'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:32:17'!
 becomeAParentOf: aComponent
 
-	(aComponent isMemberOf: Portfolio) ifTrue: [aComponent becomeAChildOf: self]! !
+	(aComponent isMemberOf: Portfolio) ifTrue: [ aComponent becomeAChildOf: self ].! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/7/2021 23:43:24'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:41:23'!
 componentsBeneath: aComponent
-	| leafs |
-	
-	leafs := OrderedCollection new.
-	(aComponent isMemberOf: ReceptiveAccount)
-		ifTrue: [leafs add: aComponent ]
-		ifFalse: [aComponent addComponentsTo: leafs].
-	^leafs ! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/8/2021 00:00:51'!
+	| componentCollection |
+	
+	componentCollection := OrderedCollection new.
+	(aComponent isMemberOf: ReceptiveAccount)
+		ifTrue: [ componentCollection add: aComponent ]
+		ifFalse: [ aComponent addComponentsTo: componentCollection ].
+	^componentCollection ! !
+
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:41:38'!
 findTransactionsOf: aReceptiveAccount In: component
 
 	(component isMemberOf: Portfolio)
-			ifTrue: [^component transactionsOf: aReceptiveAccount]
-			ifFalse: [(component = aReceptiveAccount) ifTrue: [^component transactions ]]
+		ifTrue: [ ^component transactionsOf: aReceptiveAccount ]
+		ifFalse: [ (component = aReceptiveAccount) ifTrue: [^component transactions ]].
 	
 	! !
 
-!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'LT 7/7/2021 23:12:46'!
+!Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:37:58'!
 rootPortfoliosContainingIt  
 
-	| rootPortfolios  |
+	| rootCollection |
 	
-	rootPortfolios := OrderedCollection new.
-	self addRootPortfoliosTo: rootPortfolios.
-	^rootPortfolios! !
+	rootCollection := OrderedCollection new.
+	self addRootPortfoliosTo: rootCollection.
+	^rootCollection! !
 
 
-!Portfolio methodsFor: 'initialization' stamp: 'LT 7/6/2021 19:52:11'!
+!Portfolio methodsFor: 'initialization' stamp: 'JS 7/8/2021 01:42:02'!
 initialize
+
 	components := OrderedCollection new.
 	portfolioParents := OrderedCollection new.! !
 
@@ -556,19 +570,21 @@ add: aComponent
 	components add: aComponent.
 	self becomeAParentOf: aComponent.! !
 
-!Portfolio methodsFor: 'main protocol' stamp: 'LT 7/6/2021 17:20:53'!
+!Portfolio methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:42:41'!
 balance
-	^components sum: [:component | component balance ] ifEmpty: [0 * peso].! !
 
-!Portfolio methodsFor: 'main protocol' stamp: 'LT 7/6/2021 17:07:52'!
+	^components sum: [ :component | component balance ] ifEmpty: [ 0 * peso ]! !
+
+!Portfolio methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:42:31'!
 hasRegistered: aDeposit 
-	^components anySatisfy: [:component | component hasRegistered: aDeposit]
+
+	^components anySatisfy: [ :component | component hasRegistered: aDeposit ]
 	! !
 
-!Portfolio methodsFor: 'main protocol' stamp: 'LT 7/8/2021 00:01:52'!
+!Portfolio methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:42:36'!
 transactionsOf: aReceptiveAccount 
 	
-	components do: [:component | ^self findTransactionsOf: aReceptiveAccount In: component].
+	components do: [:component | ^self findTransactionsOf: aReceptiveAccount In: component ].
 	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -577,12 +593,14 @@ transactionsOf: aReceptiveAccount
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'error messages' stamp: 'LT 7/7/2021 12:47:55'!
+!Portfolio class methodsFor: 'error messages' stamp: 'JS 7/8/2021 01:47:02'!
 accountAlreadyPresentInHierarchyErrorDescription
+
 	^'account is already present in hierarchy'! !
 
-!Portfolio class methodsFor: 'error messages' stamp: 'LT 7/7/2021 12:48:31'!
+!Portfolio class methodsFor: 'error messages' stamp: 'JS 7/8/2021 01:47:06'!
 cannotAddItselfErrorDescription
+
 	^'portfolio cannot add itself'! !
 
 
@@ -599,27 +617,27 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'LT 7/7/2021 15:11:10'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:42:57'!
 balance
 
-	^transactions  inject: 0 * peso into: [:balance :aTransaction | aTransaction effectOn: balance].! !
+	^transactions  inject: 0 * peso into: [:balance :aTransaction | aTransaction effectOn: balance]! !
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'NR 10/17/2019 03:28:43'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:43:04'!
 hasRegistered: aTransaction
 
-	^ transactions includes: aTransaction 
+	^transactions includes: aTransaction 
 ! !
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:43:10'!
 register: aTransaction
 
-	transactions add: aTransaction 
+	transactions add: aTransaction.
 ! !
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:43:14'!
 transactions 
 
-	^ transactions copy! !
+	^transactions copy! !
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Ejercicio'!
@@ -629,28 +647,29 @@ Object subclass: #Transfer
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Transfer methodsFor: 'initialization' stamp: 'LT 7/6/2021 17:35:25'!
+!Transfer methodsFor: 'initialization' stamp: 'JS 7/8/2021 01:43:45'!
 initializeFor: aValue from: aWithdrawalAccount to: aDepositAccount
+
 	value := aValue.
 	withdrawal := TransferWithdraw of: self on: aWithdrawalAccount.
 	deposit := TransferDeposit of: self on: aDepositAccount.! !
 
 
-!Transfer methodsFor: 'main protocol' stamp: 'LT 7/2/2021 17:05:07'!
+!Transfer methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:43:40'!
 value
 
-	^ value! !
+	^value! !
 
 
-!Transfer methodsFor: 'parts' stamp: 'LT 7/2/2021 17:05:47'!
+!Transfer methodsFor: 'parts' stamp: 'JS 7/8/2021 01:43:31'!
 deposit
 
-	^ deposit ! !
+	^deposit ! !
 
-!Transfer methodsFor: 'parts' stamp: 'LT 7/2/2021 17:05:43'!
+!Transfer methodsFor: 'parts' stamp: 'JS 7/8/2021 01:43:35'!
 withdrawal
 
-	^ withdrawal ! !
+	^withdrawal ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -658,10 +677,10 @@ withdrawal
 Transfer class
 	instanceVariableNames: ''!
 
-!Transfer class methodsFor: 'instance creation' stamp: 'LT 7/3/2021 15:14:52'!
+!Transfer class methodsFor: 'instance creation' stamp: 'JS 7/8/2021 01:47:51'!
 for: aValue from: withdrawalAccount to: depositAccount
 
-	^ self new initializeFor: aValue from: withdrawalAccount to: depositAccount! !
+	^self new initializeFor: aValue from: withdrawalAccount to: depositAccount! !
 
 
 !classDefinition: #TransferTransaction category: 'ServiciosFinancieros-Ejercicio'!
@@ -677,18 +696,18 @@ initializeOf: aTransfer
 	transfer := aTransfer.! !
 
 
-!TransferTransaction methodsFor: 'balance effects' stamp: 'LT 7/7/2021 15:11:10'!
+!TransferTransaction methodsFor: 'balance effects' stamp: 'JS 7/8/2021 01:44:02'!
 effectOn: balance
 
-	self subclassResponsibility ! !
+	self subclassResponsibility.! !
 
 
-!TransferTransaction methodsFor: 'main protocol' stamp: 'LT 7/6/2021 17:32:08'!
+!TransferTransaction methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:44:06'!
 counterPart
 
-	self subclassResponsibility ! !
+	self subclassResponsibility.! !
 
-!TransferTransaction methodsFor: 'main protocol' stamp: 'LT 7/6/2021 17:31:29'!
+!TransferTransaction methodsFor: 'main protocol' stamp: 'JS 7/8/2021 01:44:12'!
 value
 
 	^transfer value! !
@@ -699,7 +718,7 @@ value
 TransferTransaction class
 	instanceVariableNames: ''!
 
-!TransferTransaction class methodsFor: 'instance creation' stamp: 'LT 7/6/2021 17:32:55'!
+!TransferTransaction class methodsFor: 'instance creation' stamp: 'JS 7/8/2021 01:48:10'!
 of: aTransfer on: aDepositAccount
 
 	| transaction |
@@ -707,7 +726,7 @@ of: aTransfer on: aDepositAccount
 	transaction := self ofTransfer: aTransfer.
 	aDepositAccount register: transaction.
 		
-	^ transaction
+	^transaction
 	! !
 
 !TransferTransaction class methodsFor: 'instance creation' stamp: 'LT 7/6/2021 17:33:04'!
@@ -729,10 +748,10 @@ counterPart
 	^transfer withdrawal! !
 
 
-!TransferDeposit methodsFor: 'balance effects' stamp: 'LT 7/7/2021 15:11:10'!
+!TransferDeposit methodsFor: 'balance effects' stamp: 'JS 7/8/2021 01:44:24'!
 effectOn: balance
 
-	^balance + self value.! !
+	^balance + self value! !
 
 
 !classDefinition: #TransferWithdraw category: 'ServiciosFinancieros-Ejercicio'!
@@ -748,7 +767,7 @@ counterPart
 	^transfer deposit ! !
 
 
-!TransferWithdraw methodsFor: 'balance effects' stamp: 'LT 7/7/2021 15:11:10'!
+!TransferWithdraw methodsFor: 'balance effects' stamp: 'JS 7/8/2021 01:44:30'!
 effectOn: balance
 
-	^balance - self value.! !
+	^balance - self value! !
