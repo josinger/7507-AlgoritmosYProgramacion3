@@ -481,22 +481,22 @@ PortfolioComponent subclass: #Portfolio
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 01:29:49'!
+!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 06:43:08'!
 throwErrorIfAlreadyIncludesAnyOf: aComponentList 
 
-	aComponentList do: [ :aComponent | (components do: [ :component |
-			(component isMemberOf: Portfolio) ifTrue: [ component throwErrorIfAlreadyIncludesAnyOf: aComponentList ]]).
-			^(components includes: aComponent) ifTrue: [ Error signal: Portfolio accountAlreadyPresentInHierarchyErrorDescription ]].
+	aComponentList do: [ :aComponent | 
+		components do: [ :component | 
+			(component isMemberOf: Portfolio) ifTrue: [ component throwErrorIfAlreadyIncludesAnyOf: aComponentList ]].
+		(components includes: aComponent) ifTrue: [ Error signal: Portfolio accountAlreadyPresentInHierarchyErrorDescription ]].
 	
 	! !
 
-!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 01:30:46'!
+!Portfolio methodsFor: 'private - validations' stamp: 'JS 7/8/2021 06:27:53'!
 throwErrorIfCantAdd: aComponent 
 
 	(self = aComponent) ifTrue: [ Error signal: self class cannotAddItselfErrorDescription ].
 	self rootPortfoliosContainingIt do: [ :rootPorfolio | 
-		rootPorfolio throwErrorIfAlreadyIncludesAnyOf: (self componentsBeneath: aComponent) ].
-	! !
+		rootPorfolio throwErrorIfAlreadyIncludesAnyOf: (self componentsBeneath: aComponent) ].! !
 
 
 !Portfolio methodsFor: 'private - hierarchy manipulation' stamp: 'JS 7/8/2021 01:39:09'!
@@ -593,12 +593,12 @@ transactionsOf: aReceptiveAccount
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'error messages' stamp: 'JS 7/8/2021 01:47:02'!
+!Portfolio class methodsFor: 'error descriptions' stamp: 'JS 7/8/2021 01:47:02'!
 accountAlreadyPresentInHierarchyErrorDescription
 
 	^'account is already present in hierarchy'! !
 
-!Portfolio class methodsFor: 'error messages' stamp: 'JS 7/8/2021 01:47:06'!
+!Portfolio class methodsFor: 'error descriptions' stamp: 'JS 7/8/2021 01:47:06'!
 cannotAddItselfErrorDescription
 
 	^'portfolio cannot add itself'! !
