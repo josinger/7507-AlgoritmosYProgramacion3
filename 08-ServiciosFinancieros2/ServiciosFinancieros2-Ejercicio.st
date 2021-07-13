@@ -311,92 +311,103 @@ TestCase subclass: #ReportTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 17:22:35'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 20:58:23'!
 test01accountSumaryOfEmptyAccountHasNoTransactions
 
-	| emptyAccount |
+	| emptyAccount report |
 	
 	emptyAccount := ReceptiveAccount new.
+	report := (AccountSummaryReport for: emptyAccount) build.
 
-	self assert: #('Balance = 0 pesos') asOrderedCollection equals: emptyAccount accountSummary.! !
+	self assert: #('Balance = 0 pesos') asOrderedCollection equals: report.! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 17:26:29'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 20:59:09'!
 test02accountSumaryWithSingleDeposit
 
-	| depositAccount |
+	| depositAccount report |
 	
 	depositAccount := ReceptiveAccount new.
 	
 	Deposit register: 10 * peso on: depositAccount.
+	
+	report := (AccountSummaryReport for: depositAccount) build.
 
-	self assert: #('Depósito por 10 pesos' 'Balance = 10 pesos') asOrderedCollection equals: depositAccount accountSummary.
+	self assert: #('Depósito por 10 pesos' 'Balance = 10 pesos') asOrderedCollection equals: report.
 	
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 17:26:47'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 20:59:37'!
 test03accountSumaryWithSingleWithdraw
 
-	| depositAccount |
+	| depositAccount report |
 	
 	depositAccount := ReceptiveAccount new.
 	
 	Withdraw register: 10 * peso on: depositAccount.
+	
+	report := (AccountSummaryReport for: depositAccount) build.
 
-	self assert: #('Extracción por 10 pesos' 'Balance = -10 pesos') asOrderedCollection equals: depositAccount accountSummary.
+	self assert: #('Extracción por 10 pesos' 'Balance = -10 pesos') asOrderedCollection equals: report.
 	
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 17:27:32'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:00:09'!
 test04accountSumaryWithTransferDeposit
 
-	| depositAccount withdrawAccount |
+	| depositAccount withdrawAccount report |
 	
 	depositAccount := ReceptiveAccount new.
 	withdrawAccount := ReceptiveAccount new.
 	
 	Transfer amount: 10 * peso from: withdrawAccount to: depositAccount.
+	
+	report := (AccountSummaryReport for: depositAccount) build.
 
-	self assert: #('Entrada por transferencia de 10 pesos' 'Balance = 10 pesos') asOrderedCollection equals: depositAccount accountSummary.
+	self assert: #('Entrada por transferencia de 10 pesos' 'Balance = 10 pesos') asOrderedCollection equals: report.
 	
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 17:27:44'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:00:33'!
 test05accountSumaryWithTransferWithdraw
 
-	| depositAccount withdrawAccount |
+	| depositAccount withdrawAccount report |
 	
 	depositAccount := ReceptiveAccount new.
 	withdrawAccount := ReceptiveAccount new.
 	
 	Transfer amount: 10 * peso from: withdrawAccount to: depositAccount.
+	
+	report := (AccountSummaryReport for: withdrawAccount) build.
 
-	self assert: #('Salida por transferencia de 10 pesos' 'Balance = -10 pesos') asOrderedCollection equals: withdrawAccount accountSummary.
+	self assert: #('Salida por transferencia de 10 pesos' 'Balance = -10 pesos') asOrderedCollection equals: report.
 	
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 17:28:11'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:00:54'!
 test06accountSumaryWithWithMultipleTransactions
 
-	| account |
+	| account report |
 	
 	account := ReceptiveAccount new.
 	
 	Deposit register: 15 * peso on: account.
 	Withdraw register: 10 * peso on: account.
+	
+	report := (AccountSummaryReport for: account) build.
 
-	self assert: #('Depósito por 15 pesos' 'Extracción por 10 pesos' 'Balance = 5 pesos') asOrderedCollection equals: account accountSummary.
+	self assert: #('Depósito por 15 pesos' 'Extracción por 10 pesos' 'Balance = 5 pesos') asOrderedCollection equals: report.
 	
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 17:28:52'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:01:09'!
 test07accountSumaryOfComposedAccounts
 
-	| portfolio depositAccount |
+	| portfolio depositAccount report |
 	
 	portfolio := Portfolio new.
 	depositAccount := ReceptiveAccount new.
@@ -404,64 +415,74 @@ test07accountSumaryOfComposedAccounts
 	portfolio add: depositAccount.
 	
 	Deposit register: 10 * peso on: depositAccount.
+	
+	report := (AccountSummaryReport for: portfolio) build.
 
-	self assert: #('Depósito por 10 pesos' 'Balance = 10 pesos') asOrderedCollection equals: portfolio accountSummary.
+	self assert: #('Depósito por 10 pesos' 'Balance = 10 pesos') asOrderedCollection equals: report.
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 18:13:04'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:20:22'!
 test08netTransferOfEmptyAccountIsZeroPesos
 
-	| emptyAccount |
+	| emptyAccount report |
 	
 	emptyAccount := ReceptiveAccount new.
+	
+	report := (NetTransferReport for: emptyAccount) build.
 
-	self assert: 0*peso equals: emptyAccount netTransfer.! !
+	self assert: 0*peso equals: report.! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 18:13:45'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:24:18'!
 test09netTransferWithTransferDeposit
 
-	| depositAccount withdrawAccount |
+	| depositAccount withdrawAccount report |
 	
 	depositAccount := ReceptiveAccount new.
 	withdrawAccount := ReceptiveAccount new.
 	
 	Transfer amount: 10 * peso from: withdrawAccount to: depositAccount.
+	
+	report := (NetTransferReport for: depositAccount) build.
 
-	self assert: 10*peso equals: depositAccount netTransfer.
+	self assert: 10*peso equals: report.
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 18:14:40'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:24:49'!
 test10netTransferWithNoTransferTransaction
 
-	| depositAccount |
+	| depositAccount report |
 	
 	depositAccount := ReceptiveAccount new.
 	
 	Deposit register: 15 * peso on: depositAccount.
 	Withdraw register: 10 * peso on: depositAccount.
 
-	self assert: 0*peso equals: depositAccount netTransfer.
+	report := (NetTransferReport for: depositAccount) build.
+
+	self assert: 0*peso equals: report.
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 18:14:05'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:25:10'!
 test11netTransferWithTransferWithdraw
 
-	| depositAccount withdrawAccount |
+	| depositAccount withdrawAccount report |
 	
 	depositAccount := ReceptiveAccount new.
 	withdrawAccount := ReceptiveAccount new.
 	
 	Transfer amount: 10 * peso from: withdrawAccount to: depositAccount.
+	
+	report := (NetTransferReport for: withdrawAccount) build.
 
-	self assert: -10*peso equals: withdrawAccount netTransfer.
+	self assert: -10*peso equals: report.
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/9/2021 18:15:04'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:25:34'!
 test12netTransferOfComposedAccounts
 
-	| portfolio withdrawAccount depositAccount |
+	| portfolio withdrawAccount depositAccount report |
 	
 	portfolio := Portfolio new.
 	depositAccount := ReceptiveAccount new.
@@ -470,8 +491,10 @@ test12netTransferOfComposedAccounts
 	portfolio add: depositAccount.
 	
 	Transfer amount: 10 * peso from: withdrawAccount to: depositAccount.
+	
+	report := (NetTransferReport for: portfolio) build.
 
-	self assert: 10*peso equals: portfolio netTransfer.
+	self assert: 10*peso equals: report.
 	! !
 
 
@@ -617,34 +640,6 @@ isComposedBy: anAccount
 addTransactionsTo: aCollectionOfTransactions
 
 	self subclassResponsibility ! !
-
-
-!Account methodsFor: 'reports' stamp: 'JS 7/9/2021 18:27:26'!
-accountSummary
-
-	| report |
-
-	report := OrderedCollection new.
-
-	self transactions do: [ :transaction | 
-		(transaction isMemberOf: Deposit) ifTrue: [ report add: 'Depósito por ', transaction value asString ].
-		(transaction isMemberOf: Withdraw ) ifTrue: [ report add: 'Extracción por ', transaction value asString ].
-		(transaction isMemberOf: TransferDepositLeg) ifTrue: [ report add: 'Entrada por transferencia de ', transaction value asString ].
-		(transaction isMemberOf: TransferWithdrawLeg ) ifTrue: [ report add: 'Salida por transferencia de ', transaction value asString ]].
-
-	report add: 'Balance = ', self balance asString.
-
-	^report! !
-
-!Account methodsFor: 'reports' stamp: 'JS 7/9/2021 18:11:56'!
-netTransfer
-
-	^self transactions 
-	inject: 0 * peso
-	into: [ :currentBalance :transaction | 
-		(transaction isKindOf: TransferLeg) 
-			ifTrue: [transaction affectBalance: currentBalance]
-			ifFalse: [currentBalance] ]! !
 
 
 !classDefinition: #Portfolio category: 'ServiciosFinancieros-Solucion'!
@@ -857,6 +852,12 @@ affectBalance: aBalance
 
 	self subclassResponsibility ! !
 
+
+!AccountTransaction methodsFor: 'double dispatch - reports' stamp: 'JS 7/12/2021 20:45:17'!
+beAddedToReport: aReport
+
+	self subclassResponsibility.! !
+
 
 !classDefinition: #Deposit category: 'ServiciosFinancieros-Solucion'!
 AccountTransaction subclass: #Deposit
@@ -881,6 +882,12 @@ value
 affectBalance: aBalance
 
 	^aBalance + value ! !
+
+
+!Deposit methodsFor: 'double dispatch - reports' stamp: 'JS 7/12/2021 20:49:42'!
+beAddedToReport: aReport
+
+	aReport addDepositOf: self value.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -958,6 +965,12 @@ affectBalance: aBalance
 
 	^aBalance + self value! !
 
+
+!TransferDepositLeg methodsFor: 'double dispatch - reports' stamp: 'JS 7/12/2021 20:50:21'!
+beAddedToReport: aReport
+
+	aReport addDepositLegOf: self value.! !
+
 
 !classDefinition: #TransferWithdrawLeg category: 'ServiciosFinancieros-Solucion'!
 TransferLeg subclass: #TransferWithdrawLeg
@@ -976,6 +989,12 @@ depositLeg
 affectBalance: aBalance
 
 	^aBalance - self value! !
+
+
+!TransferWithdrawLeg methodsFor: 'double dispatch - reports' stamp: 'JS 7/12/2021 20:50:58'!
+beAddedToReport: aReport
+
+	aReport addWithdrawLegOf: self value.! !
 
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Solucion'!
@@ -1002,6 +1021,12 @@ affectBalance: aBalance
 
 	^aBalance - value! !
 
+
+!Withdraw methodsFor: 'double dispatch - reports' stamp: 'JS 7/12/2021 20:51:15'!
+beAddedToReport: aReport
+
+	aReport addWithdrawOf: self value.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Withdraw class' category: 'ServiciosFinancieros-Solucion'!
@@ -1023,6 +1048,144 @@ register: aValue on: account
 	account register: transaction.
 		
 	^ transaction! !
+
+
+!classDefinition: #Report category: 'ServiciosFinancieros-Solucion'!
+Object subclass: #Report
+	instanceVariableNames: 'account'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+!Report methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 21:07:20'!
+addDepositLegOf: aValue
+
+	self subclassResponsibility.! !
+
+!Report methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 21:07:55'!
+addDepositOf: aValue
+
+	self subclassResponsibility.! !
+
+!Report methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 21:28:19'!
+addTransactions
+
+	account transactions do: [ :transaction | transaction beAddedToReport: self ].! !
+
+!Report methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 21:08:06'!
+addWithdrawLegOf: aValue
+
+	self subclassResponsibility.! !
+
+!Report methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 21:08:16'!
+addWithdrawOf: aValue
+
+	self subclassResponsibility.! !
+
+
+!Report methodsFor: 'evaluating' stamp: 'JS 7/12/2021 21:08:38'!
+build
+
+	self subclassResponsibility.! !
+
+
+!Report methodsFor: 'initialization' stamp: 'JS 7/12/2021 21:05:47'!
+initializeFor: anAccount
+	account := anAccount.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Report class' category: 'ServiciosFinancieros-Solucion'!
+Report class
+	instanceVariableNames: ''!
+
+!Report class methodsFor: 'instance creation' stamp: 'JS 7/12/2021 21:20:45'!
+for: anAccount
+	^self new initializeFor: anAccount! !
+
+
+!classDefinition: #AccountSummaryReport category: 'ServiciosFinancieros-Solucion'!
+Report subclass: #AccountSummaryReport
+	instanceVariableNames: 'entries'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+!AccountSummaryReport methodsFor: 'initialization' stamp: 'JS 7/12/2021 21:06:07'!
+initializeFor: anAccount
+	super initializeFor: anAccount.
+	entries := OrderedCollection new.! !
+
+
+!AccountSummaryReport methodsFor: 'evaluating' stamp: 'JS 7/12/2021 21:28:31'!
+build
+
+	self addTransactions.
+
+	entries add: 'Balance = ', account balance asString.
+
+	^entries
+	
+! !
+
+
+!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 20:55:25'!
+addDepositLegOf: aValue
+
+	entries add: 'Entrada por transferencia de ', aValue asString.! !
+
+!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 20:53:48'!
+addDepositOf: aValue
+
+	entries add: 'Depósito por ', aValue asString.! !
+
+!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 20:56:35'!
+addWithdrawLegOf: aValue
+
+	entries add: 'Salida por transferencia de ', aValue asString.! !
+
+!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 20:56:01'!
+addWithdrawOf: aValue
+
+	entries add: 'Extracción por ', aValue asString.! !
+
+
+!classDefinition: #NetTransferReport category: 'ServiciosFinancieros-Solucion'!
+Report subclass: #NetTransferReport
+	instanceVariableNames: 'netTransfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 21:18:31'!
+addDepositLegOf: aValue
+
+	netTransfer := netTransfer + aValue.! !
+
+!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 21:19:04'!
+addDepositOf: aValue! !
+
+!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 21:18:40'!
+addWithdrawLegOf: aValue
+
+	netTransfer := netTransfer - aValue.! !
+
+!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/12/2021 21:18:59'!
+addWithdrawOf: aValue! !
+
+
+!NetTransferReport methodsFor: 'initialization' stamp: 'JS 7/12/2021 21:23:33'!
+initializeFor: anAccount
+	super initializeFor: anAccount.
+	netTransfer := 0 * peso.! !
+
+
+!NetTransferReport methodsFor: 'evaluating' stamp: 'JS 7/12/2021 21:28:41'!
+build
+
+	self addTransactions.
+	
+	^netTransfer! !
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Solucion'!
