@@ -311,8 +311,8 @@ TestCase subclass: #ReportTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 20:58:23'!
-test01accountSumaryOfEmptyAccountHasNoTransactions
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:11:48'!
+test01AccountSumaryOfEmptyAccountHasNoTransactions
 
 	| emptyAccount report |
 	
@@ -321,8 +321,8 @@ test01accountSumaryOfEmptyAccountHasNoTransactions
 
 	self assert: #('Balance = 0 pesos') asOrderedCollection equals: report.! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 20:59:09'!
-test02accountSumaryWithSingleDeposit
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:12:03'!
+test02AccountSumaryWithSingleDeposit
 
 	| depositAccount report |
 	
@@ -337,8 +337,8 @@ test02accountSumaryWithSingleDeposit
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 20:59:37'!
-test03accountSumaryWithSingleWithdraw
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:12:11'!
+test03AccountSumaryWithSingleWithdraw
 
 	| depositAccount report |
 	
@@ -353,8 +353,8 @@ test03accountSumaryWithSingleWithdraw
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:00:09'!
-test04accountSumaryWithTransferDeposit
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:12:18'!
+test04AccountSumaryWithTransferDeposit
 
 	| depositAccount withdrawAccount report |
 	
@@ -370,8 +370,8 @@ test04accountSumaryWithTransferDeposit
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:00:33'!
-test05accountSumaryWithTransferWithdraw
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:12:27'!
+test05AccountSumaryWithTransferWithdraw
 
 	| depositAccount withdrawAccount report |
 	
@@ -387,8 +387,8 @@ test05accountSumaryWithTransferWithdraw
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:00:54'!
-test06accountSumaryWithWithMultipleTransactions
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:12:34'!
+test06AccountSumaryWithWithMultipleTransactions
 
 	| account report |
 	
@@ -404,8 +404,8 @@ test06accountSumaryWithWithMultipleTransactions
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:01:09'!
-test07accountSumaryOfComposedAccounts
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:12:41'!
+test07AccountSumaryOfComposedAccounts
 
 	| portfolio depositAccount report |
 	
@@ -421,8 +421,8 @@ test07accountSumaryOfComposedAccounts
 	self assert: #('Depósito por 10 pesos' 'Balance = 10 pesos') asOrderedCollection equals: report.
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:20:22'!
-test08netTransferOfEmptyAccountIsZeroPesos
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:12:48'!
+test08NetTransferOfEmptyAccountIsZeroPesos
 
 	| emptyAccount report |
 	
@@ -432,8 +432,8 @@ test08netTransferOfEmptyAccountIsZeroPesos
 
 	self assert: 0*peso equals: report.! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:24:18'!
-test09netTransferWithTransferDeposit
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:12:57'!
+test09NetTransferWithTransferDeposit
 
 	| depositAccount withdrawAccount report |
 	
@@ -448,8 +448,8 @@ test09netTransferWithTransferDeposit
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:24:49'!
-test10netTransferWithNoTransferTransaction
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:13:04'!
+test10NetTransferWithNoTransferTransaction
 
 	| depositAccount report |
 	
@@ -463,8 +463,8 @@ test10netTransferWithNoTransferTransaction
 	self assert: 0*peso equals: report.
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:25:10'!
-test11netTransferWithTransferWithdraw
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:13:10'!
+test11NetTransferWithTransferWithdraw
 
 	| depositAccount withdrawAccount report |
 	
@@ -479,8 +479,8 @@ test11netTransferWithTransferWithdraw
 	
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/12/2021 21:25:34'!
-test12netTransferOfComposedAccounts
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/14/2021 05:13:16'!
+test12NetTransferOfComposedAccounts
 
 	| portfolio withdrawAccount depositAccount report |
 	
@@ -593,7 +593,7 @@ test19DetailedTreeWithAccountWithTransaction
 	! !
 
 
-!ReportTest methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 18:47:33'!
+!ReportTest methodsFor: 'indentations' stamp: 'JS 7/13/2021 18:47:33'!
 indent
 
 	^'    '! !
@@ -710,42 +710,37 @@ Object subclass: #Account
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!Account methodsFor: 'main protocol' stamp: 'JS 7/13/2021 19:03:57'!
-accept: aVisitor
+!Account methodsFor: 'main protocol' stamp: 'JS 7/14/2021 05:14:53'!
+balance
 
 	self subclassResponsibility.! !
 
-!Account methodsFor: 'main protocol' stamp: 'HAW 5/25/2019 12:23:40'!
-balance
-
-	self subclassResponsibility ! !
-
-!Account methodsFor: 'main protocol' stamp: 'HAW 5/25/2019 12:23:47'!
+!Account methodsFor: 'main protocol' stamp: 'JS 7/14/2021 05:14:56'!
 hasRegistered: aTransaction
 
-	self subclassResponsibility ! !
+	self subclassResponsibility.! !
 
-!Account methodsFor: 'main protocol' stamp: 'HAW 5/25/2019 12:23:15'!
+!Account methodsFor: 'main protocol' stamp: 'JS 7/14/2021 05:15:00'!
 transactions
 
-	self subclassResponsibility ! !
+	self subclassResponsibility.! !
 
 
-!Account methodsFor: 'composition' stamp: 'LL 7/8/2021 21:45:50'!
+!Account methodsFor: 'composition' stamp: 'JS 7/14/2021 05:15:05'!
 addedTo: aPortfolio
 
-	self subclassResponsibility! !
+	self subclassResponsibility.! !
 
-!Account methodsFor: 'composition' stamp: 'LL 7/8/2021 21:46:48'!
+!Account methodsFor: 'composition' stamp: 'JS 7/14/2021 05:15:08'!
 isComposedBy: anAccount
 
-	self subclassResponsibility! !
+	self subclassResponsibility.! !
 
 
-!Account methodsFor: 'private' stamp: 'HAW 5/25/2019 12:23:27'!
+!Account methodsFor: 'private' stamp: 'JS 7/14/2021 05:15:13'!
 addTransactionsTo: aCollectionOfTransactions
 
-	self subclassResponsibility ! !
+	self subclassResponsibility.! !
 
 !Account methodsFor: 'private' stamp: 'JS 7/13/2021 18:19:28'!
 defaultName
@@ -753,12 +748,14 @@ defaultName
 	self subclassResponsibility.! !
 
 
-!Account methodsFor: 'initialization' stamp: 'JS 7/13/2021 18:19:08'!
+!Account methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:15:22'!
 initialize
-	name := self defaultName! !
 
-!Account methodsFor: 'initialization' stamp: 'JS 7/13/2021 18:00:18'!
+	name := self defaultName.! !
+
+!Account methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:15:28'!
 initializeNamed: aName
+
 	self initialize.
 	name := aName.! !
 
@@ -768,14 +765,21 @@ name
 
 	^name! !
 
+
+!Account methodsFor: 'double dispatch - reports' stamp: 'JS 7/13/2021 19:03:57'!
+accept: aVisitor
+
+	self subclassResponsibility.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Account class' category: 'ServiciosFinancieros-Solucion'!
 Account class
 	instanceVariableNames: ''!
 
-!Account class methodsFor: 'instance creation' stamp: 'JS 7/13/2021 17:57:21'!
+!Account class methodsFor: 'instance creation' stamp: 'JS 7/14/2021 05:29:54'!
 named: aName 
+
 	^self new initializeNamed: aName ! !
 
 
@@ -835,20 +839,20 @@ accountsSize
 	
 	^accounts size! !
 
-!Portfolio methodsFor: 'accounts management' stamp: 'HAW 5/25/2019 12:19:20'!
+!Portfolio methodsFor: 'accounts management' stamp: 'JS 7/14/2021 05:17:28'!
 add: accountToAdd
 
 	self assertCanAdd: accountToAdd.
 		
 	accounts add: accountToAdd.
-	accountToAdd addedTo: self 
+	accountToAdd addedTo: self.
 	! !
 
 
-!Portfolio methodsFor: 'private' stamp: 'HAW 5/25/2019 11:42:55'!
+!Portfolio methodsFor: 'private' stamp: 'JS 7/14/2021 05:17:34'!
 addTransactionsTo: aCollectionOfTransactions
 
-	accounts do: [ :anAccount | anAccount addTransactionsTo: aCollectionOfTransactions ]! !
+	accounts do: [ :anAccount | anAccount addTransactionsTo: aCollectionOfTransactions ].! !
 
 !Portfolio methodsFor: 'private' stamp: 'JS 7/13/2021 18:19:49'!
 defaultName
@@ -856,22 +860,22 @@ defaultName
 	^'unnamed portfolio'! !
 
 
-!Portfolio methodsFor: 'composition' stamp: 'HAW 5/25/2019 12:17:31'!
+!Portfolio methodsFor: 'composition' stamp: 'JS 7/14/2021 05:17:44'!
 addRootParentsTo: rootParents
 
 	parents 
 		ifEmpty: [ rootParents add: self ] 
-		ifNotEmpty: [ parents do: [ :aParent | aParent addRootParentsTo: rootParents ]]! !
+		ifNotEmpty: [ parents do: [ :aParent | aParent addRootParentsTo: rootParents ]].! !
 
-!Portfolio methodsFor: 'composition' stamp: 'HAW 5/25/2019 12:02:59'!
+!Portfolio methodsFor: 'composition' stamp: 'JS 7/14/2021 05:17:48'!
 addedTo: aPortfolio 
 	
-	parents add: aPortfolio ! !
+	parents add: aPortfolio.! !
 
-!Portfolio methodsFor: 'composition' stamp: 'HAW 5/25/2019 12:20:56'!
+!Portfolio methodsFor: 'composition' stamp: 'JS 7/14/2021 05:17:58'!
 anyRootParentIsComposedBy: accountToAdd
 
-	^self rootParents anySatisfy: [ :aParent | aParent isComposedBy: accountToAdd]! !
+	^self rootParents anySatisfy: [ :aParent | aParent isComposedBy: accountToAdd ]! !
 
 !Portfolio methodsFor: 'composition' stamp: 'HAW 5/25/2019 12:20:36'!
 assertCanAdd: accountToAdd
@@ -879,12 +883,12 @@ assertCanAdd: accountToAdd
 	(self anyRootParentIsComposedBy: accountToAdd) ifTrue: [ self signalCanNotAddAccount ].
 ! !
 
-!Portfolio methodsFor: 'composition' stamp: 'HAW 5/29/2019 16:24:54'!
+!Portfolio methodsFor: 'composition' stamp: 'JS 7/14/2021 05:18:12'!
 isComposedBy: anAccount
 
-	^ self = anAccount or: [ accounts anySatisfy: [ :composedAccount | (composedAccount isComposedBy: anAccount) or: [ anAccount isComposedBy: composedAccount ]]]! !
+	^self = anAccount or: [ accounts anySatisfy: [ :composedAccount | (composedAccount isComposedBy: anAccount) or: [ anAccount isComposedBy: composedAccount ]]]! !
 
-!Portfolio methodsFor: 'composition' stamp: 'HAW 5/25/2019 12:17:31'!
+!Portfolio methodsFor: 'composition' stamp: 'JS 7/14/2021 05:18:19'!
 rootParents
 	
 	| rootParents |
@@ -892,16 +896,17 @@ rootParents
 	rootParents := Set new.
 	self addRootParentsTo: rootParents.
 	
-	^ rootParents! !
+	^rootParents! !
 
-!Portfolio methodsFor: 'composition' stamp: 'HAW 5/25/2019 11:48:34'!
+!Portfolio methodsFor: 'composition' stamp: 'JS 7/14/2021 05:18:23'!
 signalCanNotAddAccount
 	
-	self error: self class canNotAddAccountErrorMessage! !
+	self error: self class canNotAddAccountErrorMessage.! !
 
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 19:51:17'!
+!Portfolio methodsFor: 'visitor accesing' stamp: 'JS 7/14/2021 05:18:38'!
 accounts
+
 	^accounts! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -910,31 +915,30 @@ accounts
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'as yet unclassified' stamp: 'HAW 5/25/2019 11:48:55'!
+!Portfolio class methodsFor: 'error descriptions' stamp: 'HAW 5/25/2019 11:48:55'!
 canNotAddAccountErrorMessage
 	
 	^'Can not add repeated account to a portfolio'! !
 
-!Portfolio class methodsFor: 'as yet unclassified' stamp: 'HAW 5/25/2019 11:18:21'!
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'JS 7/14/2021 05:30:45'!
+named: aName with: aReceptiveAccount 
+		
+	^(self named: aName) add: aReceptiveAccount; yourself! !
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'HAW 5/25/2019 11:18:21'!
 with: anAccount
 
 	^self new 
 		add: anAccount;
 		yourself! !
 
-!Portfolio class methodsFor: 'as yet unclassified' stamp: 'HAW 5/25/2019 11:23:59'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'HAW 5/25/2019 11:23:59'!
 with: anAccount with: anotherAccount
 
 	^self new 
 		add: anAccount;
 		add: anotherAccount;
-		yourself! !
-
-
-!Portfolio class methodsFor: 'instance creation' stamp: 'JS 7/13/2021 18:53:18'!
-named: aName with: aReceptiveAccount 
-		
-		^(self named: aName) add: aReceptiveAccount;
 		yourself! !
 
 
@@ -958,35 +962,35 @@ accept: aVisitor
 
 	aVisitor visitReceptiveAccount: self.! !
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/9/2021 17:20:21'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/14/2021 05:19:31'!
 balance
 
 	^transactions 
 		inject: 0 * peso
-		into: [ :currentBalance :transaction | transaction affectBalance: currentBalance ]! !
+		into: [ :currentBalance :transaction | transaction affectBalance: currentBalance ].! !
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'NR 10/21/2019 18:55:56'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/14/2021 05:19:35'!
 hasRegistered: aTransaction
 
-	^ transactions includes: aTransaction 
+	^transactions includes: aTransaction 
 ! !
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/14/2021 05:19:41'!
 register: aTransaction
 
-	transactions add: aTransaction 
+	transactions add: aTransaction.
 ! !
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'JS 7/14/2021 05:19:44'!
 transactions 
 
-	^ transactions copy! !
+	^transactions copy! !
 
 
-!ReceptiveAccount methodsFor: 'private' stamp: 'HAW 5/25/2019 11:38:52'!
+!ReceptiveAccount methodsFor: 'private' stamp: 'JS 7/14/2021 05:19:20'!
 addTransactionsTo: aCollectionOfTransactions
 
-	aCollectionOfTransactions addAll: transactions ! !
+	aCollectionOfTransactions addAll: transactions.! !
 
 !ReceptiveAccount methodsFor: 'private' stamp: 'JS 7/13/2021 18:20:02'!
 defaultName
@@ -1012,16 +1016,16 @@ Object subclass: #AccountTransaction
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!AccountTransaction methodsFor: 'value' stamp: 'HernanWilkinson 9/12/2011 12:25'!
+!AccountTransaction methodsFor: 'value' stamp: 'JS 7/14/2021 05:22:03'!
 value 
 
-	self subclassResponsibility ! !
+	self subclassResponsibility.! !
 
 
-!AccountTransaction methodsFor: 'balance' stamp: 'HAW 5/25/2019 11:25:39'!
+!AccountTransaction methodsFor: 'balance' stamp: 'JS 7/14/2021 05:20:06'!
 affectBalance: aBalance
 
-	self subclassResponsibility ! !
+	self subclassResponsibility.! !
 
 
 !AccountTransaction methodsFor: 'double dispatch - reports' stamp: 'JS 7/13/2021 21:16:58'!
@@ -1037,16 +1041,16 @@ AccountTransaction subclass: #Deposit
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!Deposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:45'!
+!Deposit methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:21:58'!
 initializeFor: aValue
 
-	value := aValue ! !
+	value := aValue.! !
 
 
-!Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
+!Deposit methodsFor: 'value' stamp: 'JS 7/14/2021 05:22:21'!
 value
 
-	^ value! !
+	^value! !
 
 
 !Deposit methodsFor: 'balance' stamp: 'HAW 5/25/2019 11:25:02'!
@@ -1071,8 +1075,7 @@ for: aValue
 
 	^ self new initializeFor: aValue ! !
 
-
-!Deposit class methodsFor: 'as yet unclassified' stamp: 'LL 7/8/2021 21:45:00'!
+!Deposit class methodsFor: 'instance creation' stamp: 'LL 7/8/2021 21:45:00'!
 register: aValue on: account
 
 	| transaction |
@@ -1096,10 +1099,10 @@ value
 	^transfer value! !
 
 
-!TransferLeg methodsFor: 'initialization' stamp: 'LL 9/20/2020 22:28:14'!
+!TransferLeg methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:22:37'!
 initializeWith: aTransfer
 
-	transfer := aTransfer! !
+	transfer := aTransfer.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1107,7 +1110,7 @@ initializeWith: aTransfer
 TransferLeg class
 	instanceVariableNames: ''!
 
-!TransferLeg class methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 22:45:01'!
+!TransferLeg class methodsFor: 'instance creation' stamp: 'LL 9/20/2020 22:45:01'!
 of: aTransfer on: anAccount
 
 	| transaction |
@@ -1175,16 +1178,16 @@ AccountTransaction subclass: #Withdraw
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!Withdraw methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:46'!
+!Withdraw methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:23:02'!
 initializeFor: aValue
 
-	value := aValue ! !
+	value := aValue.! !
 
 
-!Withdraw methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:33'!
+!Withdraw methodsFor: 'value' stamp: 'JS 7/14/2021 05:23:07'!
 value
 
-	^ value! !
+	^value! !
 
 
 !Withdraw methodsFor: 'balance' stamp: 'HAW 5/25/2019 11:25:15'!
@@ -1209,8 +1212,7 @@ for: aValue
 
 	^ self new initializeFor: aValue ! !
 
-
-!Withdraw class methodsFor: 'as yet unclassified' stamp: 'LL 7/8/2021 21:45:05'!
+!Withdraw class methodsFor: 'instance creation' stamp: 'LL 7/8/2021 21:45:05'!
 register: aValue on: account
 
 	| transaction |
@@ -1228,40 +1230,43 @@ Object subclass: #PortfolioTreePrinter
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!PortfolioTreePrinter methodsFor: 'initialization' stamp: 'JS 7/13/2021 20:50:24'!
+!PortfolioTreePrinter methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:23:21'!
 initializeFor: aPortfolio 
+
 	portfolio := aPortfolio.
 	entries := OrderedCollection new.
 	indentation := ''.! !
 
 
-!PortfolioTreePrinter methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 20:41:00'!
+!PortfolioTreePrinter methodsFor: 'indentation' stamp: 'JS 7/13/2021 20:41:00'!
 defaultIndentation
 
 	^'    '! !
 
-!PortfolioTreePrinter methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 20:48:39'!
+!PortfolioTreePrinter methodsFor: 'indentation' stamp: 'JS 7/13/2021 20:48:39'!
 indent
 
 	indentation := indentation append: self defaultIndentation.! !
 
-!PortfolioTreePrinter methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 20:39:45'!
-print
-
-	self subclassResponsibility.! !
-
-!PortfolioTreePrinter methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 20:50:51'!
+!PortfolioTreePrinter methodsFor: 'indentation' stamp: 'JS 7/13/2021 20:50:51'!
 unindent
 
 	indentation := indentation withoutPrefix: self defaultIndentation.! !
 
-!PortfolioTreePrinter methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 20:40:27'!
-visitAccount: anAccount
+
+!PortfolioTreePrinter methodsFor: 'double dispatch - accounts' stamp: 'JS 7/13/2021 20:40:18'!
+visitPortfolio: aPortfolio
 
 	self subclassResponsibility.! !
 
-!PortfolioTreePrinter methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 20:40:18'!
-visitPortfolio: aPortfolio
+!PortfolioTreePrinter methodsFor: 'double dispatch - accounts' stamp: 'JS 7/14/2021 05:25:32'!
+visitReceptiveAccount: anAccount
+
+	self subclassResponsibility.! !
+
+
+!PortfolioTreePrinter methodsFor: 'evaluating' stamp: 'JS 7/13/2021 20:39:45'!
+print
 
 	self subclassResponsibility.! !
 
@@ -1284,7 +1289,15 @@ PortfolioTreePrinter subclass: #PortfolioDetailedTreePrinter
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!PortfolioDetailedTreePrinter methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 21:00:10'!
+!PortfolioDetailedTreePrinter methodsFor: 'evaluating' stamp: 'JS 7/14/2021 05:27:14'!
+print
+
+	portfolio accept: self.
+	
+	^entries! !
+
+
+!PortfolioDetailedTreePrinter methodsFor: 'double dispatch - accounts' stamp: 'JS 7/13/2021 21:00:10'!
 visitPortfolio: aPortfolio
 	
 	entries add: (indentation, aPortfolio name). 
@@ -1294,21 +1307,14 @@ visitPortfolio: aPortfolio
 	entries add: indentation, 'Balance = ', aPortfolio balance asString.
 	self unindent.! !
 
-!PortfolioDetailedTreePrinter methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 21:09:50'!
+!PortfolioDetailedTreePrinter methodsFor: 'double dispatch - accounts' stamp: 'JS 7/14/2021 05:27:30'!
 visitReceptiveAccount: anAccount
 
 	entries add: indentation, anAccount name. 
+	
 	self indent.
 	(AccountSummaryReport for: anAccount) build do: [ :entry | entries add: indentation, entry ].
 	self unindent.! !
-
-
-!PortfolioDetailedTreePrinter methodsFor: 'printing' stamp: 'JS 7/13/2021 20:52:47'!
-print
-
-	portfolio accept: self.
-	
-	^entries.! !
 
 
 !classDefinition: #PortfolioSimpleTreePrinter category: 'ServiciosFinancieros-Solucion'!
@@ -1318,15 +1324,15 @@ PortfolioTreePrinter subclass: #PortfolioSimpleTreePrinter
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!PortfolioSimpleTreePrinter methodsFor: 'evaluating' stamp: 'JS 7/13/2021 19:12:17'!
+!PortfolioSimpleTreePrinter methodsFor: 'evaluating' stamp: 'JS 7/14/2021 05:27:56'!
 print
 
 	portfolio accept: self.
 	
-	^entries.! !
+	^entries! !
 
 
-!PortfolioSimpleTreePrinter methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 20:51:16'!
+!PortfolioSimpleTreePrinter methodsFor: 'double dispatch - accounts' stamp: 'JS 7/13/2021 20:51:16'!
 visitPortfolio: aPortfolio
 	
 	entries add: (indentation, aPortfolio name). 
@@ -1335,7 +1341,7 @@ visitPortfolio: aPortfolio
 	aPortfolio accounts do: [ :account | account accept: self ].
 	self unindent.! !
 
-!PortfolioSimpleTreePrinter methodsFor: 'as yet unclassified' stamp: 'JS 7/13/2021 20:51:20'!
+!PortfolioSimpleTreePrinter methodsFor: 'double dispatch - accounts' stamp: 'JS 7/13/2021 20:51:20'!
 visitReceptiveAccount: anAccount
 
 	entries add: (indentation, anAccount name) asString. ! !
@@ -1348,10 +1354,11 @@ Object subclass: #TransactionsReport
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!TransactionsReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:16:59'!
+!TransactionsReport methodsFor: 'private' stamp: 'JS 7/13/2021 21:16:59'!
 addTransactions
 
 	account transactions do: [ :transaction | transaction accept: self ].! !
+
 
 !TransactionsReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:15:24'!
 visitDeposit: aValue
@@ -1380,8 +1387,9 @@ build
 	self subclassResponsibility.! !
 
 
-!TransactionsReport methodsFor: 'initialization' stamp: 'JS 7/12/2021 21:05:47'!
+!TransactionsReport methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:28:07'!
 initializeFor: anAccount
+
 	account := anAccount.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -1390,8 +1398,9 @@ initializeFor: anAccount
 TransactionsReport class
 	instanceVariableNames: ''!
 
-!TransactionsReport class methodsFor: 'instance creation' stamp: 'JS 7/12/2021 21:20:45'!
+!TransactionsReport class methodsFor: 'instance creation' stamp: 'JS 7/14/2021 05:32:27'!
 for: anAccount
+
 	^self new initializeFor: anAccount! !
 
 
@@ -1402,8 +1411,9 @@ TransactionsReport subclass: #AccountSummaryReport
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!AccountSummaryReport methodsFor: 'initialization' stamp: 'JS 7/12/2021 21:06:07'!
+!AccountSummaryReport methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:28:24'!
 initializeFor: anAccount
+
 	super initializeFor: anAccount.
 	entries := OrderedCollection new.! !
 
@@ -1465,8 +1475,9 @@ visitWithdrawLeg: aValue
 	netTransfer := netTransfer - aValue.! !
 
 
-!NetTransferReport methodsFor: 'initialization' stamp: 'JS 7/12/2021 21:23:33'!
+!NetTransferReport methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:29:00'!
 initializeFor: anAccount
+
 	super initializeFor: anAccount.
 	netTransfer := 0 * peso.! !
 
@@ -1503,12 +1514,12 @@ withdrawLeg
 	^withdrawLeg! !
 
 
-!Transfer methodsFor: 'initialization' stamp: 'LL 9/20/2020 21:25:21'!
+!Transfer methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:29:23'!
 initializeWith: aValue withdrawLeg: aWithdraw depositLeg: aDeposit
 
 	value := aValue.
 	withdrawLeg := aWithdraw.
-	depositLeg := aDeposit! !
+	depositLeg := aDeposit.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1516,25 +1527,26 @@ initializeWith: aValue withdrawLeg: aWithdraw depositLeg: aDeposit
 Transfer class
 	instanceVariableNames: ''!
 
-!Transfer class methodsFor: 'errors' stamp: 'LL 9/20/2020 22:57:30'!
-cannotTransferToOriginErrorDescription
-	
-	^'Transfer destionation cannot be the origin account'! !
-
-!Transfer class methodsFor: 'errors' stamp: 'LL 9/20/2020 23:00:53'!
-cannotTransferZeroErrorDescription
-
-	^'Transfer amount should be positive'! !
-
-!Transfer class methodsFor: 'errors' stamp: 'LL 9/20/2020 22:56:35'!
+!Transfer class methodsFor: 'signals' stamp: 'LL 9/20/2020 22:56:35'!
 signalCannotTransferToOrigin
 	
 	self error: self cannotTransferToOriginErrorDescription! !
 
-!Transfer class methodsFor: 'errors' stamp: 'LL 9/20/2020 23:06:17'!
+!Transfer class methodsFor: 'signals' stamp: 'LL 9/20/2020 23:06:17'!
 signalCannotTransferZero
 
 	self error: self cannotTransferZeroErrorDescription! !
+
+
+!Transfer class methodsFor: 'error descriptions' stamp: 'LL 9/20/2020 22:57:30'!
+cannotTransferToOriginErrorDescription
+	
+	^'Transfer destionation cannot be the origin account'! !
+
+!Transfer class methodsFor: 'error descriptions' stamp: 'LL 9/20/2020 23:00:53'!
+cannotTransferZeroErrorDescription
+
+	^'Transfer amount should be positive'! !
 
 
 !Transfer class methodsFor: 'assertions' stamp: 'LL 9/20/2020 23:05:22'!
