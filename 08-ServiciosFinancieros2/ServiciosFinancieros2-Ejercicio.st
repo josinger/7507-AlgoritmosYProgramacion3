@@ -933,6 +933,11 @@ named: aName with: aReceptiveAccount
 		
 	^(self named: aName) add: aReceptiveAccount; yourself! !
 
+!Portfolio class methodsFor: 'instance creation' stamp: 'LT 7/14/2021 17:09:54'!
+named: aName with: aReceptiveAccount with: anotherReceptiveAccount
+		
+	^(self named: aName) add: aReceptiveAccount; add: anotherReceptiveAccount; yourself! !
+
 !Portfolio class methodsFor: 'instance creation' stamp: 'HAW 5/25/2019 11:18:21'!
 with: anAccount
 
@@ -1272,9 +1277,11 @@ visitReceptiveAccount: anAccount
 	self subclassResponsibility.! !
 
 
-!PortfolioTreePrinter methodsFor: 'evaluating' stamp: 'JS 7/13/2021 20:39:45'!
+!PortfolioTreePrinter methodsFor: 'evaluating' stamp: 'LT 7/15/2021 18:41:18'!
 print
-
+	"si bien ambas clases concretas de printer tienen código repetido, conceptualmente son diferentes, 
+	con lo cual si hablamos de organizacion de conocimiento, es mas declarativo dejarlo separado.
+	El print no tiene por que ser igual para todos los TreePrinters, podrían funcionar bastante diferente cada uno."
 	self subclassResponsibility.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
