@@ -1066,10 +1066,10 @@ affectBalance: aBalance
 	^aBalance + value ! !
 
 
-!Deposit methodsFor: 'double dispatch - reports' stamp: 'JS 7/13/2021 21:16:58'!
+!Deposit methodsFor: 'double dispatch - reports' stamp: 'JS 7/15/2021 16:03:06'!
 accept: aReport
 
-	aReport visitDeposit: self value.! !
+	aReport visitDeposit: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1147,10 +1147,10 @@ affectBalance: aBalance
 	^aBalance + self value! !
 
 
-!TransferDepositLeg methodsFor: 'double dispatch - reports' stamp: 'JS 7/13/2021 21:16:58'!
+!TransferDepositLeg methodsFor: 'double dispatch - reports' stamp: 'JS 7/15/2021 16:03:24'!
 accept: aReport
 
-	aReport visitDepositLeg: self value.! !
+	aReport visitDepositLeg: self.! !
 
 
 !classDefinition: #TransferWithdrawLeg category: 'ServiciosFinancieros-Solucion'!
@@ -1172,10 +1172,10 @@ affectBalance: aBalance
 	^aBalance - self value! !
 
 
-!TransferWithdrawLeg methodsFor: 'double dispatch - reports' stamp: 'JS 7/13/2021 21:16:58'!
+!TransferWithdrawLeg methodsFor: 'double dispatch - reports' stamp: 'JS 7/15/2021 16:03:18'!
 accept: aReport
 
-	aReport visitWithdrawLeg: self value.! !
+	aReport visitWithdrawLeg: self.! !
 
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Solucion'!
@@ -1203,10 +1203,10 @@ affectBalance: aBalance
 	^aBalance - value! !
 
 
-!Withdraw methodsFor: 'double dispatch - reports' stamp: 'JS 7/13/2021 21:16:59'!
+!Withdraw methodsFor: 'double dispatch - reports' stamp: 'JS 7/15/2021 16:03:30'!
 accept: aReport
 
-	aReport visitWithdraw: self value.! !
+	aReport visitWithdraw: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1367,23 +1367,23 @@ addTransactions
 	account transactions do: [ :transaction | transaction accept: self ].! !
 
 
-!TransactionsReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:15:24'!
-visitDeposit: aValue
+!TransactionsReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:04:42'!
+visitDeposit: aDeposit
 
 	self subclassResponsibility.! !
 
-!TransactionsReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:15:09'!
-visitDepositLeg: aValue
+!TransactionsReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:04:51'!
+visitDepositLeg: aDepositLeg
 
 	self subclassResponsibility.! !
 
-!TransactionsReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:15:46'!
-visitWithdraw: aValue
+!TransactionsReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:05:02'!
+visitWithdraw: aWithdraw
 
 	self subclassResponsibility.! !
 
-!TransactionsReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:16:04'!
-visitWithdrawLeg: aValue
+!TransactionsReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:05:13'!
+visitWithdrawLeg: aWithdrawLeg
 
 	self subclassResponsibility.! !
 
@@ -1437,25 +1437,25 @@ build
 ! !
 
 
-!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:15:25'!
-visitDeposit: aValue
+!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:12:06'!
+visitDeposit: aDeposit
 
-	entries add: 'Depósito por ', aValue asString.! !
+	entries add: 'Depósito por ', aDeposit value asString.! !
 
-!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:15:08'!
-visitDepositLeg: aValue
+!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:12:09'!
+visitDepositLeg: aDepositLeg
 
-	entries add: 'Entrada por transferencia de ', aValue asString.! !
+	entries add: 'Entrada por transferencia de ', aDepositLeg value asString.! !
 
-!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:15:46'!
-visitWithdraw: aValue
+!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:12:13'!
+visitWithdraw: aWithdraw
 
-	entries add: 'Extracción por ', aValue asString.! !
+	entries add: 'Extracción por ', aWithdraw value asString.! !
 
-!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:16:04'!
-visitWithdrawLeg: aValue
+!AccountSummaryReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:12:16'!
+visitWithdrawLeg: aWithdrawLeg
 
-	entries add: 'Salida por transferencia de ', aValue asString.! !
+	entries add: 'Salida por transferencia de ', aWithdrawLeg value asString.! !
 
 
 !classDefinition: #NetTransferReport category: 'ServiciosFinancieros-Solucion'!
@@ -1465,21 +1465,21 @@ TransactionsReport subclass: #NetTransferReport
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:15:24'!
-visitDeposit: aValue! !
+!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:06:35'!
+visitDeposit: aDeposit! !
 
-!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:15:08'!
-visitDepositLeg: aValue
+!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:12:56'!
+visitDepositLeg: aDepositLeg
 
-	netTransfer := netTransfer + aValue.! !
+	netTransfer := netTransfer + aDepositLeg value.! !
 
-!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:15:46'!
-visitWithdraw: aValue! !
+!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:06:59'!
+visitWithdraw: aWithdraw! !
 
-!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/13/2021 21:16:04'!
-visitWithdrawLeg: aValue
+!NetTransferReport methodsFor: 'double dispatch - transactions' stamp: 'JS 7/15/2021 16:12:53'!
+visitWithdrawLeg: aWithdrawLeg
 
-	netTransfer := netTransfer - aValue.! !
+	netTransfer := netTransfer - aWithdrawLeg value.! !
 
 
 !NetTransferReport methodsFor: 'initialization' stamp: 'JS 7/14/2021 05:29:00'!
