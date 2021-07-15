@@ -521,7 +521,7 @@ test14SimpleTreeOfEmptyNamedPortfolio
 	self assert: #('Portfolio 001') asOrderedCollection equals: tree.
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/13/2021 21:12:52'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/15/2021 04:26:00'!
 test15SimpleTreeWithAccount
 
 	| portfolio childAccount tree |
@@ -531,10 +531,11 @@ test15SimpleTreeWithAccount
 	
 	tree := (PortfolioSimpleTreePrinter for: portfolio) print.
 
-	self assert: {'Portfolio 001' . self indent , 'unnamed account'} asOrderedCollection equals: tree.
+	self assert: {'Portfolio 001' . 
+				self indent , 'unnamed account'} asOrderedCollection equals: tree.
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/13/2021 21:13:11'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/15/2021 04:26:14'!
 test16SimpleTreeWithComposedAccounts
 
 	| portfolio childPortfolio grandChildAccount tree |
@@ -545,10 +546,12 @@ test16SimpleTreeWithComposedAccounts
 	
 	tree := (PortfolioSimpleTreePrinter for: portfolio) print.
 
-	self assert: {'Portfolio 001' . self indent , 'Portfolio 002' . self indent , self indent , 'Account 001'} asOrderedCollection equals: tree.
+	self assert: {'Portfolio 001' . 
+				self indent , 'Portfolio 002' . 
+				self indent , self indent , 'Account 001'} asOrderedCollection equals: tree.
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/13/2021 21:13:45'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/15/2021 04:26:38'!
 test17DetailedTreeOfEmptyPortfolio
 
 	| portfolio tree |
@@ -557,10 +560,11 @@ test17DetailedTreeOfEmptyPortfolio
 	
 	tree := (PortfolioDetailedTreePrinter for: portfolio) print.
 
-	self assert: {'unnamed portfolio'. self indent, 'Balance = 0 pesos'} asOrderedCollection equals: tree.
+	self assert: {'unnamed portfolio'. 
+				self indent, 'Balance = 0 pesos'} asOrderedCollection equals: tree.
 	! !
 
-!ReportTest methodsFor: 'tests' stamp: 'JS 7/13/2021 21:14:03'!
+!ReportTest methodsFor: 'tests' stamp: 'JS 7/15/2021 04:26:29'!
 test18DetailedTreeWithAccount
 
 	| portfolio childAccount tree |
@@ -570,7 +574,10 @@ test18DetailedTreeWithAccount
 	
 	tree := (PortfolioDetailedTreePrinter for: portfolio) print.
 
-	self assert: {'Portfolio 001' . self indent , 'unnamed account' . self indent , self indent , 'Balance = 0 pesos'. self indent , 'Balance = 0 pesos'} asOrderedCollection equals: tree.
+	self assert: {'Portfolio 001' . 
+				self indent , 'unnamed account' . 
+				self indent , self indent , 'Balance = 0 pesos'. 
+				self indent , 'Balance = 0 pesos'} asOrderedCollection equals: tree.
 	! !
 
 !ReportTest methodsFor: 'tests' stamp: 'JS 7/13/2021 21:14:23'!
