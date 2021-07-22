@@ -358,11 +358,11 @@ Object subclass: #MarsRover
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
 
-!MarsRover methodsFor: 'initialization' stamp: 'LT 7/22/2021 11:28:39'!
+!MarsRover methodsFor: 'initialization' stamp: 'LT 7/22/2021 14:14:32'!
 initializeStartingAt: aPosition heading: aCardinalPoint 
 	
-	position := MarsRoverUpdateObservableProxy for: aPosition withNotificationSelector: #updatePosition:.
-	head := MarsRoverUpdateObservableProxy for: (MarsRoverHead of: self facing: aCardinalPoint) withNotificationSelector: #updateHead:.! !
+	position := UpdateableObservableProxy for: aPosition onNotifySend: #updatePosition:.
+	head := UpdateableObservableProxy for: (MarsRoverHead of: self facing: aCardinalPoint) onNotifySend: #updateHead:.! !
 
 
 !MarsRover methodsFor: 'process commands' stamp: 'LT 7/16/2021 18:40:50'!
@@ -927,38 +927,38 @@ representationForHeadFacingWest
 	^'Oeste'! !
 
 
-!classDefinition: #MarsRoverUpdateObservableProxy category: 'MarsRover-Solucion'!
-ProtoObject subclass: #MarsRoverUpdateObservableProxy
+!classDefinition: #UpdateableObservableProxy category: 'MarsRover-Solucion'!
+ProtoObject subclass: #UpdateableObservableProxy
 	instanceVariableNames: 'observers proxee notificationSelector'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
 
-!MarsRoverUpdateObservableProxy methodsFor: 'initialization' stamp: 'LT 7/22/2021 00:36:52'!
-initializeFor: aProxee withNotificationSelector: aNotificationSelector
+!UpdateableObservableProxy methodsFor: 'initialization' stamp: 'LT 7/22/2021 12:02:23'!
+initializeFor: aProxee onNotifySend: aNotificationSelector
 
 	proxee := aProxee.
 	notificationSelector := aNotificationSelector.
-	observers := OrderedCollection new.
+	observers := Set new.
 	! !
 
 
-!MarsRoverUpdateObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:36:56'!
+!UpdateableObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:36:56'!
 addObserver: anObserver
 
 	observers add: anObserver! !
 
-!MarsRoverUpdateObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:37:31'!
+!UpdateableObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:37:31'!
 doesNotUnderstand: aMessage
 
 	^aMessage sendTo: proxee.! !
 
-!MarsRoverUpdateObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:38:59'!
+!UpdateableObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:38:59'!
 notify
 	
 	observers do: [:observer | notificationSelector sendTo: observer with: proxee]. ! !
 
-!MarsRoverUpdateObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:40:08'!
+!UpdateableObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:40:08'!
 updateWith: aProxee
 
 	proxee := aProxee.
@@ -968,11 +968,11 @@ updateWith: aProxee
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'MarsRoverUpdateObservableProxy class' category: 'MarsRover-Solucion'!
-MarsRoverUpdateObservableProxy class
+!classDefinition: 'UpdateableObservableProxy class' category: 'MarsRover-Solucion'!
+UpdateableObservableProxy class
 	instanceVariableNames: ''!
 
-!MarsRoverUpdateObservableProxy class methodsFor: 'as yet unclassified' stamp: 'LT 7/22/2021 00:35:18'!
-for: proxee withNotificationSelector: aNotificationSelector
+!UpdateableObservableProxy class methodsFor: 'as yet unclassified' stamp: 'LT 7/22/2021 11:38:14'!
+for: proxee onNotifySend: aNotificationSelector
 
-	^self new initializeFor: proxee withNotificationSelector: aNotificationSelector.! !
+	^self new initializeFor: proxee onNotifySend: aNotificationSelector.! !
