@@ -376,8 +376,9 @@ processCommands: aStringWithCommands
 ! !
 
 
-!MarsRover methodsFor: 'testing' stamp: 'LT 7/22/2021 10:15:11'!
+!MarsRover methodsFor: 'testing' stamp: 'JS 7/22/2021 14:45:40'!
 isAt: aPosition heading: aCardinalPoint
+
 	^ position = aPosition and: [ head isHeading: aCardinalPoint ]! !
 
 
@@ -411,8 +412,9 @@ isForwardCommand: command
 
 	^ command = $f! !
 
-!MarsRover methodsFor: 'private - commands' stamp: 'LL 6/30/2021 15:51:21'!
+!MarsRover methodsFor: 'private - commands' stamp: 'JS 7/22/2021 14:46:00'!
 isInvalidCommand: aCommand
+
 	^(self isForwardCommand: aCommand) not and: 
 		[ (self isBackwardCommand: aCommand) not and: 
 			[ (self isRotateRightCommand: aCommand) not and: 
@@ -434,8 +436,9 @@ moveBy: aPoint
 
 	position updateWith: position + aPoint.! !
 
-!MarsRover methodsFor: 'dd - moving' stamp: 'LT 7/22/2021 00:44:05'!
+!MarsRover methodsFor: 'dd - moving' stamp: 'JS 7/22/2021 14:46:09'!
 moveDown
+
 	self moveBy:  (0@-1).! !
 
 !MarsRover methodsFor: 'dd - moving' stamp: 'LT 7/22/2021 00:44:08'!
@@ -452,27 +455,6 @@ moveRight
 moveUp
 
 	self moveBy:  (0@1).! !
-
-
-!MarsRover methodsFor: 'tracking' stamp: 'LT 7/21/2021 20:34:38'!
-addHeadObserver: anObserver
-
-	head addObserver: anObserver.! !
-
-!MarsRover methodsFor: 'tracking' stamp: 'LT 7/21/2021 18:30:53'!
-addPositionObserver: anObserver
-
-	position addObserver: anObserver.! !
-
-!MarsRover methodsFor: 'tracking' stamp: 'LT 7/21/2021 17:44:59'!
-heading
-
-	^head ! !
-
-!MarsRover methodsFor: 'tracking' stamp: 'LT 7/16/2021 17:43:25'!
-position
-
-	^position ! !
 
 
 !MarsRover methodsFor: 'dd - heading' stamp: 'LT 7/22/2021 00:46:32'!
@@ -504,6 +486,17 @@ headWest
 	self head: (MarsRoverHeadFacingWest of: self).
 ! !
 
+
+!MarsRover methodsFor: 'observing' stamp: 'LT 7/21/2021 20:34:38'!
+addHeadObserver: anObserver
+
+	head addObserver: anObserver.! !
+
+!MarsRover methodsFor: 'observing' stamp: 'LT 7/21/2021 18:30:53'!
+addPositionObserver: anObserver
+
+	position addObserver: anObserver.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'MarsRover class' category: 'MarsRover-Solucion'!
@@ -523,40 +516,44 @@ Object subclass: #MarsRoverHead
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
 
-!MarsRoverHead methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 16:17:57'!
-initializeOf: aMarsRover
-
-	marsRover := aMarsRover! !
-
-!MarsRoverHead methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:46:16'!
+!MarsRoverHead methodsFor: 'testing' stamp: 'LL 6/30/2021 19:46:16'!
 isHeading: aCardinalPoint
 
 	^self class whenFacing: aCardinalPoint
 
 	! !
 
-!MarsRoverHead methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:48:36'!
-movingBackwards
 
-	self subclassResponsibility! !
-
-!MarsRoverHead methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:48:47'!
-movingForward
-
-	self subclassResponsibility! !
-
-!MarsRoverHead methodsFor: 'as yet unclassified' stamp: 'LT 7/22/2021 01:08:48'!
+!MarsRoverHead methodsFor: 'represent' stamp: 'JS 7/22/2021 15:02:01'!
 representationFor: anObject
-	"si se usa este método en cualquier objeto, este debe saber responder el mensaje específico de cada cabeza"
+
 	self subclassResponsibility ! !
 
-!MarsRoverHead methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 16:36:46'!
+
+!MarsRoverHead methodsFor: 'initialization' stamp: 'LL 6/30/2021 16:17:57'!
+initializeOf: aMarsRover
+
+	marsRover := aMarsRover! !
+
+
+!MarsRoverHead methodsFor: 'rotation' stamp: 'LL 6/30/2021 16:36:46'!
 rotateLeft
 
 	self subclassResponsibility! !
 
-!MarsRoverHead methodsFor: 'as yet unclassified' stamp: 'LT 7/21/2021 21:45:05'!
+!MarsRoverHead methodsFor: 'rotation' stamp: 'LT 7/21/2021 21:45:05'!
 rotateRight
+
+	self subclassResponsibility! !
+
+
+!MarsRoverHead methodsFor: 'movement' stamp: 'LL 6/30/2021 19:48:36'!
+movingBackwards
+
+	self subclassResponsibility! !
+
+!MarsRoverHead methodsFor: 'movement' stamp: 'LL 6/30/2021 19:48:47'!
+movingForward
 
 	self subclassResponsibility! !
 
@@ -593,33 +590,35 @@ MarsRoverHead subclass: #MarsRoverHeadFacingEast
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
 
-!MarsRoverHeadFacingEast methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:48:36'!
+!MarsRoverHeadFacingEast methodsFor: 'movement' stamp: 'LL 6/30/2021 19:48:36'!
 movingBackwards
 
 	^marsRover moveLeft.
 
 	! !
 
-!MarsRoverHeadFacingEast methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:48:47'!
+!MarsRoverHeadFacingEast methodsFor: 'movement' stamp: 'LL 6/30/2021 19:48:47'!
 movingForward
 
 	^marsRover moveRight.
 
 	! !
 
-!MarsRoverHeadFacingEast methodsFor: 'as yet unclassified' stamp: 'LT 7/22/2021 01:09:02'!
+
+!MarsRoverHeadFacingEast methodsFor: 'represent' stamp: 'LT 7/22/2021 01:09:02'!
 representationFor: anObject
 
 	^anObject representationForHeadFacingEast.! !
 
-!MarsRoverHeadFacingEast methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 17:06:22'!
+
+!MarsRoverHeadFacingEast methodsFor: 'rotation' stamp: 'LL 6/30/2021 17:06:22'!
 rotateLeft
 
 	^marsRover headNorth.
 
 	! !
 
-!MarsRoverHeadFacingEast methodsFor: 'as yet unclassified' stamp: 'LT 7/19/2021 21:36:49'!
+!MarsRoverHeadFacingEast methodsFor: 'rotation' stamp: 'LT 7/19/2021 21:36:49'!
 rotateRight
 
 	^marsRover headSouth.
@@ -632,7 +631,7 @@ rotateRight
 MarsRoverHeadFacingEast class
 	instanceVariableNames: ''!
 
-!MarsRoverHeadFacingEast class methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:46:16'!
+!MarsRoverHeadFacingEast class methodsFor: 'testing' stamp: 'LL 6/30/2021 19:46:16'!
 whenFacing: aCardinalPoint
 
 	^aCardinalPoint = #East! !
@@ -645,27 +644,29 @@ MarsRoverHead subclass: #MarsRoverHeadFacingNorth
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
 
-!MarsRoverHeadFacingNorth methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:48:36'!
+!MarsRoverHeadFacingNorth methodsFor: 'movement' stamp: 'LL 6/30/2021 19:48:36'!
 movingBackwards
 
 	^marsRover moveDown.! !
 
-!MarsRoverHeadFacingNorth methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:48:47'!
+!MarsRoverHeadFacingNorth methodsFor: 'movement' stamp: 'LL 6/30/2021 19:48:47'!
 movingForward
 
 	^marsRover moveUp.! !
 
-!MarsRoverHeadFacingNorth methodsFor: 'as yet unclassified' stamp: 'LT 7/22/2021 01:09:12'!
+
+!MarsRoverHeadFacingNorth methodsFor: 'represent' stamp: 'LT 7/22/2021 01:09:12'!
 representationFor: anObject
 
 	^anObject representationForHeadFacingNorth.! !
 
-!MarsRoverHeadFacingNorth methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 17:06:33'!
+
+!MarsRoverHeadFacingNorth methodsFor: 'rotation' stamp: 'LL 6/30/2021 17:06:33'!
 rotateLeft
 
 	^marsRover headWest.! !
 
-!MarsRoverHeadFacingNorth methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 17:10:58'!
+!MarsRoverHeadFacingNorth methodsFor: 'rotation' stamp: 'LL 6/30/2021 17:10:58'!
 rotateRight
 
 	^marsRover headEast.! !
@@ -676,7 +677,7 @@ rotateRight
 MarsRoverHeadFacingNorth class
 	instanceVariableNames: ''!
 
-!MarsRoverHeadFacingNorth class methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:46:16'!
+!MarsRoverHeadFacingNorth class methodsFor: 'testing' stamp: 'LL 6/30/2021 19:46:16'!
 whenFacing: aCardinalPoint
 
 	^aCardinalPoint = #North! !
@@ -689,27 +690,29 @@ MarsRoverHead subclass: #MarsRoverHeadFacingSouth
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
 
-!MarsRoverHeadFacingSouth methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:48:36'!
+!MarsRoverHeadFacingSouth methodsFor: 'movement' stamp: 'LL 6/30/2021 19:48:36'!
 movingBackwards
 
 	^marsRover moveUp.! !
 
-!MarsRoverHeadFacingSouth methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:48:47'!
+!MarsRoverHeadFacingSouth methodsFor: 'movement' stamp: 'LL 6/30/2021 19:48:47'!
 movingForward
 
 	^marsRover moveDown! !
 
-!MarsRoverHeadFacingSouth methodsFor: 'as yet unclassified' stamp: 'LT 7/22/2021 01:09:20'!
+
+!MarsRoverHeadFacingSouth methodsFor: 'represent' stamp: 'LT 7/22/2021 01:09:20'!
 representationFor: anObject
 
 	^anObject representationForHeadFacingSouth.! !
 
-!MarsRoverHeadFacingSouth methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 17:06:43'!
+
+!MarsRoverHeadFacingSouth methodsFor: 'rotation' stamp: 'LL 6/30/2021 17:06:43'!
 rotateLeft
 
 	^marsRover headEast.! !
 
-!MarsRoverHeadFacingSouth methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 17:12:30'!
+!MarsRoverHeadFacingSouth methodsFor: 'rotation' stamp: 'LL 6/30/2021 17:12:30'!
 rotateRight
 
 	^marsRover headWest.! !
@@ -720,7 +723,7 @@ rotateRight
 MarsRoverHeadFacingSouth class
 	instanceVariableNames: ''!
 
-!MarsRoverHeadFacingSouth class methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:46:16'!
+!MarsRoverHeadFacingSouth class methodsFor: 'testing' stamp: 'LL 6/30/2021 19:46:16'!
 whenFacing: aCardinalPoint
 
 	^aCardinalPoint = #South! !
@@ -733,27 +736,29 @@ MarsRoverHead subclass: #MarsRoverHeadFacingWest
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
 
-!MarsRoverHeadFacingWest methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:48:36'!
+!MarsRoverHeadFacingWest methodsFor: 'movement' stamp: 'LL 6/30/2021 19:48:36'!
 movingBackwards
 
 	^marsRover moveRight.! !
 
-!MarsRoverHeadFacingWest methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:48:47'!
+!MarsRoverHeadFacingWest methodsFor: 'movement' stamp: 'LL 6/30/2021 19:48:47'!
 movingForward
 
 	^marsRover moveLeft.! !
 
-!MarsRoverHeadFacingWest methodsFor: 'as yet unclassified' stamp: 'LT 7/22/2021 01:09:30'!
+
+!MarsRoverHeadFacingWest methodsFor: 'represent' stamp: 'LT 7/22/2021 01:09:30'!
 representationFor: anObject
 
 	^anObject representationForHeadFacingWest.! !
 
-!MarsRoverHeadFacingWest methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 17:06:52'!
+
+!MarsRoverHeadFacingWest methodsFor: 'rotation' stamp: 'LL 6/30/2021 17:06:52'!
 rotateLeft
 
 	^marsRover headSouth.! !
 
-!MarsRoverHeadFacingWest methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 17:12:44'!
+!MarsRoverHeadFacingWest methodsFor: 'rotation' stamp: 'LL 6/30/2021 17:12:44'!
 rotateRight
 
 	^marsRover headNorth.! !
@@ -764,7 +769,7 @@ rotateRight
 MarsRoverHeadFacingWest class
 	instanceVariableNames: ''!
 
-!MarsRoverHeadFacingWest class methodsFor: 'as yet unclassified' stamp: 'LL 6/30/2021 19:46:16'!
+!MarsRoverHeadFacingWest class methodsFor: 'testing' stamp: 'LL 6/30/2021 19:46:16'!
 whenFacing: aCardinalPoint
 
 	^aCardinalPoint = #West! !
@@ -777,13 +782,15 @@ Object subclass: #MarsRoverObserver
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
 
-!MarsRoverObserver methodsFor: 'updating' stamp: 'LT 7/22/2021 10:40:02'!
+!MarsRoverObserver methodsFor: 'updating' stamp: 'JS 7/22/2021 15:03:29'!
 updateHead: aHead
-! !
 
-!MarsRoverObserver methodsFor: 'updating' stamp: 'LT 7/22/2021 10:40:46'!
+	self subclassResponsibility! !
+
+!MarsRoverObserver methodsFor: 'updating' stamp: 'JS 7/22/2021 15:03:32'!
 updatePosition: aHead
-! !
+
+	self subclassResponsibility! !
 
 
 !MarsRoverObserver methodsFor: 'DD - MarsRoverHead representation' stamp: 'LT 7/22/2021 11:30:16'!
@@ -814,25 +821,30 @@ MarsRoverObserver subclass: #MarsRoverLog
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
 
-!MarsRoverLog methodsFor: 'initialization' stamp: 'JS 7/21/2021 22:58:24'!
+!MarsRoverLog methodsFor: 'initialization' stamp: 'JS 7/22/2021 14:47:07'!
 initialize 
+
 	log := OrderedCollection new.! !
 
 
-!MarsRoverLog methodsFor: 'logs' stamp: 'LT 7/21/2021 21:04:04'!
+!MarsRoverLog methodsFor: 'logs' stamp: 'JS 7/22/2021 14:46:50'!
 first
+
 	^log first! !
 
-!MarsRoverLog methodsFor: 'logs' stamp: 'LT 7/21/2021 21:53:11'!
+!MarsRoverLog methodsFor: 'logs' stamp: 'JS 7/22/2021 14:46:54'!
 second
+
 	^log second! !
 
-!MarsRoverLog methodsFor: 'logs' stamp: 'LT 7/21/2021 21:03:46'!
+!MarsRoverLog methodsFor: 'logs' stamp: 'JS 7/22/2021 14:46:57'!
 size
+
 	^log size! !
 
-!MarsRoverLog methodsFor: 'logs' stamp: 'LT 7/22/2021 11:10:33'!
+!MarsRoverLog methodsFor: 'logs' stamp: 'JS 7/22/2021 14:47:00'!
 third
+
 	^log third! !
 
 
@@ -857,14 +869,16 @@ representationForHeadFacingWest
 	^'West'! !
 
 
-!MarsRoverLog methodsFor: 'updating' stamp: 'LT 7/22/2021 01:04:13'!
+!MarsRoverLog methodsFor: 'updating' stamp: 'JS 7/22/2021 14:47:16'!
 updateHead: aHead
+
 	log add: (aHead representationFor: self).
 	
 	! !
 
-!MarsRoverLog methodsFor: 'updating' stamp: 'LT 7/21/2021 22:26:05'!
+!MarsRoverLog methodsFor: 'updating' stamp: 'JS 7/22/2021 14:47:20'!
 updatePosition: aPosition
+
 	log add: aPosition asString.
 	
 	! !
@@ -877,10 +891,10 @@ MarsRoverObserver subclass: #MarsRoverWindow
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
 
-!MarsRoverWindow methodsFor: 'initialization' stamp: 'JS 7/21/2021 22:58:24'!
+!MarsRoverWindow methodsFor: 'initialization' stamp: 'JS 7/22/2021 14:54:48'!
 initialize 
-	position := nil.
-	heading := nil.! !
+	position := 'unknown'.
+	heading := 'unknown'.! !
 
 
 !MarsRoverWindow methodsFor: 'reporting' stamp: 'LT 7/21/2021 22:41:33'!
@@ -894,13 +908,15 @@ position
 	^position ! !
 
 
-!MarsRoverWindow methodsFor: 'updating' stamp: 'LT 7/22/2021 10:40:26'!
+!MarsRoverWindow methodsFor: 'updating' stamp: 'JS 7/22/2021 14:47:43'!
 updateHead: aHead
+
 	heading := aHead representationFor: self.
 	! !
 
-!MarsRoverWindow methodsFor: 'updating' stamp: 'JS 7/21/2021 23:28:17'!
+!MarsRoverWindow methodsFor: 'updating' stamp: 'JS 7/22/2021 14:47:46'!
 updatePosition: aPosition
+
 	position := '<', aPosition x asString, ',', aPosition y asString, '>'.
 	
 	! !
@@ -943,22 +959,7 @@ initializeFor: aProxee onNotifySend: aNotificationSelector
 	! !
 
 
-!UpdateableObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:36:56'!
-addObserver: anObserver
-
-	observers add: anObserver! !
-
-!UpdateableObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:37:31'!
-doesNotUnderstand: aMessage
-
-	^aMessage sendTo: proxee.! !
-
-!UpdateableObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:38:59'!
-notify
-	
-	observers do: [:observer | notificationSelector sendTo: observer with: proxee]. ! !
-
-!UpdateableObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:40:08'!
+!UpdateableObservableProxy methodsFor: 'value' stamp: 'LT 7/22/2021 00:40:08'!
 updateWith: aProxee
 
 	proxee := aProxee.
@@ -966,13 +967,30 @@ updateWith: aProxee
 
 	! !
 
+
+!UpdateableObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:36:56'!
+addObserver: anObserver
+
+	observers add: anObserver! !
+
+!UpdateableObservableProxy methodsFor: 'observing' stamp: 'LT 7/22/2021 00:38:59'!
+notify
+	
+	observers do: [:observer | notificationSelector sendTo: observer with: proxee]. ! !
+
+
+!UpdateableObservableProxy methodsFor: 'system primitives' stamp: 'LT 7/22/2021 00:37:31'!
+doesNotUnderstand: aMessage
+
+	^aMessage sendTo: proxee.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'UpdateableObservableProxy class' category: 'MarsRover-Solucion'!
 UpdateableObservableProxy class
 	instanceVariableNames: ''!
 
-!UpdateableObservableProxy class methodsFor: 'as yet unclassified' stamp: 'LT 7/22/2021 11:38:14'!
+!UpdateableObservableProxy class methodsFor: 'instance creation' stamp: 'LT 7/22/2021 11:38:14'!
 for: proxee onNotifySend: aNotificationSelector
 
 	^self new initializeFor: proxee onNotifySend: aNotificationSelector.! !
