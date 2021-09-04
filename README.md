@@ -19,3 +19,4 @@ Docentes de la materia:
     - Julieta Belén Taras
     - Franco Lucchesi
 
+Cursada en el primer cuatrimestre de 2021.
